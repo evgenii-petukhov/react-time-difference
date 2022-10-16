@@ -1,0 +1,71 @@
+body {
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+}
+
+.add-clock-container {
+    text-align: center;
+}
+
+.clock-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .clock {
+        flex: 0 1 400px;
+        margin: 20px;
+
+        .time-zone-name, .time, .remove {
+            text-align: center;
+        }
+
+        .time {
+            font-family: 'JetBrains Mono';
+            font-weight: 500;
+            font-size: 60px;
+        }
+
+        &:only-child {
+            .remove {
+                display: none;
+            }
+        }
+    }
+}
+
+.autocomplete-textbox-component {
+    display: flex;
+    flex-direction: column;
+
+    .textbox-container {
+        flex: 1;
+
+        input {
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box; 
+            font-size: 14px;
+            line-height: 26px;
+        }
+    }
+
+    .suggestions {
+        position: relative;
+
+        ul {
+            display: block;
+            flex: 1;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            background: rgba(255,255,255,.9);
+            width: 100%;
+
+            li {
+                font-size: 14px;
+                line-height: 30px;
+            }
+        }
+    }
+}
