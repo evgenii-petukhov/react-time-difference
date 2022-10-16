@@ -12,7 +12,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-
+    "city-timezones": "^1.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",

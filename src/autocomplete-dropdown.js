@@ -10,7 +10,7 @@ const AutocompleteDropdown = (props) => {
         const value = e.target.value.toUpperCase();
 
         setSuggestions(value.length > 0
-            ? props.items.filter(item => item.toUpperCase().indexOf(value) > -1).slice(0, 10).sort()
+            ? props.getItems(value).slice(0, 10).sort()
             : []);
 
         setText(e.target.value);
@@ -30,16 +30,16 @@ const AutocompleteDropdown = (props) => {
         }
     }
 
-    function selectSuggestion(value) {
+    function selectSuggestion(item) {
         setSuggestions([]);
-        setText(value);
-        props.onChange?.(value);
+        setText(item.label);
+        props.onChange?.(item.value);
     }
 
     function renderSuggestions() {
         return suggestions.length === 0 ? null : (
             <ul>
-                {suggestions.map((item, index) => <li key={index} onClick={() => selectSuggestion(item)}>{item}</li>)}
+                {suggestions.map((item, index) => <li key={index} onClick={() => selectSuggestion(item)} data-value={item.value}>{item.label}</li>)}
             </ul>
         );
     }

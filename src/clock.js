@@ -1,9 +1,11 @@
 const { useState, useEffect } = React
 import { AutocompleteDropdown } from "./autocomplete-dropdown";
+import { cityMapping } from "city-timezones";
 export { Clock };
 
 const Clock = (props) => {
     const [date, setDate] = useState(new Date());
+    const [position, setPosition] = useState(props.selectedPosition);
     const [timeZone, setTimeZone] = useState(props.selectedTimeZone);
     let timerID = 0;
 
@@ -19,10 +21,21 @@ const Clock = (props) => {
         };
     }, []);
 
+    function getItems(input) {
+        const inputUpper = input.toLocaleUpperCase();
+
+        return cityMapping
+            .filter(item => item.city.toLocaleUpperCase().includes(inputUpper))
+            .map(item => ({
+                label: item.city + ', ' + item.country,
+                value: item.timezone
+            }));
+    }
+
     return (
         <div className="clock">
             <div className="time-zone-name">
-                <AutocompleteDropdown text={timeZone} items={props.timeZones} onChange={(value) => setTimeZone(value)} />
+                <AutocompleteDropdown text={position} getItems={(input) => getItems(input)} onChange={(value) => setTimeZone(value)} />
             </div>
             <div className="time">
                 {date.toLocaleTimeString([], { timeZone: timeZone, hour12: false })}
