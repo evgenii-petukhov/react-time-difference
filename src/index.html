@@ -2,18 +2,31 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Getting Started</title>
+        <title>Time Difference</title>
         <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
         <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
         <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+        <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css" crossorigin />
     </head>
     <body>
-        <div id="container"></div>
-        <script src="main.js"></script>
-        <script type="text/javascript">
-            new ClockApp({
-                selector: '#container'
-            });
-        </script>
+		<div class="container-fluid">
+		    <div class="row text-center">
+				<div class = "col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-sm-10 offset-sm-1">
+					<p>This application enables you to compare times in different timezones instantly. You can check a few places at once. Therefore, making it very easy to find the most suitable time for everybody.</p>
+				</div>
+		    </div>
+		</div>
+        <div class="container-fluid">
+            <div class="row">
+                <div id="react-time-difference"></div>
+                <script src="main.js"></script>
+                <script type="text/javascript">
+                    new ClockApp({
+                        selector: '#react-time-difference'
+                    });
+                </script>
+            </div>
+        </div>
     </body>
 </html>
