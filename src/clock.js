@@ -5,8 +5,9 @@ export { Clock };
 
 const Clock = (props) => {
     const [date, setDate] = useState(new Date());
-    const [position, setPosition] = useState(props.selectedPosition);
-    const [timeZone, setTimeZone] = useState(props.selectedTimeZone);
+    const [city, setCity] = useState(props.city);
+    const [country, setCountry] = useState(props.country);
+    const [timezone, setTimezone] = useState(props.timezone);
     let timerID = 0;
 
     useEffect(() => {
@@ -35,10 +36,10 @@ const Clock = (props) => {
     return (
         <div className="clock">
             <div className="time-zone-name">
-                <AutocompleteDropdown text={position} getItems={(input) => getItems(input)} onChange={(value) => setTimeZone(value)} />
+                <AutocompleteDropdown text={city + ', ' + country} getItems={(input) => getItems(input)} onChange={(value) => setTimezone(value)} />
             </div>
             <div className="time">
-                {date.toLocaleTimeString([], { timeZone: timeZone, hour12: false })}
+                {date.toLocaleTimeString([], { timeZone: timezone, hour12: false })}
             </div>
             <div className="remove">
                 <button onClick={() => props.removeCallback(props.id)}>Remove</button>
