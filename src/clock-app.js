@@ -27,6 +27,7 @@ export default class ClockApp {
         });
     }
 
+    // https://www.geeksforgeeks.org/program-distance-two-points-earth/#:~:text=For%20this%20divide%20the%20values,is%20the%20radius%20of%20Earth.
     getDistance(lat1, lon1, lat2, lon2) {
 
         // The math module contains a function

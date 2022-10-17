@@ -6,8 +6,6 @@ import i18next from "i18next";
 
 const Clock = (props) => {
     const [date, setDate] = useState(new Date());
-    const [city, setCity] = useState(props.city);
-    const [country, setCountry] = useState(props.country);
     const [timezone, setTimezone] = useState(props.timezone);
     let timerID = 0;
 
@@ -37,7 +35,7 @@ const Clock = (props) => {
     return (
         <div className="clock">
             <div className="time-zone-name">
-                <AutocompleteDropdown text={city + ', ' + country} getItems={(input) => getItems(input)} onChange={(value) => setTimezone(value)} />
+                <AutocompleteDropdown text={props.city + ', ' + props.country} getItems={(input) => getItems(input)} onChange={(value) => setTimezone(value)} />
             </div>
             <div className="time">
                 {date.toLocaleTimeString([], { timeZone: timezone, hour12: false })}
