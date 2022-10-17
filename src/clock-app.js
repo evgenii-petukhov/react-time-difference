@@ -1,6 +1,7 @@
 import { cityMapping } from "city-timezones";
 import { lookupViaCity } from "city-timezones";
 import { ClockWrapper } from "./clock-wrapper";
+import './i18n';
 
 export default class ClockApp {
     constructor(options) {

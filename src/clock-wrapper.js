@@ -1,6 +1,7 @@
 const { useState } = React
 import { Clock } from "./clock";
 export { ClockWrapper };
+import i18next from "i18next";
 
 const ClockWrapper = (props) => {
     const [idCounter, setIdCounter] = useState(0);
@@ -30,7 +31,7 @@ const ClockWrapper = (props) => {
     return (
         <div>
             <div className="add-clock-container">
-                <button onClick={addClock}>Add clock</button>
+                <button onClick={addClock}>{i18next.t('Add clock')}</button>
             </div>
             <div className="clock-container">
                 {addedTimeZones.map(settings => <Clock key={settings.id} id={settings.id} city={settings.city} country={settings.country} timezone={settings.timeZone} removeCallback={removeClockById} />)}

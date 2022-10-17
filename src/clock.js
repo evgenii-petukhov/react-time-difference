@@ -2,6 +2,7 @@ const { useState, useEffect } = React
 import { AutocompleteDropdown } from "./autocomplete-dropdown";
 import { cityMapping } from "city-timezones";
 export { Clock };
+import i18next from "i18next";
 
 const Clock = (props) => {
     const [date, setDate] = useState(new Date());
@@ -42,7 +43,7 @@ const Clock = (props) => {
                 {date.toLocaleTimeString([], { timeZone: timezone, hour12: false })}
             </div>
             <div className="remove">
-                <button onClick={() => props.removeCallback(props.id)}>Remove</button>
+                <button onClick={() => props.removeCallback(props.id)}>{i18next.t('Remove')}</button>
             </div>
         </div>
     );
