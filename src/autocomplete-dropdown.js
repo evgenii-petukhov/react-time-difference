@@ -1,10 +1,14 @@
-const { useState } = React
+const { useState, useEffect } = React
 
 export { AutocompleteDropdown }
 
 const AutocompleteDropdown = (props) => {
     const [suggestions, setSuggestions] = useState([]);
     const [text, setText] = useState(props.text);
+
+    useEffect(() => {
+        setText(props.text);
+    });
 
     function onTextChanged(e) {
         const value = e.target.value.toUpperCase();
