@@ -10,11 +10,11 @@ const Clock = (props) => {
     let timerID = 0;
 
     useEffect(() => {
-        setTimeout(() => {
-            timerID = setInterval(() => {
-                setDate(new Date())
-            }, 1000)
-        }, 1000 - new Date().getMilliseconds());
+        if (timerID === 0) {
+            setTimeout(() => {
+                timerID = setInterval(() => setDate(new Date()), 1000);
+            }, 1000 - new Date().getMilliseconds());
+        }
 
         return () => {
             clearInterval(timerID);
@@ -35,7 +35,11 @@ const Clock = (props) => {
     return (
         <div className="clock">
             <div className="time-zone-name">
-                <AutocompleteDropdown text={props.city + ', ' + props.country} getItems={(input) => getItems(input)} onChange={(value) => setTimezone(value)} />
+                <AutocompleteDropdown
+                    text={props.city + ', ' + props.country}
+                    disabled={props.disabled}
+                    getItems={(input) => getItems(input)} 
+                    onChange={(value) => setTimezone(value)} />
             </div>
             <div className="time">
                 {date.toLocaleTimeString([], { timeZone: timezone, hour12: false })}
