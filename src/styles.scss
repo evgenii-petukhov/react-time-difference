@@ -5,93 +5,97 @@ html {
         display: flex;
         flex-direction: column;
         height: 100%;
-    
-        .project-description {
-            flex: 0 1 auto;
-        }
-        .application-container {
+        
+        #react-time-difference {
             display: flex;
             flex: 1 1 auto;
-            flex-direction: column;
-
-            .clock-collection {
+            .application-container{
                 display: flex;
                 flex: 1 1 auto;
-                flex-wrap: wrap;
-                justify-content: center;
-                align-items: center;
-                
-                .clock-container {
-                    display: flex;
-                    justify-content: center;
-                    flex: 1 1 auto;
-
-                    .clock {
-                        flex: 0 1 400px;
-                        margin: 20px;
-                        @media (max-width: 575.98px) {
-                            width: auto;
-                            flex: 1 1 auto;
-                        }
-                
-                        .location-name, .time, .remove-button-container {
-                            text-align: center;
-                        }
-                
-                        .time {
-                            font-family: 'JetBrains Mono';
-                            font-weight: 500;
-                            font-size: 60px;
-                        }
-                
-                        .button-container {
-                            text-align: center;
-                            .btn-remove {
-                                margin-left: 40px;
-                            }
-                        }
-                    }
-
-                    &:only-child {
-                        .clock {
-                            .btn-remove {
-                                display: none;
-                            }
-                        }
-                    }
-                }
-            }
-            
-            .autocomplete-textbox-component {
-                display: flex;
                 flex-direction: column;
-            
-                .textbox-container {
-                    flex: 1;
-            
-                    input {
-                        width: 100%;
-                        text-align: center;
-                        box-sizing: border-box; 
+
+                .project-description {
+                    flex: 0 1 auto;
+                }
+                .clock-collection {
+                    display: flex;
+                    flex: 1 1 auto;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                    
+                    .clock-container {
+                        display: flex;
+                        justify-content: center;
+                        flex: 1 1 auto;
+    
+                        .clock {
+                            flex: 0 1 400px;
+                            margin: 20px;
+                            @media (max-width: 575.98px) {
+                                width: auto;
+                                flex: 1 1 auto;
+                            }
+                    
+                            .location-name, .time, .remove-button-container {
+                                text-align: center;
+                            }
+                    
+                            .time {
+                                font-family: 'JetBrains Mono';
+                                font-weight: 500;
+                                font-size: 60px;
+                            }
+                    
+                            .button-container {
+                                text-align: center;
+                                .btn-remove {
+                                    margin-left: 40px;
+                                }
+                            }
+                        }
+    
+                        &:only-child {
+                            .clock {
+                                .btn-remove {
+                                    display: none;
+                                }
+                            }
+                        }
                     }
                 }
-            
-                .suggestions {
-                    position: relative;
-            
-                    ul {
-                        display: block;
+                
+                .autocomplete-textbox-component {
+                    display: flex;
+                    flex-direction: column;
+                
+                    .textbox-container {
                         flex: 1;
-                        list-style: none;
-                        margin: 0;
-                        padding: 0;
-                        position: absolute;
-                        background: rgba(255,255,255,.9);
-                        width: 100%;
-            
-                        li {
-                            font-size: 14px;
-                            line-height: 30px;
+                
+                        input {
+                            width: 100%;
+                            text-align: center;
+                            box-sizing: border-box; 
+                        }
+                    }
+                
+                    .suggestions {
+                        position: relative;
+                
+                        ul {
+                            display: block;
+                            flex: 1;
+                            list-style: none;
+                            margin: 4px 0 0 0;
+                            padding: 0;
+                            position: absolute;
+                            background: rgba(255,255,255,.9);
+                            width: 100%;
+                
+                            li {
+                                font-size: 14px;
+                                line-height: 30px;
+                            }
                         }
                     }
                 }

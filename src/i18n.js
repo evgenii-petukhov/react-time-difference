@@ -7,13 +7,15 @@ i18next.use(LanguageDetector).init({
         en: {
             translation: {
                 "Add clock": "Add clock",
-                "Remove": "Remove"
+                "Remove": "Remove",
+                "Project description": "This application enables you to compare times in different timezones instantly. You can check a few places at once. Therefore, making it very easy to find the most suitable time for everybody."
             }
         },
         ru: {
             translation: {
                 "Add clock": "Добавить часы",
-                "Remove": "Удалить"
+                "Remove": "Удалить",
+                "Project description": "Это приложение позволяет вам сравнить время в разных часовых поясах, максимально упрощая планирование совещаний, звонков, встреч."
             }
         }
     }

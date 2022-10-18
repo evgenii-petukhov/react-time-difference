@@ -1,6 +1,7 @@
 const { useState, useEffect } = React
 import { Clock } from "./clock";
 import { cityMapping } from "city-timezones";
+import i18next from "i18next";
 
 export { ClockCollection };
 
@@ -85,15 +86,26 @@ const ClockCollection = (props) => {
         setAddedTimeZones((prev) => prev.filter((element) => element.id !== id));
     }
 
-    return <div className="clock-collection">
-    {
-        addedTimeZones.map(settings => <Clock key={settings.id}
-            id={settings.id}
-            city={settings.location.city}
-            country={settings.location.country}
-            timezone={settings.location.timezone}
-            removeCallback={removeClockById}
-            addCallback={addClock} />)
-    }
+    return <div className="application-container">
+        <div className="project-description">
+            <div className="container-fluid">
+                <div className="row text-center">
+                    <div className = "col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-sm-10 offset-sm-1">
+                        <p>{i18next.t('Project description')}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="clock-collection">
+            {
+                addedTimeZones.map(settings => <Clock key={settings.id}
+                    id={settings.id}
+                    city={settings.location.city}
+                    country={settings.location.country}
+                    timezone={settings.location.timezone}
+                    removeCallback={removeClockById}
+                    addCallback={addClock} />)
+            }
+            </div>
     </div>;
 }
