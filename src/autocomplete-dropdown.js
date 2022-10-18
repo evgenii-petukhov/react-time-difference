@@ -5,9 +5,12 @@ export { AutocompleteDropdown }
 const AutocompleteDropdown = (props) => {
     const [suggestions, setSuggestions] = useState([]);
     const [text, setText] = useState(props.text);
+    const [isChangedManually, setIsChangedManually] = useState(false);
 
     useEffect(() => {
-        setText(props.text);
+        if (!isChangedManually) {
+            setText(props.text);
+        }
     });
 
     function onTextChanged(e) {
@@ -17,6 +20,7 @@ const AutocompleteDropdown = (props) => {
             ? props.getItems(value).slice(0, 10).sort()
             : []);
 
+        setIsChangedManually(true);
         setText(e.target.value);
     }
 
@@ -37,7 +41,7 @@ const AutocompleteDropdown = (props) => {
     function selectSuggestion(item) {
         setSuggestions([]);
         setText(item.label);
-        props.onChange?.(item.value);
+        props.onTimezoneSelected?.(item);
     }
 
     function renderSuggestions() {
@@ -52,6 +56,7 @@ const AutocompleteDropdown = (props) => {
         <div className="autocomplete-textbox-component">
             <div className="textbox-container">
                 <input type="text"
+                    className="form-control"
                     value={text}
                     placeholder={props.placeholder}
                     onChange={onTextChanged}

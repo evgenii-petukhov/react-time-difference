@@ -1,5 +1,5 @@
 import { lookupViaCity } from "city-timezones";
-import { ClockWrapper } from "./clock-wrapper";
+import { ClockCollection } from "./clock-collection";
 import './i18n';
 
 export default class ClockApp {
@@ -10,6 +10,6 @@ export default class ClockApp {
         const defaultTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const cityInfo = lookupViaCity(defaultTimezone.split('/')[1])[0];
 
-        root.render(<ClockWrapper defaultTimezone={cityInfo.timezone} defaultCity={cityInfo.city} defaultCountry={cityInfo.country} />);
+        root.render(<ClockCollection defaultTimezone={cityInfo.timezone} defaultCity={cityInfo.city} defaultCountry={cityInfo.country} />);
     }
 }

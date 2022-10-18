@@ -1,46 +1,47 @@
 const { useState, useEffect } = React
 import { Clock } from "./clock";
-export { ClockWrapper };
 import i18next from "i18next";
 import { cityMapping } from "city-timezones";
 
-const ClockWrapper = (props) => {
+export { ClockCollection };
+
+const ClockCollection = (props) => {
     const [idCounter, setIdCounter] = useState(0);
     const [addedTimeZones, setAddedTimeZones] = useState([{
         id: idCounter,
+        location: {
+            city: props.defaultCity,
+            country: props.defaultCountry,
+            timezone: props.defaultTimezone
+        }
+    }]);
+    const [defaultLocation, setDefaultLocation] = useState(({
         city: props.defaultCity,
         country: props.defaultCountry,
-        timezone: props.defaultTimezone
-    }]);
-    const [defaultTimezone, setDefaultTimezone] = useState(props.defaultTimezone);
-    const [defaultCity, setDefaultCity] = useState(props.defaultCity);
-    const [defaultCountry, setDefaultCountry] = useState(props.defaultCountry);
+        timezone: props.defaultTimezone,
+    }));
 
     useEffect(() => {
-        new Promise((resolve, reject) => {
+        new Promise(resolve => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
                     resolve(cityMapping.map(item => ({
-                        city: item.city,
-                        country: item.country,
-                        timezone: item.timezone,
+                        location: {
+                            city: item.city,
+                            country: item.country,
+                            timezone: item.timezone,
+                        },
                         distance: getDistance(position.coords.latitude, position.coords.longitude, item.lat, item.lng)
                     })).sort((a, b) => a.distance - b.distance)[0]);
-                }, () => reject());
-            } else {
-                reject();
+                });
             }
         }).then(cityInfo => {
-            setDefaultCity(cityInfo.city);
-            setDefaultCountry(cityInfo.country);
-            setDefaultTimezone(cityInfo.timezone);
+            setDefaultLocation(cityInfo.location);
             setAddedTimeZones([{
                 id: idCounter,
-                city: cityInfo.city,
-                country: cityInfo.country,
-                timezone: cityInfo.timezone
+                location: cityInfo.location
             }]);
-        }, () => {});
+        });
     }, []);
 
     // https://www.geeksforgeeks.org/program-distance-two-points-earth/
@@ -72,9 +73,7 @@ const ClockWrapper = (props) => {
         setIdCounter(newIdCounter);
         setAddedTimeZones((prev) => [...prev, {
             id: newIdCounter,
-            city: defaultCity,
-            country: defaultCountry,
-            timeZone: defaultTimezone
+            location: defaultLocation
         }]);
     }
 
@@ -86,10 +85,15 @@ const ClockWrapper = (props) => {
     return (
         <div>
             <div className="add-clock-container">
-                <button onClick={addClock}>{i18next.t('Add clock')}</button>
+                <button className="btn btn-outline-primary" onClick={addClock}>{i18next.t('Add clock')}</button>
             </div>
             <div className="clock-container">
-                {addedTimeZones.map(settings => <Clock key={settings.id} id={settings.id} city={settings.city} country={settings.country} timezone={settings.timezone} removeCallback={removeClockById} />)}
+                {addedTimeZones.map(settings => <Clock key={settings.id}
+                    id={settings.id}
+                    city={settings.location.city}
+                    country={settings.location.country}
+                    timezone={settings.location.timezone}
+                    removeCallback={removeClockById} />)}
             </div>
         </div>
     );

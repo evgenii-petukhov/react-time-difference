@@ -1,25 +1,22 @@
 const { useState, useEffect } = React
 import { AutocompleteDropdown } from "./autocomplete-dropdown";
+import { Time } from "./time";
 import { cityMapping } from "city-timezones";
-export { Clock };
 import i18next from "i18next";
 
+export { Clock };
+
 const Clock = (props) => {
-    const [date, setDate] = useState(new Date());
+    const [label, setLabel] = useState(props.city + ', ' + props.country);
     const [timezone, setTimezone] = useState(props.timezone);
-    let timerID = 0;
+    const [isChangedManually, setIsChangedManually] = useState(false);
 
     useEffect(() => {
-        if (timerID === 0) {
-            setTimeout(() => {
-                timerID = setInterval(() => setDate(new Date()), 1000);
-            }, 1000 - new Date().getMilliseconds());
+        if (!isChangedManually) {
+            setLabel(props.city + ', ' + props.country);
+            setTimezone(props.timezone);
         }
-
-        return () => {
-            clearInterval(timerID);
-        };
-    }, []);
+    });
 
     function getItems(input) {
         const inputUpper = input.toLocaleUpperCase();
@@ -32,20 +29,26 @@ const Clock = (props) => {
             }));
     }
 
+    function onTimezoneSelected(item) {
+        setIsChangedManually(true);
+        setLabel(item.label);
+        setTimezone(item.value);
+    }
+
     return (
         <div className="clock">
-            <div className="time-zone-name">
+            <div className="location-name">
                 <AutocompleteDropdown
-                    text={props.city + ', ' + props.country}
+                    text={label}
                     disabled={props.disabled}
-                    getItems={(input) => getItems(input)} 
-                    onChange={(value) => setTimezone(value)} />
+                    getItems={getItems}
+                    onTimezoneSelected={onTimezoneSelected} />
             </div>
             <div className="time">
-                {date.toLocaleTimeString([], { timeZone: timezone, hour12: false })}
+                <Time timezone={timezone} />
             </div>
             <div className="remove">
-                <button onClick={() => props.removeCallback(props.id)}>{i18next.t('Remove')}</button>
+                <button className="btn btn-outline-primary" onClick={() => props.removeCallback(props.id)}>{i18next.t('Remove')}</button>
             </div>
         </div>
     );

@@ -1,7 +1,3 @@
-body {
-    font-family: "PT Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-}
-
 .add-clock-container {
     text-align: center;
 }
@@ -15,7 +11,7 @@ body {
         flex: 0 1 400px;
         margin: 20px;
 
-        .time-zone-name, .time, .remove {
+        .location-name, .time, .remove {
             text-align: center;
         }
 
