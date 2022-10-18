@@ -35,21 +35,20 @@ const Clock = (props) => {
         setTimezone(item.value);
     }
 
-    return (
-        <div className="clock">
-            <div className="location-name">
-                <AutocompleteDropdown
-                    text={label}
-                    disabled={props.disabled}
-                    getItems={getItems}
-                    onTimezoneSelected={onTimezoneSelected} />
-            </div>
-            <div className="time">
-                <Time timezone={timezone} />
-            </div>
-            <div className="remove">
-                <button className="btn btn-outline-primary" onClick={() => props.removeCallback(props.id)}>{i18next.t('Remove')}</button>
-            </div>
+    return <div className="clock">
+        <div className="location-name">
+            <AutocompleteDropdown
+                text={label}
+                disabled={props.disabled}
+                getItems={getItems}
+                onTimezoneSelected={onTimezoneSelected} />
         </div>
-    );
+        <div className="time">
+            <Time timezone={timezone} />
+        </div>
+        <div className="button-container">
+            <button className="btn btn-outline-primary" onClick={() => props.addCallback()}>{i18next.t('Add clock')}</button>
+            <button className="btn btn-light btn-remove" onClick={() => props.removeCallback(props.id)}>{i18next.t('Remove')}</button>
+        </div>
+    </div>;
 }

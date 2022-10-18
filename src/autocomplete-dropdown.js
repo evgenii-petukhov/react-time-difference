@@ -52,20 +52,18 @@ const AutocompleteDropdown = (props) => {
         );
     }
 
-    return (
-        <div className="autocomplete-textbox-component">
-            <div className="textbox-container">
-                <input type="text"
-                    className="form-control"
-                    value={text}
-                    placeholder={props.placeholder}
-                    onChange={onTextChanged}
-                    onKeyDown={onKeyDown}
-                    onFocus={(e) => e.target.select()} />
-            </div>
-            <div className="suggestions">
-                {renderSuggestions()}
-            </div>
+    return <div className="autocomplete-textbox-component">
+        <div className="textbox-container">
+            <input type="text"
+                className="form-control"
+                value={text}
+                placeholder={props.placeholder}
+                onChange={onTextChanged}
+                onKeyDown={onKeyDown}
+                onFocus={(e) => e.target.select()} />
         </div>
-    );
+        <div className="suggestions">
+            {renderSuggestions()}
+        </div>
+    </div>;
 }
