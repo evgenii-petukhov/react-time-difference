@@ -1,4 +1,4 @@
-const { useState, useEffect } = React
+const { useState, useEffect, useRef } = React
 import { AutocompleteDropdown } from "./autocomplete-dropdown";
 import { Time } from "./time";
 import { cityMapping } from "city-timezones";
@@ -10,19 +10,30 @@ const Clock = (props) => {
     const [label, setLabel] = useState(props.city + ', ' + props.country);
     const [timezone, setTimezone] = useState(props.timezone);
     const [isChangedManually, setIsChangedManually] = useState(false);
+    const [isInitialized, setIsInitialized] = useState(false);
+    const endOfComponentRef = useRef(null);
 
     useEffect(() => {
+        if (!isInitialized) {
+            endOfComponentRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "end"
+            });
+        }
+
         if (!isChangedManually) {
             setLabel(props.city + ', ' + props.country);
             setTimezone(props.timezone);
         }
+
+        setIsInitialized(true);
     });
 
     function getItems(input) {
         const inputUpper = input.toLocaleUpperCase();
 
         return cityMapping
-            .filter(item => item.city.toLocaleUpperCase().includes(inputUpper) || item.country.toLocaleUpperCase().includes(inputUpper))
+            .filter(item => item.timezone !== null && (item.city.toLocaleUpperCase().includes(inputUpper) || item.country.toLocaleUpperCase().includes(inputUpper)))
             .map(item => ({
                 label: item.city + ', ' + item.country,
                 value: item.timezone
@@ -35,7 +46,7 @@ const Clock = (props) => {
         setTimezone(item.value);
     }
 
-    return <div className="clock-container">
+    return <div className="clock-container" ref={endOfComponentRef}>
         <div className="clock">
             <div className="location-name">
                 <AutocompleteDropdown

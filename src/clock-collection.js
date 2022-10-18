@@ -85,11 +85,15 @@ const ClockCollection = (props) => {
         setAddedTimeZones((prev) => prev.filter((element) => element.id !== id));
     }
 
-    return <div className="clock-collection">{addedTimeZones.map(settings => <Clock key={settings.id}
-        id={settings.id}
-        city={settings.location.city}
-        country={settings.location.country}
-        timezone={settings.location.timezone}
-        removeCallback={removeClockById}
-        addCallback={addClock} />)}</div>;
+    return <div className="clock-collection">
+    {
+        addedTimeZones.map(settings => <Clock key={settings.id}
+            id={settings.id}
+            city={settings.location.city}
+            country={settings.location.country}
+            timezone={settings.location.timezone}
+            removeCallback={removeClockById}
+            addCallback={addClock} />)
+    }
+    </div>;
 }
