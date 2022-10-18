@@ -48,7 +48,7 @@ const Clock = (props) => {
                 <Time timezone={timezone} />
             </div>
             <div className="button-container">
-                <button className="btn btn-outline-primary" onClick={() => props.addCallback()}>{i18next.t('Add clock')}</button>
+                <button className="btn btn-outline-primary" onClick={() => props.addCallback(props.id)}>{i18next.t('Add clock')}</button>
                 <button className="btn btn-light btn-remove" onClick={() => props.removeCallback(props.id)}>{i18next.t('Remove')}</button>
             </div>
         </div>

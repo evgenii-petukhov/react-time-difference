@@ -44,16 +44,18 @@ html {
                             font-size: 60px;
                         }
                 
-                        &:only-child {
-                            .btn-remove {
-                                display: none;
-                            }
-                        }
-                
                         .button-container {
                             text-align: center;
                             .btn-remove {
                                 margin-left: 40px;
+                            }
+                        }
+                    }
+
+                    &:only-child {
+                        .clock {
+                            .btn-remove {
+                                display: none;
                             }
                         }
                     }
@@ -71,8 +73,6 @@ html {
                         width: 100%;
                         text-align: center;
                         box-sizing: border-box; 
-                        font-size: 14px;
-                        line-height: 26px;
                     }
                 }
             

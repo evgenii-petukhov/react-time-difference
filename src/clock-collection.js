@@ -1,6 +1,5 @@
 const { useState, useEffect } = React
 import { Clock } from "./clock";
-import i18next from "i18next";
 import { cityMapping } from "city-timezones";
 
 export { ClockCollection };
@@ -68,13 +67,17 @@ const ClockCollection = (props) => {
         return (c * r);
     }
 
-    function addClock() {
+    function addClock(id) {
         const newIdCounter = idCounter + 1;
         setIdCounter(newIdCounter);
-        setAddedTimeZones((prev) => [...prev, {
-            id: newIdCounter,
-            location: defaultLocation
-        }]);
+        setAddedTimeZones((prev) => {
+            const index = prev.findIndex((element) => element.id === id);
+            prev.splice(index + 1, 0, {
+                id: newIdCounter,
+                location: defaultLocation
+            });
+            return [...prev];
+        });
     }
 
     function removeClockById(id) {
