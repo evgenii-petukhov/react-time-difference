@@ -22,7 +22,7 @@ const Clock = (props) => {
         const inputUpper = input.toLocaleUpperCase();
 
         return cityMapping
-            .filter(item => item.city.toLocaleUpperCase().includes(inputUpper))
+            .filter(item => item.city.toLocaleUpperCase().includes(inputUpper) || item.country.toLocaleUpperCase().includes(inputUpper))
             .map(item => ({
                 label: item.city + ', ' + item.country,
                 value: item.timezone
@@ -35,20 +35,22 @@ const Clock = (props) => {
         setTimezone(item.value);
     }
 
-    return <div className="clock">
-        <div className="location-name">
-            <AutocompleteDropdown
-                text={label}
-                disabled={props.disabled}
-                getItems={getItems}
-                onTimezoneSelected={onTimezoneSelected} />
-        </div>
-        <div className="time">
-            <Time timezone={timezone} />
-        </div>
-        <div className="button-container">
-            <button className="btn btn-outline-primary" onClick={() => props.addCallback()}>{i18next.t('Add clock')}</button>
-            <button className="btn btn-light btn-remove" onClick={() => props.removeCallback(props.id)}>{i18next.t('Remove')}</button>
+    return <div className="clock-container">
+        <div className="clock">
+            <div className="location-name">
+                <AutocompleteDropdown
+                    text={label}
+                    disabled={props.disabled}
+                    getItems={getItems}
+                    onTimezoneSelected={onTimezoneSelected} />
+            </div>
+            <div className="time">
+                <Time timezone={timezone} />
+            </div>
+            <div className="button-container">
+                <button className="btn btn-outline-primary" onClick={() => props.addCallback()}>{i18next.t('Add clock')}</button>
+                <button className="btn btn-light btn-remove" onClick={() => props.removeCallback(props.id)}>{i18next.t('Remove')}</button>
+            </div>
         </div>
     </div>;
 }

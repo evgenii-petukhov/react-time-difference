@@ -82,7 +82,7 @@ const ClockCollection = (props) => {
         setAddedTimeZones((prev) => prev.filter((element) => element.id !== id));
     }
 
-    return <div className="clock-container">{addedTimeZones.map(settings => <Clock key={settings.id}
+    return <div className="clock-collection">{addedTimeZones.map(settings => <Clock key={settings.id}
         id={settings.id}
         city={settings.location.city}
         country={settings.location.country}

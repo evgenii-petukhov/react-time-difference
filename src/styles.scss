@@ -1,70 +1,103 @@
-.clock-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+html {
+    height: 100%;
 
-    .clock {
-        flex: 0 1 400px;
-        margin: 20px;
-
-        .location-name, .time, .remove-button-container {
-            text-align: center;
+    body {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    
+        .project-description {
+            flex: 0 1 auto;
         }
+        .application-container {
+            display: flex;
+            flex: 1 1 auto;
+            flex-direction: column;
 
-        .time {
-            font-family: 'JetBrains Mono';
-            font-weight: 500;
-            font-size: 60px;
-        }
+            .clock-collection {
+                display: flex;
+                flex: 1 1 auto;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                
+                .clock-container {
+                    display: flex;
+                    justify-content: center;
+                    flex: 1 1 auto;
 
-        &:only-child {
-            .btn-remove {
-                display: none;
+                    .clock {
+                        flex: 0 1 400px;
+                        margin: 20px;
+                        @media (max-width: 575.98px) {
+                            width: auto;
+                            flex: 1 1 auto;
+                        }
+                
+                        .location-name, .time, .remove-button-container {
+                            text-align: center;
+                        }
+                
+                        .time {
+                            font-family: 'JetBrains Mono';
+                            font-weight: 500;
+                            font-size: 60px;
+                        }
+                
+                        &:only-child {
+                            .btn-remove {
+                                display: none;
+                            }
+                        }
+                
+                        .button-container {
+                            text-align: center;
+                            .btn-remove {
+                                margin-left: 40px;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            .autocomplete-textbox-component {
+                display: flex;
+                flex-direction: column;
+            
+                .textbox-container {
+                    flex: 1;
+            
+                    input {
+                        width: 100%;
+                        text-align: center;
+                        box-sizing: border-box; 
+                        font-size: 14px;
+                        line-height: 26px;
+                    }
+                }
+            
+                .suggestions {
+                    position: relative;
+            
+                    ul {
+                        display: block;
+                        flex: 1;
+                        list-style: none;
+                        margin: 0;
+                        padding: 0;
+                        position: absolute;
+                        background: rgba(255,255,255,.9);
+                        width: 100%;
+            
+                        li {
+                            font-size: 14px;
+                            line-height: 30px;
+                        }
+                    }
+                }
             }
         }
-
-        .button-container {
-            text-align: center;
-            .btn-remove {
-                margin-left: 40px;
-            }
-        }
-    }
+    }    
 }
 
-.autocomplete-textbox-component {
-    display: flex;
-    flex-direction: column;
 
-    .textbox-container {
-        flex: 1;
-
-        input {
-            width: 100%;
-            text-align: center;
-            box-sizing: border-box; 
-            font-size: 14px;
-            line-height: 26px;
-        }
-    }
-
-    .suggestions {
-        position: relative;
-
-        ul {
-            display: block;
-            flex: 1;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            background: rgba(255,255,255,.9);
-            width: 100%;
-
-            li {
-                font-size: 14px;
-                line-height: 30px;
-            }
-        }
-    }
-}
