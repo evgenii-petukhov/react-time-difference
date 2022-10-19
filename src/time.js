@@ -4,16 +4,10 @@ export { Time };
 
 const Time = (props) => {
     const [date, setDate] = useState(new Date());
-    const [timerID, setTimerID] = useState(0);
     const [timezone, setTimezone] = useState(props.timezone);
 
     useEffect(() => {
-        if (timerID === 0) {
-            setTimeout(() => {
-                setDate(new Date());
-                setTimerID(setInterval(() => setDate(new Date()), 1000));
-            }, 1000 - new Date().getMilliseconds());
-        }
+        setDate(props.date);
         setTimezone(props.timezone);
     });
 

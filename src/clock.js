@@ -8,6 +8,7 @@ export { Clock };
 
 const Clock = (props) => {
     const [label, setLabel] = useState(props.city + ', ' + props.country);
+    const [date, setDate] = useState(new Date());
     const [timezone, setTimezone] = useState(props.timezone);
     const [isChangedManually, setIsChangedManually] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
@@ -19,6 +20,7 @@ const Clock = (props) => {
                 behavior: "smooth",
                 block: "end"
             });
+            setIsInitialized(true);
         }
 
         if (!isChangedManually) {
@@ -26,7 +28,7 @@ const Clock = (props) => {
             setTimezone(props.timezone);
         }
 
-        setIsInitialized(true);
+        setDate(props.date);
     });
 
     function getItems(input) {
@@ -49,7 +51,7 @@ const Clock = (props) => {
     return <div className="clock-container" ref={endOfComponentRef}>
         <div className="clock">
             <div className="time">
-                <Time timezone={timezone} />
+                <Time date={date} timezone={timezone} />
             </div>
             <div className="location-name">
                 <AutocompleteDropdown

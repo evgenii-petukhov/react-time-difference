@@ -20,8 +20,12 @@ const ClockCollection = (props) => {
         country: props.defaultCountry,
         timezone: props.defaultTimezone,
     }));
+    const [date, setDate] = useState(new Date());
 
     useEffect(() => {
+        setDate(new Date());
+        const timerID = setInterval(() => setDate(new Date()), 1000);
+
         new Promise(resolve => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
@@ -42,6 +46,10 @@ const ClockCollection = (props) => {
                 location: cityInfo.location
             }]);
         });
+
+        return () => {
+            clearInterval(timerID);
+        };
     }, []);
 
     // https://www.geeksforgeeks.org/program-distance-two-points-earth/
@@ -102,7 +110,8 @@ const ClockCollection = (props) => {
                     country={settings.location.country}
                     timezone={settings.location.timezone}
                     removeCallback={removeClockById}
-                    addCallback={addClock} />)
+                    addCallback={addClock}
+                    date={date} />)
             }
             </div>
     </div>;
