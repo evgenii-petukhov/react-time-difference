@@ -90,9 +90,7 @@ const ClockCollection = (props) => {
         <div className="project-description">
             <div className="container-fluid">
                 <div className="row text-center">
-                    <div className = "col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-sm-10 offset-sm-1">
-                        <p>{i18next.t('Project description')}</p>
-                    </div>
+                    <div className = "col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-sm-10 offset-sm-1">{i18next.t('Project description')}</div>
                 </div>
             </div>
         </div>

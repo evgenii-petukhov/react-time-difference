@@ -30,7 +30,7 @@ html {
                         flex: 1 1 auto;
     
                         .clock {
-                            flex: 0 1 400px;
+                            flex: 0 1 auto;
                             margin: 20px;
                             @media (max-width: 575.98px) {
                                 width: auto;
@@ -49,6 +49,8 @@ html {
                     
                             .button-container {
                                 text-align: center;
+                                margin: 16px 0 0 0;
+
                                 .btn-remove {
                                     margin-left: 40px;
                                 }
@@ -93,8 +95,8 @@ html {
                             width: 100%;
                 
                             li {
-                                font-size: 14px;
-                                line-height: 30px;
+                                font-size: 1rem;
+                                line-height: 2;
                             }
                         }
                     }

@@ -48,15 +48,15 @@ const Clock = (props) => {
 
     return <div className="clock-container" ref={endOfComponentRef}>
         <div className="clock">
+            <div className="time">
+                <Time timezone={timezone} />
+            </div>
             <div className="location-name">
                 <AutocompleteDropdown
                     text={label}
                     disabled={props.disabled}
                     getItems={getItems}
                     onTimezoneSelected={onTimezoneSelected} />
-            </div>
-            <div className="time">
-                <Time timezone={timezone} />
             </div>
             <div className="button-container">
                 <button className="btn btn-outline-primary" onClick={() => props.addCallback(props.id)}>{i18next.t('Add clock')}</button>
