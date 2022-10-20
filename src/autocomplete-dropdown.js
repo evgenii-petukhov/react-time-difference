@@ -41,7 +41,7 @@ const AutocompleteDropdown = (props) => {
     function selectSuggestion(item) {
         setSuggestions([]);
         setText(item.label);
-        props.onTimezoneSelected?.(item);
+        props.onTimezoneChanged?.(item);
     }
 
     function renderSuggestions() {

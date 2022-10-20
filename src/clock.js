@@ -12,11 +12,11 @@ const Clock = (props) => {
     const [timezone, setTimezone] = useState(props.timezone);
     const [isChangedManually, setIsChangedManually] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
-    const endOfComponentRef = useRef(null);
+    const clockComponentRef = useRef(null);
 
     useEffect(() => {
         if (!isInitialized) {
-            endOfComponentRef.current.scrollIntoView({
+            clockComponentRef.current.scrollIntoView({
                 behavior: "smooth",
                 block: "end"
             });
@@ -38,13 +38,14 @@ const Clock = (props) => {
         }));
     }
 
-    function onTimezoneSelected(item) {
+    function onTimezoneChanged(item) {
         setIsChangedManually(true);
         setLabel(item.label);
         setTimezone(item.value);
+        props.onChange?.();
     }
 
-    return <div className="clock-container" ref={endOfComponentRef}>
+    return <div className="clock-container" ref={clockComponentRef}>
         <div className="clock">
             <div className="time">
                 <Time date={date} timezone={timezone} />
@@ -54,11 +55,11 @@ const Clock = (props) => {
                     text={label}
                     disabled={props.disabled}
                     getItems={getItems}
-                    onTimezoneSelected={onTimezoneSelected} />
+                    onTimezoneChanged={onTimezoneChanged} />
             </div>
             <div className="button-container">
-                <button className="btn btn-outline-primary" onClick={() => props.addCallback(props.id)}>{i18next.t('Add clock')}</button>
-                <button className="btn btn-light btn-remove" onClick={() => props.removeCallback(props.id)}>{i18next.t('Remove')}</button>
+                <button className="btn btn-outline-primary" onClick={() => props.onAdd(props.id)}>{i18next.t('Add clock')}</button>
+                <button className="btn btn-light btn-remove" onClick={() => props.onRemove(props.id)}>{i18next.t('Remove')}</button>
             </div>
         </div>
     </div>;
