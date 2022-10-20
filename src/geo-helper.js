@@ -14,11 +14,11 @@ function getNearestCity(lat, lng) {
 }
 
 function findCitiesByName(input, count) {
-    const inputUpper = input.toLocaleUpperCase();
+    input = input.toLocaleUpperCase();
 
     return cityMapping
         .filter(item => item.timezone !== null 
-            && ((`${item.city} ${item.country}|${item.city}, ${item.country}`).toLocaleUpperCase().includes(inputUpper)))
+            && `${item.city} ${item.country}|${item.city}, ${item.country}`.toLocaleUpperCase().includes(input))
         .slice(0, count);
 }
 
