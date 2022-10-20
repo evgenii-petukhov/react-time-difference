@@ -11,19 +11,19 @@ const ClockCollection = (props) => {
     const idCounterRef = useRef(idCounter);
     const [addedTimeZones, setAddedTimeZones] = useState([{
         id: idCounter,
+        image: null,
         location: {
             city: props.defaultCity,
             country: props.defaultCountry,
-            timezone: props.defaultTimezone,
-            image: null
+            timezone: props.defaultTimezone
         }
     }]);
     const [defaultLocation, setDefaultLocation] = useState(({
         city: props.defaultCity,
         country: props.defaultCountry,
-        timezone: props.defaultTimezone,
-        image: null
+        timezone: props.defaultTimezone
     }));
+    const [defaultImage, setDefaultImage] = useState(null);
     const [date, setDate] = useState(new Date());
     const [isModelChanged, setIsModelChanged] = useState(false);
     const isModelChangedRef = useRef(isModelChanged);
@@ -43,6 +43,7 @@ const ClockCollection = (props) => {
                 if (!isModelChangedRef.current) {
                     setAddedTimeZones([{
                         id: idCounterRef,
+                        image: null,
                         location: cityInfo.location
                     }]);
                 }
@@ -51,19 +52,14 @@ const ClockCollection = (props) => {
 
                 searchPhotos(cityInfo.location.country).then(response => {
                     if (response.photos.length) {
-                        setDefaultLocation(({
-                            city: cityInfo.location.city,
-                            country: cityInfo.location.country,
-                            timezone: cityInfo.location.timezone,
-                            image: response.photos[0].src.large
-                        }));
+                        setDefaultImage(response.photos[0].src.large);
                         setAddedTimeZones([{
                             id: idCounter,
+                            image: response.photos[0].src.large,
                             location: {
                                 city: cityInfo.location.city,
                                 country: cityInfo.location.country,
                                 timezone: cityInfo.location.timezone,
-                                image: response.photos[0].src.large
                             }
                         }]);
                     }
@@ -81,19 +77,14 @@ const ClockCollection = (props) => {
     function loadDefaultImage() {
         searchPhotos(props.defaultCountry).then(response => {
             if (response.photos.length) {
-                setDefaultLocation(({
-                    city: props.defaultCity,
-                    country: props.defaultCountry,
-                    timezone: props.defaultTimezone,
-                    image: response.photos[0].src.large
-                }));
+                setDefaultImage(response.photos[0].src.large);
                 setAddedTimeZones([{
                     id: idCounter,
+                    image: response.photos[0].src.large,
                     location: {
                         city: props.defaultCity,
                         country: props.defaultCountry,
                         timezone: props.defaultTimezone,
-                        image: response.photos[0].src.large
                     }
                 }]);
             }
@@ -107,6 +98,7 @@ const ClockCollection = (props) => {
             const index = prev.findIndex((element) => element.id === id);
             prev.splice(index + 1, 0, {
                 id: newIdCounter,
+                image: defaultImage,
                 location: defaultLocation
             });
             return [...prev];
@@ -121,10 +113,10 @@ const ClockCollection = (props) => {
     }
 
     function onClockChanged(id, location) {
-        const a = [...addedTimeZones];
-        const index = a.findIndex(el => el.id === id);
-        a[index].location = location;
-        setAddedTimeZones(a);
+        const prev = [...addedTimeZones];
+        const index = prev.findIndex(el => el.id === id);
+        prev[index].location = location;
+        setAddedTimeZones(prev);
         setIsModelChanged(true);
     }
 
@@ -143,7 +135,7 @@ const ClockCollection = (props) => {
                 city={settings.location.city}
                 country={settings.location.country}
                 defaultTimezone={defaultLocation.timezone}
-                image={settings.location.image}
+                image={settings.image}
                 date={date}
                 timezone={settings.location.timezone}
                 onRemove={onClockRemove}
