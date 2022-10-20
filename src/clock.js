@@ -30,17 +30,33 @@ const Clock = (props) => {
     }, []);
 
     function getItems(input) {
-        return findCitiesByName(input, 10).map(item => ({
-            label: `${item.city}, ${item.country}`,
-            value: item.timezone
-        }));
+        const localTimezoneOffset = getOffset(props.defaultTimezone);
+
+        return findCitiesByName(input, 10).map(item => {
+            const timezoneDiff = (getOffset(item.timezone) - localTimezoneOffset) / 60;
+            return {
+                label: `${item.city}, ${item.country}`,
+                diff: `${timezoneDiff > 0 ? '+' : ''}${timezoneDiff}${i18next.t('h')}`,
+                location: {
+                    city: item.city,
+                    country: item.country,
+                    timezone: item.timezone
+                }
+            };
+        });
     }
 
-    function onTimezoneChanged(item) {
+    const getOffset = (timeZone = 'UTC', date = new Date()) => {
+        const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+        const tzDate = new Date(date.toLocaleString('en-US', { timeZone }));
+        return (tzDate.getTime() - utcDate.getTime()) / 6e4;
+      }
+
+    function onTimezoneChanged(label, location) {
         setIsChangedManually(true);
-        setLabel(item.label);
-        setTimezone(item.value);
-        props.onChange?.();
+        setLabel(label);
+        setTimezone(location.timezone);
+        props.onChange?.(props.id, location);
     }
 
     return <div className="clock-container" ref={clockComponentRef}>

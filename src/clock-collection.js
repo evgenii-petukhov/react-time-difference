@@ -73,7 +73,12 @@ const ClockCollection = (props) => {
         setIsModelChanged(true);
     }
 
-    function onClockChanged() {
+    function onClockChanged(id, location) {
+        const a = [...addedTimeZones];
+        const index = a.findIndex(el => el.id === id);
+        a[index].location = location;
+        setAddedTimeZones(a);
+
         setIsModelChanged(true);
     }
 
@@ -91,6 +96,7 @@ const ClockCollection = (props) => {
                 id={settings.id}
                 city={settings.location.city}
                 country={settings.location.country}
+                defaultTimezone={defaultLocation.timezone}
                 date={date}
                 timezone={settings.location.timezone}
                 onRemove={onClockRemove}

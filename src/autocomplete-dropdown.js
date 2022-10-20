@@ -41,13 +41,16 @@ const AutocompleteDropdown = (props) => {
     function selectSuggestion(item) {
         setSuggestions([]);
         setText(item.label);
-        props.onTimezoneChanged?.(item);
+        props.onTimezoneChanged?.(item.label, item.location);
     }
 
     function renderSuggestions() {
         return suggestions.length === 0 ? null : (
             <ul>
-                {suggestions.map((item, index) => <li key={index} onClick={() => selectSuggestion(item)} data-value={item.value}>{item.label}</li>)}
+                {suggestions.map((item, index) => <li key={index} onClick={() => selectSuggestion(item)}>
+                    <div className="timezone-label">{item.label}</div>
+                    <div className="timezone-diff">{item.diff}</div>
+                </li>)}
             </ul>
         );
     }
