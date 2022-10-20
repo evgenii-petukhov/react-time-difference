@@ -1,6 +1,10 @@
 import { cityMapping } from "city-timezones";
 
-export { getNearestCity, findCitiesByName };
+export {
+    getNearestCity,
+    findCitiesByName,
+    getTimezoneOffset
+};
 
 function getNearestCity(lat, lng) {
     return cityMapping.map(item => ({
@@ -17,9 +21,15 @@ function findCitiesByName(input, count) {
     input = input.toLocaleUpperCase();
 
     return cityMapping
-        .filter(item => item.timezone !== null 
+        .filter(item => item.timezone !== null
             && `${item.city} ${item.country}|${item.city}, ${item.country}`.toLocaleUpperCase().includes(input))
         .slice(0, count);
+}
+
+function getTimezoneOffset(timeZone = 'UTC', date = new Date()) {
+    const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+    const tzDate = new Date(date.toLocaleString('en-US', { timeZone }));
+    return (tzDate.getTime() - utcDate.getTime()) / 6e4;
 }
 
 // https://www.geeksforgeeks.org/program-distance-two-points-earth/

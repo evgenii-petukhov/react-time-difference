@@ -3,6 +3,7 @@ import i18next from "i18next";
 import { Clock } from "./clock";
 import { getNearestCity }  from "./geo-helper";
 import { searchPhotos } from "./pexels-helper";
+import { downloadAndEncodeToBase64 } from "./base64-helper";
 
 export { ClockCollection };
 
@@ -52,16 +53,19 @@ const ClockCollection = (props) => {
 
                 searchPhotos(cityInfo.location.country).then(response => {
                     if (response.photos.length) {
-                        setDefaultImage(response.photos[0].src.large);
-                        setAddedTimeZones([{
-                            id: idCounter,
-                            image: response.photos[0].src.large,
-                            location: {
-                                city: cityInfo.location.city,
-                                country: cityInfo.location.country,
-                                timezone: cityInfo.location.timezone,
-                            }
-                        }]);
+                        const url = response.photos[0].src.large;
+                        downloadAndEncodeToBase64(url).then(b => {
+                            setDefaultImage(b);
+                            setAddedTimeZones([{
+                                id: idCounter,
+                                image: b,
+                                location: {
+                                    city: cityInfo.location.city,
+                                    country: cityInfo.location.country,
+                                    timezone: cityInfo.location.timezone,
+                                }
+                            }]);
+                        });
                     }
                 }).catch(error => console.error(error));
             }, () => loadDefaultImage());
@@ -77,16 +81,19 @@ const ClockCollection = (props) => {
     function loadDefaultImage() {
         searchPhotos(props.defaultCountry).then(response => {
             if (response.photos.length) {
-                setDefaultImage(response.photos[0].src.large);
-                setAddedTimeZones([{
-                    id: idCounter,
-                    image: response.photos[0].src.large,
-                    location: {
-                        city: props.defaultCity,
-                        country: props.defaultCountry,
-                        timezone: props.defaultTimezone,
-                    }
-                }]);
+                const url = response.photos[0].src.large;
+                downloadAndEncodeToBase64(url).then(b => {
+                    setDefaultImage(b);
+                    setAddedTimeZones([{
+                        id: idCounter,
+                        image: b,
+                        location: {
+                            city: props.defaultCity,
+                            country: props.defaultCountry,
+                            timezone: props.defaultTimezone,
+                        }
+                    }]);
+                });
             }
         }).catch(error => console.error(error));
     }

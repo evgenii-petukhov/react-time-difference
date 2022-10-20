@@ -4,6 +4,8 @@ import { Time } from "./time";
 import { findCitiesByName } from "./geo-helper";
 import { searchPhotos } from "./pexels-helper";
 import i18next from "i18next";
+import { downloadAndEncodeToBase64 } from "./base64-helper";
+import { getTimezoneOffset } from "./geo-helper";
 
 export { Clock };
 
@@ -29,10 +31,10 @@ const Clock = (props) => {
     }, []);
 
     function getItems(input) {
-        const localTimezoneOffset = getOffset(props.defaultTimezone);
+        const localTimezoneOffset = getTimezoneOffset(props.defaultTimezone);
 
         return findCitiesByName(input, 10).map(item => {
-            const timezoneDiff = (getOffset(item.timezone) - localTimezoneOffset) / 60;
+            const timezoneDiff = (getTimezoneOffset(item.timezone) - localTimezoneOffset) / 60;
             return {
                 label: `${item.city}, ${item.country}`,
                 diff: `${timezoneDiff > 0 ? '+' : ''}${timezoneDiff}${i18next.t('h')}`,
@@ -46,12 +48,6 @@ const Clock = (props) => {
         });
     }
 
-    function getOffset(timeZone = 'UTC', date = new Date()) {
-        const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
-        const tzDate = new Date(date.toLocaleString('en-US', { timeZone }));
-        return (tzDate.getTime() - utcDate.getTime()) / 6e4;
-    }
-
     function onTimezoneChanged(label, location) {
         setIsChangedManually(true);
         setLabel(label);
@@ -59,7 +55,8 @@ const Clock = (props) => {
         setImage(null);
         searchPhotos(location.country).then(response => {
             if (response.photos.length) {
-                setImage(response.photos[0].src.large);
+                const url = response.photos[0].src.large;
+                downloadAndEncodeToBase64(url).then(b => setImage(b));
             }
         }).catch(() => setImage(null));
         props.onChange?.(props.id, location);
