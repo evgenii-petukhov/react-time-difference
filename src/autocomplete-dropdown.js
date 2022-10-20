@@ -17,7 +17,7 @@ const AutocompleteDropdown = (props) => {
         const value = e.target.value.toUpperCase();
 
         setSuggestions(value.length > 0
-            ? props.getItems(value).slice(0, 10).sort()
+            ? props.getItems(value).sort()
             : []);
 
         setIsChangedManually(true);

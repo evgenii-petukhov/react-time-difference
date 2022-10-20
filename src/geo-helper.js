@@ -1,6 +1,6 @@
 import { cityMapping } from "city-timezones";
 
-export { getNearestCity };
+export { getNearestCity, findCitiesByName };
 
 function getNearestCity(lat, lng) {
     return cityMapping.map(item => ({
@@ -11,6 +11,15 @@ function getNearestCity(lat, lng) {
         },
         distance: getDistance(lat, lng, item.lat, item.lng)
     })).sort((a, b) => a.distance - b.distance)[0]
+}
+
+function findCitiesByName(input, count) {
+    const inputUpper = input.toLocaleUpperCase();
+
+    return cityMapping
+        .filter(item => item.timezone !== null 
+            && ((`${item.city} ${item.country}|${item.city}, ${item.country}`).toLocaleUpperCase().includes(inputUpper)))
+        .slice(0, count);
 }
 
 // https://www.geeksforgeeks.org/program-distance-two-points-earth/

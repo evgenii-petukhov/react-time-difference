@@ -3,13 +3,11 @@ const { useState, useEffect } = React
 export { Time };
 
 const Time = (props) => {
-    const [date, setDate] = useState(new Date());
-    const [timezone, setTimezone] = useState(props.timezone);
+    const [state, setState] = useState(props);
 
     useEffect(() => {
-        setDate(props.date);
-        setTimezone(props.timezone);
+        setState(props);
     });
 
-    return <div>{date.toLocaleTimeString([], { timeZone: timezone, hour12: false })}</div>;
+    return <div>{state.date.toLocaleTimeString([], { timeZone: state.timezone, hour12: false })}</div>;
 }

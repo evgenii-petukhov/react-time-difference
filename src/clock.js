@@ -1,13 +1,13 @@
 const { useState, useEffect, useRef } = React
 import { AutocompleteDropdown } from "./autocomplete-dropdown";
 import { Time } from "./time";
-import { cityMapping } from "city-timezones";
+import { findCitiesByName } from "./geo-helper";
 import i18next from "i18next";
 
 export { Clock };
 
 const Clock = (props) => {
-    const [label, setLabel] = useState(props.city + ', ' + props.country);
+    const [label, setLabel] = useState(`${props.city}, ${props.country}`);
     const [date, setDate] = useState(new Date());
     const [timezone, setTimezone] = useState(props.timezone);
     const [isChangedManually, setIsChangedManually] = useState(false);
@@ -24,7 +24,7 @@ const Clock = (props) => {
         }
 
         if (!isChangedManually) {
-            setLabel(props.city + ', ' + props.country);
+            setLabel(`${props.city}, ${props.country}`);
             setTimezone(props.timezone);
         }
 
@@ -32,14 +32,10 @@ const Clock = (props) => {
     });
 
     function getItems(input) {
-        const inputUpper = input.toLocaleUpperCase();
-
-        return cityMapping
-            .filter(item => item.timezone !== null && (item.city.toLocaleUpperCase().includes(inputUpper) || item.country.toLocaleUpperCase().includes(inputUpper)))
-            .map(item => ({
-                label: item.city + ', ' + item.country,
-                value: item.timezone
-            }));
+        return findCitiesByName(input, 10).map(item => ({
+            label: `${item.city}, ${item.country}`,
+            value: item.timezone
+        }));
     }
 
     function onTimezoneSelected(item) {
