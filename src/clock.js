@@ -11,18 +11,9 @@ const Clock = (props) => {
     const [date, setDate] = useState(new Date());
     const [timezone, setTimezone] = useState(props.timezone);
     const [isChangedManually, setIsChangedManually] = useState(false);
-    const [isInitialized, setIsInitialized] = useState(false);
     const clockComponentRef = useRef(null);
 
     useEffect(() => {
-        if (!isInitialized) {
-            clockComponentRef.current.scrollIntoView({
-                behavior: "smooth",
-                block: "end"
-            });
-            setIsInitialized(true);
-        }
-
         if (!isChangedManually) {
             setLabel(`${props.city}, ${props.country}`);
             setTimezone(props.timezone);
@@ -30,6 +21,13 @@ const Clock = (props) => {
 
         setDate(props.date);
     });
+
+    useEffect(() => {
+        clockComponentRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "end"
+        });
+    }, []);
 
     function getItems(input) {
         return findCitiesByName(input, 10).map(item => ({

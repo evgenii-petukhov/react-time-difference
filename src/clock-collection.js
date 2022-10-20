@@ -28,7 +28,7 @@ const ClockCollection = (props) => {
     useEffect(() => {
         isModelChangedRef.current = isModelChanged;
         idCounterRef.current = idCounter;
-    })
+    });
 
     useEffect(() => {
         setDate(new Date());
