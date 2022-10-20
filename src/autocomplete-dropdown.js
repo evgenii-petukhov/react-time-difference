@@ -48,7 +48,7 @@ const AutocompleteDropdown = (props) => {
         return suggestions.length === 0 ? null : (
             <ul>
                 {suggestions.map((item, index) => <li key={index} onClick={() => selectSuggestion(item)}>
-                    <div className="timezone-label">{item.label}</div>
+                    <div className="timezone-label">{item.label} <span className={`fi fi-${item.location.iso2.toLowerCase()}`}></span></div>
                     <div className="timezone-diff">{item.diff}</div>
                 </li>)}
             </ul>

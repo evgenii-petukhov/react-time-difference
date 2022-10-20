@@ -40,6 +40,7 @@ const Clock = (props) => {
                 location: {
                     city: item.city,
                     country: item.country,
+                    iso2: item.iso2,
                     timezone: item.timezone
                 }
             };
