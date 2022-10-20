@@ -2,14 +2,15 @@ const { useState, useEffect, useRef } = React
 import { AutocompleteDropdown } from "./autocomplete-dropdown";
 import { Time } from "./time";
 import { findCitiesByName } from "./geo-helper";
+import { searchPhotos } from "./pexels-helper";
 import i18next from "i18next";
 
 export { Clock };
 
 const Clock = (props) => {
     const [label, setLabel] = useState(`${props.city}, ${props.country}`);
-    const [date, setDate] = useState(new Date());
     const [timezone, setTimezone] = useState(props.timezone);
+    const [image, setImage] = useState(props.image);
     const [isChangedManually, setIsChangedManually] = useState(false);
     const clockComponentRef = useRef(null);
 
@@ -18,8 +19,9 @@ const Clock = (props) => {
             setLabel(`${props.city}, ${props.country}`);
             setTimezone(props.timezone);
         }
-
-        setDate(props.date);
+        if (!image) {
+            setImage(props.image);
+        }
     });
 
     useEffect(() => {
@@ -57,21 +59,26 @@ const Clock = (props) => {
         setIsChangedManually(true);
         setLabel(label);
         setTimezone(location.timezone);
+        searchPhotos(location.country).then(response => {
+            if (response.photos.length) {
+                setImage(response.photos[0].src.large);
+            }
+        }).catch(() => setImage(null));
         props.onChange?.(props.id, location);
     }
 
     return <div className="clock-container" ref={clockComponentRef}>
         <div className="clock">
             <div className="time">
-                <Time date={date} timezone={timezone} />
+                <Time date={props.date} timezone={timezone} />
             </div>
-            <div className="location-name">
+            <div>
                 <AutocompleteDropdown
                     text={label}
-                    disabled={props.disabled}
                     getItems={getItems}
                     onTimezoneChanged={onTimezoneChanged} />
             </div>
+            {image && <div className="location-image" style={{background: `url('${image}') center center no-repeat`}}></div>}
             <div className="button-container">
                 <button className="btn btn-outline-primary" onClick={() => props.onAdd(props.id)}>{i18next.t('Add clock')}</button>
                 <button className="btn btn-light btn-remove" onClick={() => props.onRemove(props.id)}>{i18next.t('Remove')}</button>

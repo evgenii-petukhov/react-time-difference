@@ -2,6 +2,7 @@ const { useState, useEffect, useRef } = React
 import i18next from "i18next";
 import { Clock } from "./clock";
 import { getNearestCity }  from "./geo-helper";
+import { searchPhotos } from "./pexels-helper";
 
 export { ClockCollection };
 
@@ -13,13 +14,15 @@ const ClockCollection = (props) => {
         location: {
             city: props.defaultCity,
             country: props.defaultCountry,
-            timezone: props.defaultTimezone
+            timezone: props.defaultTimezone,
+            image: null
         }
     }]);
     const [defaultLocation, setDefaultLocation] = useState(({
         city: props.defaultCity,
         country: props.defaultCountry,
         timezone: props.defaultTimezone,
+        image: null
     }));
     const [date, setDate] = useState(new Date());
     const [isModelChanged, setIsModelChanged] = useState(false);
@@ -45,13 +48,57 @@ const ClockCollection = (props) => {
                 }
     
                 setDefaultLocation(cityInfo.location);
-            });
+
+                searchPhotos(cityInfo.location.country).then(response => {
+                    if (response.photos.length) {
+                        setDefaultLocation(({
+                            city: cityInfo.location.city,
+                            country: cityInfo.location.country,
+                            timezone: cityInfo.location.timezone,
+                            image: response.photos[0].src.large
+                        }));
+                        setAddedTimeZones([{
+                            id: idCounter,
+                            location: {
+                                city: cityInfo.location.city,
+                                country: cityInfo.location.country,
+                                timezone: cityInfo.location.timezone,
+                                image: response.photos[0].src.large
+                            }
+                        }]);
+                    }
+                }).catch(error => console.error(error));
+            }, () => loadDefaultImage());
+        } else {
+            loadDefaultImage();
         }
 
         return () => {
             clearInterval(timerID);
         };
     }, []);
+
+    function loadDefaultImage() {
+        searchPhotos(props.defaultCountry).then(response => {
+            if (response.photos.length) {
+                setDefaultLocation(({
+                    city: props.defaultCity,
+                    country: props.defaultCountry,
+                    timezone: props.defaultTimezone,
+                    image: response.photos[0].src.large
+                }));
+                setAddedTimeZones([{
+                    id: idCounter,
+                    location: {
+                        city: props.defaultCity,
+                        country: props.defaultCountry,
+                        timezone: props.defaultTimezone,
+                        image: response.photos[0].src.large
+                    }
+                }]);
+            }
+        }).catch(error => console.error(error));
+    }
 
     function onClockAdded(id) {
         const newIdCounter = idCounter + 1;
@@ -78,7 +125,6 @@ const ClockCollection = (props) => {
         const index = a.findIndex(el => el.id === id);
         a[index].location = location;
         setAddedTimeZones(a);
-
         setIsModelChanged(true);
     }
 
@@ -97,6 +143,7 @@ const ClockCollection = (props) => {
                 city={settings.location.city}
                 country={settings.location.country}
                 defaultTimezone={defaultLocation.timezone}
+                image={settings.location.image}
                 date={date}
                 timezone={settings.location.timezone}
                 onRemove={onClockRemove}
