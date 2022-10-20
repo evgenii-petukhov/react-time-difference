@@ -77,10 +77,6 @@ const ClockCollection = (props) => {
         setIsModelChanged(true);
     }
 
-    function getIsModelChanged() {
-        return isModelChanged;
-    }
-
     return <div className="application-container">
         <div className="project-description">
             <div className="container-fluid">
