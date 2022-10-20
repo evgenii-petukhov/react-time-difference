@@ -19,9 +19,6 @@ const Clock = (props) => {
             setLabel(`${props.city}, ${props.country}`);
             setTimezone(props.timezone);
         }
-        if (!image) {
-            setImage(props.image);
-        }
     });
 
     useEffect(() => {
@@ -49,16 +46,17 @@ const Clock = (props) => {
         });
     }
 
-    const getOffset = (timeZone = 'UTC', date = new Date()) => {
+    function getOffset(timeZone = 'UTC', date = new Date()) {
         const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
         const tzDate = new Date(date.toLocaleString('en-US', { timeZone }));
         return (tzDate.getTime() - utcDate.getTime()) / 6e4;
-      }
+    }
 
     function onTimezoneChanged(label, location) {
         setIsChangedManually(true);
         setLabel(label);
         setTimezone(location.timezone);
+        setImage(null);
         searchPhotos(location.country).then(response => {
             if (response.photos.length) {
                 setImage(response.photos[0].src.large);
@@ -78,7 +76,7 @@ const Clock = (props) => {
                     getItems={getItems}
                     onTimezoneChanged={onTimezoneChanged} />
             </div>
-            {image && <div className="location-image" style={{background: `url('${image}') center center no-repeat`}}></div>}
+            {image && <div className={`${image === props.image ? 'default' : ''} location-image`} style={{ background: `url('${image}') center center no-repeat` }}></div>}
             <div className="button-container">
                 <button className="btn btn-outline-primary" onClick={() => props.onAdd(props.id)}>{i18next.t('Add clock')}</button>
                 <button className="btn btn-light btn-remove" onClick={() => props.onRemove(props.id)}>{i18next.t('Remove')}</button>
