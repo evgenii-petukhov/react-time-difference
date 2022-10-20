@@ -1,7 +1,7 @@
 const { useState, useEffect } = React
-import { Clock } from "./clock";
-import { cityMapping } from "city-timezones";
 import i18next from "i18next";
+import { Clock } from "./clock";
+import { getNearestCity }  from "./geo-helper";
 
 export { ClockCollection };
 
@@ -28,53 +28,25 @@ const ClockCollection = (props) => {
 
         new Promise(resolve => {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    resolve(cityMapping.map(item => ({
-                        location: {
-                            city: item.city,
-                            country: item.country,
-                            timezone: item.timezone,
-                        },
-                        distance: getDistance(position.coords.latitude, position.coords.longitude, item.lat, item.lng)
-                    })).sort((a, b) => a.distance - b.distance)[0]);
+                navigator.geolocation.getCurrentPosition(position => {
+                    resolve(getNearestCity(position.coords.latitude, position.coords.longitude));
                 });
             }
         }).then(cityInfo => {
+            if (addedTimeZones.length === 1 && addedTimeZones[0].location.city === defaultLocation.city) {
+                setAddedTimeZones([{
+                    id: idCounter,
+                    location: cityInfo.location
+                }]);
+            }
+
             setDefaultLocation(cityInfo.location);
-            setAddedTimeZones([{
-                id: idCounter,
-                location: cityInfo.location
-            }]);
         });
 
         return () => {
             clearInterval(timerID);
         };
     }, []);
-
-    // https://www.geeksforgeeks.org/program-distance-two-points-earth/
-    function getDistance(lat1, lon1, lat2, lon2) {
-
-        // The math module contains a function
-        // named toRadians which converts from
-        // degrees to radians.
-        lon1 = lon1 * Math.PI / 180;
-        lon2 = lon2 * Math.PI / 180;
-        lat1 = lat1 * Math.PI / 180;
-        lat2 = lat2 * Math.PI / 180;
-
-        // Haversine formula
-        let dlon = lon2 - lon1;
-        let dlat = lat2 - lat1;
-        let a = Math.pow(Math.sin(dlat / 2), 2)
-            + Math.cos(lat1) * Math.cos(lat2)
-            * Math.pow(Math.sin(dlon / 2), 2);
-
-        let c = 2 * Math.asin(Math.sqrt(a));
-
-        let r = 6371; // Radius of earth in kilometers. Use 3956 for miles
-        return (c * r);
-    }
 
     function addClock(id) {
         const newIdCounter = idCounter + 1;
@@ -98,21 +70,21 @@ const ClockCollection = (props) => {
         <div className="project-description">
             <div className="container-fluid">
                 <div className="row text-center">
-                    <div className = "col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-sm-10 offset-sm-1">{i18next.t('Project description')}</div>
+                    <div className = "col-lg-4offset-lg-4 col-md-6 offset-md-3 col-sm-10 offset-sm-1">{i18next.t('Project description')}</div>
                 </div>
             </div>
         </div>
         <div className="clock-collection">
-            {
-                addedTimeZones.map(settings => <Clock key={settings.id}
-                    id={settings.id}
-                    city={settings.location.city}
-                    country={settings.location.country}
-                    timezone={settings.location.timezone}
-                    removeCallback={removeClockById}
-                    addCallback={addClock}
-                    date={date} />)
-            }
-            </div>
+        {
+            addedTimeZones.map(settings => <Clock key={settings.id}
+                id={settings.id}
+                city={settings.location.city}
+                country={settings.location.country}
+                timezone={settings.location.timezone}
+                removeCallback={removeClockById}
+                addCallback={addClock}
+                date={date} />)
+        }
+        </div>
     </div>;
 }
