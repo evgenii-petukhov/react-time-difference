@@ -41,36 +41,11 @@ const ClockCollection = (props) => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
                 const cityInfo = getNearestCity(position.coords.latitude, position.coords.longitude);
-                if (!isModelChangedRef.current) {
-                    setAddedTimeZones([{
-                        id: idCounterRef,
-                        image: null,
-                        location: cityInfo.location
-                    }]);
-                }
-    
                 setDefaultLocation(cityInfo.location);
-
-                searchPhotos(cityInfo.location.country).then(response => {
-                    if (response.photos.length) {
-                        const url = response.photos[0].src.large;
-                        downloadAndEncodeToBase64(url).then(b => {
-                            setDefaultImage(b);
-                            setAddedTimeZones([{
-                                id: idCounter,
-                                image: b,
-                                location: {
-                                    city: cityInfo.location.city,
-                                    country: cityInfo.location.country,
-                                    timezone: cityInfo.location.timezone,
-                                }
-                            }]);
-                        });
-                    }
-                }).catch(error => console.error(error));
-            }, () => loadDefaultImage());
+                loadDefaultImage(idCounterRef.current, cityInfo.location.city, cityInfo.location.country, cityInfo.location.timezone);
+            }, () => loadDefaultImage(idCounterRef.current, props.defaultCity, props.defaultCountry, props.defaultTimezone));
         } else {
-            loadDefaultImage();
+            loadDefaultImage(idCounterRef.current, props.defaultCity, props.defaultCountry, props.defaultTimezone);
         }
 
         return () => {
@@ -78,24 +53,26 @@ const ClockCollection = (props) => {
         };
     }, []);
 
-    function loadDefaultImage() {
-        searchPhotos(props.defaultCountry).then(response => {
+    function loadDefaultImage(id, city, country, timezone) {
+        searchPhotos(`${city} ${country}`).then(response => {
             if (response.photos.length) {
                 const url = response.photos[0].src.large;
                 downloadAndEncodeToBase64(url).then(b => {
                     setDefaultImage(b);
-                    setAddedTimeZones([{
-                        id: idCounter,
-                        image: b,
-                        location: {
-                            city: props.defaultCity,
-                            country: props.defaultCountry,
-                            timezone: props.defaultTimezone,
-                        }
-                    }]);
+                    if (!isModelChangedRef.current) {
+                        setAddedTimeZones(() => [{
+                            id: id,
+                            image: b,
+                            location: {
+                                city: city,
+                                country: country,
+                                timezone: timezone,
+                            }
+                        }]);
+                    }
                 });
             }
-        }).catch(error => console.error(error));
+        }).catch(() => setDefaultImage(null));
     }
 
     function onClockAdded(id) {

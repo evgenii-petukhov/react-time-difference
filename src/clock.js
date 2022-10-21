@@ -21,6 +21,10 @@ const Clock = (props) => {
             setLabel(`${props.city}, ${props.country}`);
             setTimezone(props.timezone);
         }
+
+        if (!image) {
+            setImage(props.image);
+        }
     });
 
     useEffect(() => {
@@ -53,7 +57,7 @@ const Clock = (props) => {
         setLabel(label);
         setTimezone(location.timezone);
         setImage(null);
-        searchPhotos(location.country).then(response => {
+        searchPhotos(`${location.city} ${location.country}`).then(response => {
             if (response.photos.length) {
                 const url = response.photos[0].src.large;
                 downloadAndEncodeToBase64(url).then(b => setImage(b));
