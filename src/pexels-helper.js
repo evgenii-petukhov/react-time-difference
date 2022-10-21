@@ -32,6 +32,6 @@ function searchPhotos(query) {
             } else {
                 resolve(`images/${query}.jpeg`);
             }
-        }).catch(() => resolve(`${query}.jpeg`));
+        }).catch(() => resolve(`images/${query}.jpeg`));
     });
 }
