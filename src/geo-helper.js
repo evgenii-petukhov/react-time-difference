@@ -22,7 +22,7 @@ function findCitiesByName(input, count) {
 
     return cityMapping
         .filter(item => item.timezone !== null
-            && `${item.city} ${item.country}|${item.city}, ${item.country}`.toLocaleUpperCase().includes(input))
+            && `${item.city} ${item.country} ${item.city}|${item.city}, ${item.country}, ${item.city}`.toLocaleUpperCase().includes(input))
         .slice(0, count);
 }
 
