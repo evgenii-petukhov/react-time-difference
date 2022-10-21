@@ -37,15 +37,14 @@ const ClockCollection = (props) => {
     useEffect(() => {
         setDate(new Date());
         const timerID = setInterval(() => setDate(new Date()), 1000);
+        loadDefaultImage(idCounterRef.current, props.defaultCity, props.defaultCountry, props.defaultTimezone);
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
                 const cityInfo = getNearestCity(position.coords.latitude, position.coords.longitude);
                 setDefaultLocation(cityInfo.location);
                 loadDefaultImage(idCounterRef.current, cityInfo.location.city, cityInfo.location.country, cityInfo.location.timezone);
-            }, () => loadDefaultImage(idCounterRef.current, props.defaultCity, props.defaultCountry, props.defaultTimezone));
-        } else {
-            loadDefaultImage(idCounterRef.current, props.defaultCity, props.defaultCountry, props.defaultTimezone);
+            });
         }
 
         return () => {
