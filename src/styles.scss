@@ -38,6 +38,7 @@ html {
                             @media (max-width: 575.98px) {
                                 width: auto;
                                 flex: 1 1 auto;
+                                margin: 20px 0;
                             }
 
                             .time {
@@ -47,6 +48,12 @@ html {
                                 text-align: center;
                             }
 
+                            .location-name {
+                                @media (max-width: 575.98px) {
+                                    margin: 0 8px;
+                                }
+                            }
+
                             .location-image {
                                 height: 200px;
                                 margin: 16px 0 0 0;
@@ -54,6 +61,10 @@ html {
 
                                 &:not(.default) {
                                     animation: shake .5s linear;
+                                }
+
+                                @media (max-width: 575.98px) {
+                                    height: 260px;
                                 }
                             }
 

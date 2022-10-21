@@ -71,7 +71,7 @@ const Clock = (props) => {
             <div className="time">
                 <Time date={props.date} timezone={timezone} />
             </div>
-            <div>
+            <div className="location-name">
                 <AutocompleteDropdown
                     text={label}
                     getItems={getItems}
