@@ -8,6 +8,7 @@ function searchPhotos(query) {
     return client.photos.search({ 
         query, 
         per_page: 1,
-        size: 'large'
+        size: 'large',
+        orientation: 'landscape'
     });
 }
