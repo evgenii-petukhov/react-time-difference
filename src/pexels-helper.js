@@ -12,7 +12,7 @@ function searchPhotos(query) {
     let urlCache = JSON.parse(localStorage.getItem(urlCacheName) || '[]');
     const index = urlCache.findIndex(el => el.query === query);
 
-    return index > -1 ? Promise.resolve(urlCache[index].url) : new Promise((resolve, reject) => {
+    return index > -1 ? Promise.resolve(urlCache[index].url) : new Promise(resolve => {
         client.photos.search({ 
             query, 
             per_page: 1,
@@ -30,8 +30,8 @@ function searchPhotos(query) {
                 localStorage.setItem(urlCacheName, JSON.stringify(urlCache));
                 resolve(url);
             } else {
-                reject();
+                resolve(`images/${query}.jpeg`);
             }
-        });
+        }).catch(() => resolve(`${query}.jpeg`));
     });
 }

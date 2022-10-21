@@ -20,6 +20,7 @@ module.exports = {
                 { from: "src/favicon/clock.ico", to: "favicon.ico" },
                 { from: "src/favicon/clock.svg", to: "icon.svg" },
                 { from: "src/favicon/manifest.webmanifest", to: "manifest.webmanifest" },
+                { from: "src/images", to: "images" },
             ],
         }),
     ],
