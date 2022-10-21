@@ -21,10 +21,6 @@ const Clock = (props) => {
             setLabel(`${props.city}, ${props.country}`);
             setTimezone(props.timezone);
         }
-
-        if (!image) {
-            setImage(props.image);
-        }
     });
 
     useEffect(() => {
@@ -33,6 +29,10 @@ const Clock = (props) => {
             block: "end"
         });
     }, []);
+
+    useEffect(() => {
+        setImage(props.image);
+    }, [props.image]);
 
     function getItems(input) {
         const localTimezoneOffset = getTimezoneOffset(props.defaultTimezone);
