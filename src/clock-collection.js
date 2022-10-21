@@ -53,24 +53,21 @@ const ClockCollection = (props) => {
     }, []);
 
     function loadDefaultImage(id, city, country, timezone) {
-        searchPhotos(`${city} ${country}`).then(response => {
-            if (response.photos.length) {
-                const url = response.photos[0].src.large;
-                downloadAndEncodeToBase64(url).then(b => {
-                    setDefaultImage(b);
-                    if (!isModelChangedRef.current) {
-                        setAddedTimeZones(() => [{
-                            id: id,
-                            image: b,
-                            location: {
-                                city: city,
-                                country: country,
-                                timezone: timezone,
-                            }
-                        }]);
-                    }
-                });
-            }
+        searchPhotos(`${city} ${country}`).then(url => {
+            downloadAndEncodeToBase64(url).then(b => {
+                setDefaultImage(b);
+                if (!isModelChangedRef.current) {
+                    setAddedTimeZones(() => [{
+                        id: id,
+                        image: b,
+                        location: {
+                            city: city,
+                            country: country,
+                            timezone: timezone,
+                        }
+                    }]);
+                }
+            });
         }).catch(() => setDefaultImage(null));
     }
 

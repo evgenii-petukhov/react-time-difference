@@ -57,12 +57,9 @@ const Clock = (props) => {
         setLabel(label);
         setTimezone(location.timezone);
         setImage(null);
-        searchPhotos(`${location.city} ${location.country}`).then(response => {
-            if (response.photos.length) {
-                const url = response.photos[0].src.large;
-                downloadAndEncodeToBase64(url).then(b => setImage(b));
-            }
-        }).catch(() => setImage(null));
+        searchPhotos(`${location.city} ${location.country}`)
+            .then(url => downloadAndEncodeToBase64(url).then(b => setImage(b)))
+            .catch(() => setImage(null));
         props.onChange?.(props.id, location);
     }
 
@@ -77,7 +74,7 @@ const Clock = (props) => {
                     getItems={getItems}
                     onTimezoneChanged={onTimezoneChanged} />
             </div>
-            {image && <div className={`${image === props.image ? 'default' : ''} location-image`} style={{ background: `url('${image}') center center no-repeat` }}></div>}
+            {image && <div className={`${image === props.image ? 'default-image' : ''} location-image`} style={{ background: `url('${image}') center center no-repeat` }}></div>}
             <div className="button-container">
                 <button className="btn btn-outline-primary" onClick={() => props.onAdd(props.id)}>{i18next.t('Add clock')}</button>
                 <button className="btn btn-light btn-remove" onClick={() => props.onRemove(props.id)}>{i18next.t('Remove')}</button>

@@ -59,7 +59,7 @@ html {
                                 margin: 16px 0 0 0;
                                 background-size: cover !important;
 
-                                &:not(.default) {
+                                &:not(.default-image) {
                                     animation: shake .5s linear;
                                 }
 
