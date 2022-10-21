@@ -5,12 +5,15 @@ const CopyPlugin = require("copy-webpack-plugin");
 module.exports = {
     entry: './src/index.js',
     output: {
-        filename: 'main.js',
+        filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'dist'),
+        clean: true
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: 'src/index.html'
+            template: 'src/index.html',
+            scriptLoading: 'blocking',
+            inject: 'head'
         }),
         new CopyPlugin({
             patterns: [
