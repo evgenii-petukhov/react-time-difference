@@ -8,6 +8,8 @@ const apiKey = '563492ad6f917000010000010b615054bce549e2bdb4a48e0d1520d9';
 const client = createClient(apiKey);
 
 function searchPhotos(city, country) {
+    city = city.toLocaleLowerCase();
+    country = country.toLocaleLowerCase();
     const query = `${city} ${country}`;
     return new Promise(resolve => {
         urlCacheHelper.get(query).then(url => url).catch(() => {
