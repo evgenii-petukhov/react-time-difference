@@ -53,7 +53,7 @@ const ClockCollection = (props) => {
     }, []);
 
     function loadDefaultImage(id, city, country, timezone) {
-        searchPhotos(city, country).then(url => {
+        searchPhotos(country).then(url => {
             downloadAndEncodeToBase64(url).then(b => {
                 setDefaultImage(b);
                 if (!isModelChangedRef.current) {

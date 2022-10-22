@@ -40,7 +40,7 @@ const Clock = (props) => {
         setLabel(label);
         setTimezone(location.timezone);
         setImage(null);
-        searchPhotos(location.city, location.country)
+        searchPhotos(location.country)
             .then(url => downloadAndEncodeToBase64(url)
                 .then(b => setImage(b))
                 .catch(() => setImage(null)));
