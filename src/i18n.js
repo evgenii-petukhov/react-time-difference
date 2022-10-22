@@ -3,6 +3,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 i18next.use(LanguageDetector).init({
     debug: true,
+    fallbackLng: 'en',
     resources: {
         en: {
             translation: {
