@@ -3,8 +3,16 @@ import i18next from "i18next";
 
 export { getNearestCity, findCitiesByName };
 
+const validCityMappings = cityMapping.filter(item => item.timezone !== null).map(item => ({
+    city: item.city,
+    country: item.country,
+    iso2: item.iso2,
+    timezone: item.timezone,
+    searchString: `${item.city} ${item.country} ${item.city}|${item.city}, ${item.country}, ${item.city}`.toLocaleUpperCase()
+}));
+
 function getNearestCity(lat, lng) {
-    return cityMapping.map(item => ({
+    return validCityMappings.map(item => ({
         location: {
             city: item.city,
             country: item.country,
@@ -24,9 +32,8 @@ function findCitiesByName(query, localTimezone, count) {
     query = query.toLocaleUpperCase();
     const localTimezoneOffset = getTimezoneOffset(localTimezone);
 
-    return cityMapping
-        .filter(item => item.timezone !== null
-            && `${item.city} ${item.country} ${item.city}|${item.city}, ${item.country}, ${item.city}`.toLocaleUpperCase().includes(query))
+    return validCityMappings
+        .filter(item => item.searchString.includes(query))
         .slice(0, count)
         .map(item => {
             const timezoneDiff = (getTimezoneOffset(item.timezone) - localTimezoneOffset) / 60;

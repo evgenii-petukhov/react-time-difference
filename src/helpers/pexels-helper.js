@@ -1,5 +1,5 @@
 import { createClient } from 'pexels';
-import { isImageCached } from './local-image-storage';
+import { isImageCached } from './image-cache';
 import * as urlCacheHelper from './url-cache-helper';
 
 export { searchPhotos };
