@@ -1,13 +1,14 @@
-const { useState, useEffect, useRef } = React
+const { useState, useEffect, useRef } = React;
+import i18next from "i18next";
 import { AutocompleteDropdown } from "./autocomplete-dropdown";
 import { Time } from "./time";
-import { findCitiesByName } from "./geo-helper";
-import { searchPhotos } from "./pexels-helper";
-import i18next from "i18next";
-import { downloadAndEncodeToBase64 } from "./base64-helper";
-import { getTimezoneOffset } from "./geo-helper";
+import { findCitiesByName } from "../helpers/geo-helper";
+import { searchPhotos } from "../helpers/pexels-helper";
+import { downloadAndEncodeToBase64 } from "../helpers/base64-helper";
 
 export { Clock };
+
+const dropdownCityLimit = 10;
 
 const Clock = (props) => {
     const [label, setLabel] = useState(`${props.city}, ${props.country}`);
@@ -34,32 +35,15 @@ const Clock = (props) => {
         setImage(props.image);
     }, [props.image]);
 
-    function getItems(input) {
-        const localTimezoneOffset = getTimezoneOffset(props.defaultTimezone);
-
-        return findCitiesByName(input, 10).map(item => {
-            const timezoneDiff = (getTimezoneOffset(item.timezone) - localTimezoneOffset) / 60;
-            return {
-                label: `${item.city}, ${item.country}`,
-                diff: `${timezoneDiff > 0 ? '+' : ''}${timezoneDiff}${i18next.t('h')}`,
-                location: {
-                    city: item.city,
-                    country: item.country,
-                    iso2: item.iso2,
-                    timezone: item.timezone
-                }
-            };
-        });
-    }
-
     function onTimezoneChanged(label, location) {
         setIsChangedManually(true);
         setLabel(label);
         setTimezone(location.timezone);
         setImage(null);
-        searchPhotos(`${location.city} ${location.country}`)
-            .then(url => downloadAndEncodeToBase64(url).then(b => setImage(b)))
-            .catch(() => setImage(null));
+        searchPhotos(location.city, location.country)
+            .then(url => downloadAndEncodeToBase64(url)
+                .then(b => setImage(b))
+                .catch(() => setImage(null)));
         props.onChange?.(props.id, location);
     }
 
@@ -71,7 +55,7 @@ const Clock = (props) => {
             <div className="location-name">
                 <AutocompleteDropdown
                     text={label}
-                    getItems={getItems}
+                    getItems={input => findCitiesByName(input, props.defaultTimezone, dropdownCityLimit)}
                     onTimezoneChanged={onTimezoneChanged} />
             </div>
             {image && <div className={`${image === props.image ? 'default-image' : ''} location-image`} style={{ background: `url('${image}') center center no-repeat` }}></div>}

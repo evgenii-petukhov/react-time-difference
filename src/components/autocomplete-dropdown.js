@@ -1,6 +1,6 @@
-const { useState, useEffect } = React
+const { useState, useEffect } = React;
 
-export { AutocompleteDropdown }
+export { AutocompleteDropdown };
 
 const AutocompleteDropdown = (props) => {
     const [suggestions, setSuggestions] = useState([]);

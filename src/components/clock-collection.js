@@ -1,9 +1,9 @@
-const { useState, useEffect, useRef } = React
+const { useState, useEffect, useRef } = React;
 import i18next from "i18next";
 import { Clock } from "./clock";
-import { getNearestCity }  from "./geo-helper";
-import { searchPhotos } from "./pexels-helper";
-import { downloadAndEncodeToBase64 } from "./base64-helper";
+import { getNearestCity }  from "../helpers/geo-helper";
+import { searchPhotos } from "../helpers/pexels-helper";
+import { downloadAndEncodeToBase64 } from "../helpers/base64-helper";
 
 export { ClockCollection };
 
@@ -19,11 +19,11 @@ const ClockCollection = (props) => {
             timezone: props.defaultTimezone
         }
     }]);
-    const [defaultLocation, setDefaultLocation] = useState(({
+    const [defaultLocation, setDefaultLocation] = useState({
         city: props.defaultCity,
         country: props.defaultCountry,
         timezone: props.defaultTimezone
-    }));
+    });
     const [defaultImage, setDefaultImage] = useState(null);
     const [date, setDate] = useState(new Date());
     const [isModelChanged, setIsModelChanged] = useState(false);
@@ -53,22 +53,22 @@ const ClockCollection = (props) => {
     }, []);
 
     function loadDefaultImage(id, city, country, timezone) {
-        searchPhotos(`${city} ${country}`).then(url => {
+        searchPhotos(city, country).then(url => {
             downloadAndEncodeToBase64(url).then(b => {
                 setDefaultImage(b);
                 if (!isModelChangedRef.current) {
                     setAddedTimeZones(() => [{
-                        id: id,
+                        id,
                         image: b,
                         location: {
-                            city: city,
-                            country: country,
-                            timezone: timezone,
+                            city,
+                            country,
+                            timezone
                         }
                     }]);
                 }
-            });
-        }).catch(() => setDefaultImage(null));
+            }).catch(() => setDefaultImage(null));
+        });
     }
 
     function onClockAdded(id) {
