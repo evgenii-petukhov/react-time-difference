@@ -8,6 +8,8 @@ const validCityMappings = cityMapping.filter(item => item.timezone !== null).map
     country: item.country,
     iso2: item.iso2,
     timezone: item.timezone,
+    lat: item.lat,
+    lng: item.lng,
     searchString: `${item.city} ${item.country} ${item.city}|${item.city}, ${item.country}, ${item.city}`.toLocaleUpperCase()
 }));
 
