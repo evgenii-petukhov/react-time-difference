@@ -1,5 +1,5 @@
 import { createClient } from 'pexels';
-import { isImageCached } from './image-cache';
+import { getCachedImages } from './image-cache';
 import * as urlCacheHelper from './url-cache-helper';
 
 export { searchPhotos };
@@ -10,9 +10,10 @@ const client = createClient(apiKey);
 
 function searchPhotos(country) {
     country = country.toLocaleLowerCase();
-    const cachedImageFilename = `images/${country}.jpeg`;
-    return isImageCached(country) ? Promise.resolve(cachedImageFilename) : new Promise(resolve => {
-        urlCacheHelper.get(country).then(url => resolve(url)).catch(() => {
+    const cachedImages = getCachedImages(country);
+    const defaultResponse = [`images/${country}.jpeg`];
+    return cachedImages.length ? Promise.resolve(cachedImages) : new Promise(resolve => {
+        urlCacheHelper.get(country).then(urls => resolve(urls)).catch(() => {
             client.photos.search({ 
                 query: country, 
                 per_page: 1,
@@ -21,12 +22,12 @@ function searchPhotos(country) {
             }).then(response => {
                 if (response.photos.length) {
                     const url = response.photos[0].src.large;
-                    urlCacheHelper.add(country, url);
-                    resolve(url);
+                    urlCacheHelper.add(country, [url]);
+                    resolve([url]);
                 } else {
-                    resolve(cachedImageFilename);
+                    resolve(defaultResponse);
                 }
-            }).catch(() => resolve(cachedImageFilename));
+            }).catch(() => resolve(defaultResponse));
         });
     });
 }

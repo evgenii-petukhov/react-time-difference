@@ -1,6 +1,7 @@
 const { useState, useEffect, useRef } = React;
 import i18next from "i18next";
 import { AutocompleteDropdown } from "./autocomplete-dropdown";
+import { Carousel } from "./carousel";
 import { Time } from "./time";
 import { findCitiesByName } from "../helpers/geo-helper";
 import { searchPhotos } from "../helpers/pexels-helper";
@@ -12,7 +13,7 @@ const dropdownCityLimit = 10;
 
 const Clock = (props) => {
     const [location, setLocation] = useState(props.location);
-    const [image, setImage] = useState(props.image);
+    const [images, setImages] = useState(props.images);
     const [isChangedManually, setIsChangedManually] = useState(false);
     const clockComponentRef = useRef(null);
 
@@ -30,17 +31,20 @@ const Clock = (props) => {
     }, []);
 
     useEffect(() => {
-        setImage(props.image);
-    }, [props.image]);
+        setImages(props.images);
+    }, [props.images]);
 
     function onTimezoneChanged(location) {
         setIsChangedManually(true);
         setLocation(location);
-        setImage(null);
+        setImages(null);
         searchPhotos(location.country)
-            .then(url => downloadAndEncodeToBase64(url)
-                .then(b => setImage(b))
-                .catch(() => setImage(null)));
+            .then(urls => Promise.allSettled(urls.map(url => downloadAndEncodeToBase64(url)))
+                .then(results => {
+                    const blobs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
+                    setImages(blobs);
+                })
+                .catch(() => setImages(null)));
         props.onChange?.(props.id, location);
     }
 
@@ -56,7 +60,9 @@ const Clock = (props) => {
                     getItems={input => findCitiesByName(input, props.defaultTimezone, dropdownCityLimit)}
                     onTimezoneChanged={onTimezoneChanged} />
             </div>
-            {image && <div className={`${image === props.image ? 'default-image' : ''} location-image`} style={{ background: `url('${image}') center center no-repeat` }}></div>}
+            <div className="carousel-container">
+                <Carousel clockId={props.id} images={images} isChangedManually={isChangedManually} />
+            </div>
             <div className="button-container">
                 <button className="btn btn-outline-primary" onClick={() => props.onAdd(props.id)}>{i18next.t('Add clock')}</button>
                 <button className="btn btn-light btn-remove" onClick={() => props.onRemove(props.id)}>{i18next.t('Remove')}</button>

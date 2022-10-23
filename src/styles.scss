@@ -54,14 +54,19 @@ html {
                                 }
                             }
 
+                            .carousel-container {
+                                .carousel {
+                                    &:not(.default-images) {
+                                        animation: shake .5s linear;
+                                    }
+                                }
+
+                            }
+
                             .location-image {
                                 height: 200px;
                                 margin: 16px 0 0 0;
                                 background-size: cover !important;
-
-                                &:not(.default-image) {
-                                    animation: shake .5s linear;
-                                }
 
                                 @media (max-width: 575.98px) {
                                     height: 260px;
@@ -144,6 +149,7 @@ html {
                             background: rgba(255, 255, 255, .9);
                             width: auto;
                             min-width: 100%;
+                            z-index: 3;
 
                             li {
                                 font-size: 1rem;

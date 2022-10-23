@@ -12,7 +12,7 @@ const ClockCollection = (props) => {
     const idCounterRef = useRef(idCounter);
     const [addedTimeZones, setAddedTimeZones] = useState([{
         id: idCounter,
-        image: null,
+        images: null,
         location: {
             city: props.defaultCity,
             country: props.defaultCountry,
@@ -26,7 +26,7 @@ const ClockCollection = (props) => {
         timezone: props.defaultTimezone,
         iso2: props.defaultIso2
     });
-    const [defaultImage, setDefaultImage] = useState(null);
+    const [defaultImages, setDefaultImages] = useState(null);
     const [date, setDate] = useState(new Date());
     const [isModelChanged, setIsModelChanged] = useState(false);
     const isModelChangedRef = useRef(isModelChanged);
@@ -39,13 +39,13 @@ const ClockCollection = (props) => {
     useEffect(() => {
         setDate(new Date());
         const timerID = setInterval(() => setDate(new Date()), 1000);
-        loadDefaultImage(idCounterRef.current, defaultLocation);
+        loadDefaultImages(idCounterRef.current, defaultLocation);
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
                 const cityInfo = getNearestCity(position.coords.latitude, position.coords.longitude);
                 setDefaultLocation(cityInfo.location);
-                loadDefaultImage(idCounterRef.current, cityInfo.location);
+                loadDefaultImages(idCounterRef.current, cityInfo.location);
             });
         }
 
@@ -54,14 +54,15 @@ const ClockCollection = (props) => {
         };
     }, []);
 
-    function loadDefaultImage(id, location) {
-        searchPhotos(location.country).then(url => {
-            downloadAndEncodeToBase64(url).then(b => {
-                setDefaultImage(b);
+    function loadDefaultImages(id, location) {
+        searchPhotos(location.country).then(urls => {
+            Promise.allSettled(urls.map(url => downloadAndEncodeToBase64(url))).then(results => {
+                const blobs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
+                setDefaultImages(blobs);
                 if (!isModelChangedRef.current) {
                     setAddedTimeZones(() => [{
                         id,
-                        image: b,
+                        images: blobs,
                         location: {
                             city: location.city,
                             country: location.country,
@@ -70,7 +71,7 @@ const ClockCollection = (props) => {
                         }
                     }]);
                 }
-            }).catch(() => setDefaultImage(null));
+            }).catch(() => setDefaultImages(null));
         });
     }
 
@@ -81,7 +82,7 @@ const ClockCollection = (props) => {
             const index = prev.findIndex((element) => element.id === id);
             prev.splice(index + 1, 0, {
                 id: newIdCounter,
-                image: defaultImage,
+                images: defaultImages,
                 location: defaultLocation
             });
             return [...prev];
@@ -116,7 +117,7 @@ const ClockCollection = (props) => {
             addedTimeZones.map(settings => <Clock key={settings.id}
                 id={settings.id}
                 location={settings.location}
-                image={settings.image}
+                images={settings.images}
                 date={date}
                 onRemove={onClockRemove}
                 onAdd={onClockAdded}
