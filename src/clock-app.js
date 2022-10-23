@@ -11,9 +11,13 @@ export default class ClockApp {
         const cityInfo = defaultTimezone.includes('UTC') || !defaultTimezone.includes('/') ? {
             city: 'New York',
             country: 'United States of America',
-            timezone: 'America/New_York'
+            timezone: 'America/New_York',
+            iso2: 'US'
         } : lookupViaCity(defaultTimezone.split('/')[1])[0];
 
-        root.render(<ClockCollection defaultTimezone={cityInfo.timezone} defaultCity={cityInfo.city} defaultCountry={cityInfo.country} />);
+        root.render(<ClockCollection defaultTimezone={cityInfo.timezone} 
+            defaultCity={cityInfo.city} 
+            defaultCountry={cityInfo.country}
+            defaultIso2={cityInfo.iso2} />);
     }
 }

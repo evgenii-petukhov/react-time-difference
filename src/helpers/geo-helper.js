@@ -19,6 +19,7 @@ function getNearestCity(lat, lng) {
             city: item.city,
             country: item.country,
             timezone: item.timezone,
+            iso2: item.iso2
         },
         distance: getDistance(lat, lng, item.lat, item.lng)
     })).sort((a, b) => a.distance - b.distance)[0]

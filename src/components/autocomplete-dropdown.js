@@ -5,11 +5,15 @@ export { AutocompleteDropdown };
 const AutocompleteDropdown = (props) => {
     const [suggestions, setSuggestions] = useState([]);
     const [text, setText] = useState(props.text);
+    const [country, setCountry] = useState(props.country);
+    const [iso2, setIso2] = useState(props.iso2);
     const [isChangedManually, setIsChangedManually] = useState(false);
 
     useEffect(() => {
         if (!isChangedManually) {
             setText(props.text);
+            setCountry(props.country);
+            setIso2(props.iso2);
         }
     });
 
@@ -40,17 +44,18 @@ const AutocompleteDropdown = (props) => {
 
     function selectSuggestion(item) {
         setSuggestions([]);
-        setText(item.label);
-        props.onTimezoneChanged?.(item.label, item.location);
+        setText(item.location.city);
+        setCountry(item.location.country);
+        setIso2(item.location.iso2);
+        props.onTimezoneChanged?.(item.location);
     }
 
     function renderSuggestions() {
         return suggestions.length === 0 ? null : (
             <ul>
                 {suggestions.map((item, index) => <li key={index} onClick={() => selectSuggestion(item)}>
-                    <div className="timezone-label">{item.label}
-                        {item.location.iso2 && <span>&nbsp;<span className={`fi fi-${item.location.iso2.toString().toLowerCase()}`}></span></span>}
-                    </div>
+                    <div className="timezone-flag">{item.location.iso2 && <span className={`fi fi-${item.location.iso2.toString().toLowerCase()}`}></span>}</div>
+                    <div className="timezone-label">{item.label}</div>
                     <div className="timezone-diff">{item.diff}</div>
                 </li>)}
             </ul>
@@ -59,13 +64,19 @@ const AutocompleteDropdown = (props) => {
 
     return <div className="autocomplete-textbox-component">
         <div className="textbox-container">
-            <input type="text"
-                className="form-control"
-                value={text}
-                placeholder={props.placeholder}
-                onChange={onTextChanged}
-                onKeyDown={onKeyDown}
-                onFocus={(e) => e.target.select()} />
+            <div className="input-group mb-3">
+                <span className="input-group-text">
+                    {iso2 && <span className={`fi fi-${iso2.toString().toLowerCase()}`}
+                        title={country}></span>}
+                </span>
+                <input type="text"
+                    className="form-control"
+                    value={text}
+                    placeholder={props.placeholder}
+                    onChange={onTextChanged}
+                    onKeyDown={onKeyDown}
+                    onFocus={(e) => e.target.select()} />
+            </div>
         </div>
         <div className="suggestions">
             {renderSuggestions()}

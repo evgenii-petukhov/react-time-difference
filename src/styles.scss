@@ -127,8 +127,6 @@ html {
                         flex: 1;
 
                         input {
-                            width: 100%;
-                            text-align: center;
                             box-sizing: border-box;
                         }
                     }
@@ -157,9 +155,16 @@ html {
                                     flex: 1 1 auto;
                                 }
 
-                                .timezone-diff {
+                                .timezone-diff, .timezone-flag {
                                     flex: 0 1 auto;
+                                }
+
+                                .timezone-diff {
                                     margin: 0 0 0 5px;
+                                }
+
+                                .timezone-flag {
+                                    margin: 0 5px 0 0;
                                 }
                             }
                         }

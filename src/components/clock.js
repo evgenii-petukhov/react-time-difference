@@ -11,7 +11,9 @@ export { Clock };
 const dropdownCityLimit = 10;
 
 const Clock = (props) => {
-    const [label, setLabel] = useState(`${props.city}, ${props.country}`);
+    const [city, setCity] = useState(props.city);
+    const [iso2, setIso2] = useState(props.iso2);
+    const [country, setCountry] = useState(props.country);
     const [timezone, setTimezone] = useState(props.timezone);
     const [image, setImage] = useState(props.image);
     const [isChangedManually, setIsChangedManually] = useState(false);
@@ -19,7 +21,9 @@ const Clock = (props) => {
 
     useEffect(() => {
         if (!isChangedManually) {
-            setLabel(`${props.city}, ${props.country}`);
+            setCity(props.city);
+            setCountry(props.country);
+            setIso2(props.iso2);
             setTimezone(props.timezone);
         }
     });
@@ -35,9 +39,11 @@ const Clock = (props) => {
         setImage(props.image);
     }, [props.image]);
 
-    function onTimezoneChanged(label, location) {
+    function onTimezoneChanged(location) {
         setIsChangedManually(true);
-        setLabel(label);
+        setCity(location.city);
+        setCountry(location.country);
+        setIso2(location.iso2);
         setTimezone(location.timezone);
         setImage(null);
         searchPhotos(location.country)
@@ -54,7 +60,9 @@ const Clock = (props) => {
             </div>
             <div className="location-name">
                 <AutocompleteDropdown
-                    text={label}
+                    text={city}
+                    country={country}
+                    iso2={iso2}
                     getItems={input => findCitiesByName(input, props.defaultTimezone, dropdownCityLimit)}
                     onTimezoneChanged={onTimezoneChanged} />
             </div>
