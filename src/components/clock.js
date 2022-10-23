@@ -11,20 +11,14 @@ export { Clock };
 const dropdownCityLimit = 10;
 
 const Clock = (props) => {
-    const [city, setCity] = useState(props.city);
-    const [iso2, setIso2] = useState(props.iso2);
-    const [country, setCountry] = useState(props.country);
-    const [timezone, setTimezone] = useState(props.timezone);
+    const [location, setLocation] = useState(props.location);
     const [image, setImage] = useState(props.image);
     const [isChangedManually, setIsChangedManually] = useState(false);
     const clockComponentRef = useRef(null);
 
     useEffect(() => {
         if (!isChangedManually) {
-            setCity(props.city);
-            setCountry(props.country);
-            setIso2(props.iso2);
-            setTimezone(props.timezone);
+            setLocation(props.location);
         }
     });
 
@@ -41,10 +35,7 @@ const Clock = (props) => {
 
     function onTimezoneChanged(location) {
         setIsChangedManually(true);
-        setCity(location.city);
-        setCountry(location.country);
-        setIso2(location.iso2);
-        setTimezone(location.timezone);
+        setLocation(location);
         setImage(null);
         searchPhotos(location.country)
             .then(url => downloadAndEncodeToBase64(url)
@@ -56,13 +47,12 @@ const Clock = (props) => {
     return <div className="clock-container" ref={clockComponentRef}>
         <div className="clock">
             <div className="time">
-                <Time date={props.date} timezone={timezone} />
+                <Time date={props.date} timezone={location.timezone} />
             </div>
             <div className="location-name">
                 <AutocompleteDropdown
-                    text={city}
-                    country={country}
-                    iso2={iso2}
+                    text={location.city}
+                    location={location}
                     getItems={input => findCitiesByName(input, props.defaultTimezone, dropdownCityLimit)}
                     onTimezoneChanged={onTimezoneChanged} />
             </div>

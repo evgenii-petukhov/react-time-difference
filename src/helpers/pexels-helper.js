@@ -12,7 +12,7 @@ function searchPhotos(country) {
     country = country.toLocaleLowerCase();
     const cachedImageFilename = `images/${country}.jpeg`;
     return isImageCached(country) ? Promise.resolve(cachedImageFilename) : new Promise(resolve => {
-        urlCacheHelper.get(country).then(url => url).catch(() => {
+        urlCacheHelper.get(country).then(url => resolve(url)).catch(() => {
             client.photos.search({ 
                 query: country, 
                 per_page: 1,

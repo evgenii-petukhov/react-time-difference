@@ -5,15 +5,13 @@ export { AutocompleteDropdown };
 const AutocompleteDropdown = (props) => {
     const [suggestions, setSuggestions] = useState([]);
     const [text, setText] = useState(props.text);
-    const [country, setCountry] = useState(props.country);
-    const [iso2, setIso2] = useState(props.iso2);
+    const [location, setLocation] = useState(props.location);
     const [isChangedManually, setIsChangedManually] = useState(false);
 
     useEffect(() => {
         if (!isChangedManually) {
+            setLocation(props.location);
             setText(props.text);
-            setCountry(props.country);
-            setIso2(props.iso2);
         }
     });
 
@@ -44,9 +42,8 @@ const AutocompleteDropdown = (props) => {
 
     function selectSuggestion(item) {
         setSuggestions([]);
+        setLocation(item.location);
         setText(item.location.city);
-        setCountry(item.location.country);
-        setIso2(item.location.iso2);
         props.onTimezoneChanged?.(item.location);
     }
 
@@ -66,8 +63,8 @@ const AutocompleteDropdown = (props) => {
         <div className="textbox-container">
             <div className="input-group mb-3">
                 <span className="input-group-text">
-                    {iso2 && <span className={`fi fi-${iso2.toString().toLowerCase()}`}
-                        title={country}></span>}
+                    {location.iso2 && <span className={`fi fi-${location.iso2.toString().toLowerCase()}`}
+                        title={location.country}></span>}
                 </span>
                 <input type="text"
                     className="form-control"

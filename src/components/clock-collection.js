@@ -39,13 +39,13 @@ const ClockCollection = (props) => {
     useEffect(() => {
         setDate(new Date());
         const timerID = setInterval(() => setDate(new Date()), 1000);
-        loadDefaultImage(idCounterRef.current, props.defaultCity, props.defaultCountry, props.defaultTimezone, props.defaultIso2);
+        loadDefaultImage(idCounterRef.current, defaultLocation);
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
                 const cityInfo = getNearestCity(position.coords.latitude, position.coords.longitude);
                 setDefaultLocation(cityInfo.location);
-                loadDefaultImage(idCounterRef.current, cityInfo.location.city, cityInfo.location.country, cityInfo.location.timezone, cityInfo.location.iso2);
+                loadDefaultImage(idCounterRef.current, cityInfo.location);
             });
         }
 
@@ -54,8 +54,8 @@ const ClockCollection = (props) => {
         };
     }, []);
 
-    function loadDefaultImage(id, city, country, timezone, iso2) {
-        searchPhotos(country).then(url => {
+    function loadDefaultImage(id, location) {
+        searchPhotos(location.country).then(url => {
             downloadAndEncodeToBase64(url).then(b => {
                 setDefaultImage(b);
                 if (!isModelChangedRef.current) {
@@ -63,10 +63,10 @@ const ClockCollection = (props) => {
                         id,
                         image: b,
                         location: {
-                            city,
-                            country,
-                            timezone,
-                            iso2
+                            city: location.city,
+                            country: location.country,
+                            timezone: location.timezone,
+                            iso2: location.iso2
                         }
                     }]);
                 }
@@ -82,8 +82,7 @@ const ClockCollection = (props) => {
             prev.splice(index + 1, 0, {
                 id: newIdCounter,
                 image: defaultImage,
-                location: defaultLocation,
-                iso2: defaultIso2
+                location: defaultLocation
             });
             return [...prev];
         });
@@ -116,13 +115,9 @@ const ClockCollection = (props) => {
         {
             addedTimeZones.map(settings => <Clock key={settings.id}
                 id={settings.id}
-                city={settings.location.city}
-                country={settings.location.country}
-                iso2={settings.location.iso2}
-                defaultTimezone={defaultLocation.timezone}
+                location={settings.location}
                 image={settings.image}
                 date={date}
-                timezone={settings.location.timezone}
                 onRemove={onClockRemove}
                 onAdd={onClockAdded}
                 onChange={onClockChanged}/>)
