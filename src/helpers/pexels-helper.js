@@ -5,6 +5,7 @@ import * as urlCacheHelper from './url-cache-helper';
 export { searchPhotos };
 
 const apiKey = '563492ad6f917000010000010b615054bce549e2bdb4a48e0d1520d9';
+const picturesPerPage = 3;
 
 const client = createClient(apiKey);
 
@@ -16,14 +17,14 @@ function searchPhotos(country) {
         urlCacheHelper.get(country).then(urls => resolve(urls)).catch(() => {
             client.photos.search({ 
                 query: country, 
-                per_page: 1,
+                per_page: picturesPerPage,
                 size: 'large',
                 orientation: 'landscape'
             }).then(response => {
                 if (response.photos.length) {
-                    const url = response.photos[0].src.large;
-                    urlCacheHelper.add(country, [url]);
-                    resolve([url]);
+                    const urls = response.photos.map(photo => photo.src.large);
+                    urlCacheHelper.add(country, urls);
+                    resolve(urls);
                 } else {
                     resolve(defaultResponse);
                 }
