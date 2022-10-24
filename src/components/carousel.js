@@ -9,7 +9,7 @@ const Carousel = (props) => {
                 {
                     props.images.map((image, index) => <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>
                         <div className="location-image"
-                    style={{background: `url('${image}') center center no-repeat`}}></div>
+                            style={{ background: `url('${image}') center center no-repeat` }}></div>
                     </div>)
                 }
             </div>
@@ -22,14 +22,18 @@ const Carousel = (props) => {
                         key={index}></button>)
                 }
             </div>
-            <button className="carousel-control-prev" type="button" data-bs-target={`#${carouselId}`} data-bs-slide="prev">
-                <span className="carousel-control-prev-icon"></span>
-                <span className="visually-hidden">Previous</span>
-            </button>
-            <button className="carousel-control-next" type="button" data-bs-target={`#${carouselId}`} data-bs-slide="next">
-                <span className="carousel-control-next-icon"></span>
-                <span className="visually-hidden">Next</span>
-            </button>
+            {
+                props.images.length > 1 && <button className="carousel-control-prev" type="button" data-bs-target={`#${carouselId}`} data-bs-slide="prev">
+                    <span className="carousel-control-prev-icon"></span>
+                    <span className="visually-hidden">Previous</span>
+                </button>
+            }
+            {
+                props.images.length > 1 && <button className="carousel-control-next" type="button" data-bs-target={`#${carouselId}`} data-bs-slide="next">
+                    <span className="carousel-control-next-icon"></span>
+                    <span className="visually-hidden">Next</span>
+                </button>
+            }
         </div>
     </div>;
 }

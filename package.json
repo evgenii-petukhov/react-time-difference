@@ -14,8 +14,7 @@
   "dependencies": {
     "city-timezones": "^1.2.1",
     "i18next": "^21.10.0",
-    "i18next-browser-languagedetector": "^6.1.8",
-    "remove-files-webpack-plugin": "^1.5.0"
+    "i18next-browser-languagedetector": "^6.1.8"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",

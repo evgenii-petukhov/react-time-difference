@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
-const RemovePlugin = require('remove-files-webpack-plugin');
 
 module.exports = {
     entry: './src/index.js',
@@ -26,13 +25,6 @@ module.exports = {
                 { from: "src/favicon/manifest.webmanifest", to: "manifest.webmanifest" },
                 { from: "src/images", to: "images" },
             ],
-        }),
-        new RemovePlugin({
-            after: {
-                include: [
-                    './dist/src'
-                ]
-            }
         })
     ],
     devtool: 'source-map',
