@@ -107,7 +107,7 @@ const cachedQueries = [
     },
     {
         query: 'united kingdom',
-        count: 8
+        count: 7
     },
     {
         query: 'united states of america',
