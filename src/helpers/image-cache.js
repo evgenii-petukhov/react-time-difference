@@ -125,7 +125,7 @@ function getCachedImages(query) {
     const images = [];
     if (index > -1) {
         const cachedQuery = cachedQueries[index];
-        for(let imageCounter = 1; imageCounter <= cachedQuery.count ?? 1; imageCounter++) {
+        for(let imageCounter = 1; imageCounter <= (cachedQuery.count ?? 1); imageCounter++) {
             images.push(imageCounter === 1 ? `images/${query}.jpeg` : `images/${query}-${imageCounter}.jpeg`);
         }
     }
