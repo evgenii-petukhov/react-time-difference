@@ -17,8 +17,8 @@ const Time = (props) => {
 
     function changeMode() {
         if (isEditing) {
-            const {hours, minutes} = parseDateString(localizedDateString);
-            const {hours: hoursSetByUser, minutes: minutesSetByUser} = parseDateString(timeSetByUser);
+            const { hours, minutes } = parseDateString(localizedDateString);
+            const { hours: hoursSetByUser, minutes: minutesSetByUser } = parseDateString(timeSetByUser);
 
             const delta = ((hoursSetByUser - hours) * 3600 + (minutesSetByUser - minutes) * 60) * 1000;
             props.updateTimeDelta?.(delta);
@@ -40,13 +40,15 @@ const Time = (props) => {
 
     return <div className="time">
         <div className="time-value-container">
-            {
-                isEditing
-                    ? <div className="time-editable">
-                        <input size="2" type="text" value={timeSetByUser} onChange={onTextChanged} />
-                    </div>
-                    : <div className="time-readonly">{props.date.toLocaleTimeString([], { timeZone: props.timezone, hour12: false })}</div>
-            }
+            <div className="time-value-inner-container">
+                {
+                    isEditing
+                        ? <div className="time-editable">
+                            <input size="2" type="text" value={timeSetByUser} onChange={onTextChanged} />
+                        </div>
+                        : <div className="time-readonly">{props.date.toLocaleTimeString([], { timeZone: props.timezone, hour12: false })}</div>
+                }
+            </div>
         </div>
         <div className="time-control-container">
             <button className="btn btn-light" onClick={changeMode}><i className={`bi bi-${isEditing ? 'check-lg' : 'pencil'}`}></i></button>

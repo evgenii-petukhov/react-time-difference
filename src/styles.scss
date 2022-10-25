@@ -53,18 +53,25 @@ html {
                                         font-weight: 500;
                                         font-size: 60px;
                                         line-height: 60px;
-                                        width: 8ch;
+                                        justify-content: center;
+                                        display: flex;
+                                        
+                                        .time-value-inner-container{
+                                            width: 8ch;
 
-                                        .time-readonly {
-                                            border: 2px solid transparent;
-                                            border-right: none;
-                                        }
-    
-                                        input[type="text"] {
-                                            width: 5ch;
-                                            padding: 0;
-                                            box-sizing: content-box;
-                                            height: 60px;
+                                            .time-readonly {
+                                                border: 2px solid transparent;
+                                                border-right: none;
+                                                margin-left: 2px;
+                                            }
+        
+                                            input[type="text"] {
+                                                width: 5ch;
+                                                padding: 0;
+                                                box-sizing: content-box;
+                                                height: 60px;
+                                                margin-left: 2px;
+                                            }
                                         }
                                     }
 
