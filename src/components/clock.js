@@ -16,6 +16,7 @@ const Clock = (props) => {
     const [images, setImages] = useState(props.images);
     const [isChangedManually, setIsChangedManually] = useState(false);
     const clockComponentRef = useRef(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (!isChangedManually) {
@@ -38,13 +39,18 @@ const Clock = (props) => {
         setIsChangedManually(true);
         setLocation(location);
         setImages(null);
+        setIsLoading(true);
         searchPhotos(location.country)
             .then(urls => Promise.allSettled(urls.map(url => downloadAndEncodeToBase64(url)))
                 .then(results => {
                     const blobs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
                     setImages(blobs);
+                    setIsLoading(false);
                 })
-                .catch(() => setImages(null)));
+                .catch(() => {
+                    setImages(null);
+                    setIsLoading(false);
+                }));
         props.onChange?.(props.id, location);
     }
 
@@ -61,9 +67,13 @@ const Clock = (props) => {
                     onTimezoneChanged={onTimezoneChanged} />
             </div>
             {
-                (images && images.length) ? <div className="carousel-container">
-                    <Carousel clockId={props.id} images={images} isChangedManually={isChangedManually} />
-                </div> : null
+                isLoading
+                    ? <div className="loading"><span className="spinner-border" role="status"></span> {i18next.t('Loading')}</div>
+                    : (
+                        images && images.length ? <div className="carousel-container">
+                            <Carousel clockId={props.id} images={images} isChangedManually={isChangedManually} />
+                        </div> : null
+                    )
             }
             <div className="button-container">
                 <button className="btn btn-outline-primary" onClick={() => props.onAdd(props.id)}>{i18next.t('Add clock')}</button>

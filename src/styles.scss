@@ -123,6 +123,16 @@ html {
                                 }
                             }
 
+                            .loading {
+                                margin: 0 0 16px 0;
+
+                                .spinner-border {
+                                    width: 14px;
+                                    height: 14px;
+                                    border-width: 2px;
+                                }
+                            }
+
                             .button-container {
                                 text-align: center;
 
