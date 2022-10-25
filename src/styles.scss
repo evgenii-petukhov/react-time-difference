@@ -41,11 +41,39 @@ html {
                                 margin: 20px 0;
                             }
 
-                            .time {
-                                font-family: 'JetBrains Mono';
-                                font-weight: 500;
-                                font-size: 60px;
-                                text-align: center;
+                            .time-container {
+                                margin: 0 0 10px 0;
+
+                                .time {
+                                    display: flex;
+
+                                    .time-value-container {
+                                        flex: 1 1 auto;
+                                        font-family: 'JetBrains Mono';
+                                        font-weight: 500;
+                                        font-size: 60px;
+                                        line-height: 60px;
+                                        width: 8ch;
+
+                                        .time-readonly {
+                                            border: 2px solid transparent;
+                                            border-right: none;
+                                        }
+    
+                                        input[type="text"] {
+                                            width: 5ch;
+                                            padding: 0;
+                                            box-sizing: content-box;
+                                            height: 60px;
+                                        }
+                                    }
+
+                                    .time-control-container {
+                                        flex: 0 1 auto;
+                                        display: flex;
+                                        margin: 0 0 0 12px;
+                                    }
+                                }
                             }
 
                             .location-name {

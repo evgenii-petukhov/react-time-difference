@@ -28,17 +28,20 @@ const ClockCollection = (props) => {
     });
     const [defaultImages, setDefaultImages] = useState(null);
     const [date, setDate] = useState(new Date());
+    const [timeDelta, setTimeDelta] = useState(0);
+    const timeDeltaRef = useRef(timeDelta);
     const [isModelChanged, setIsModelChanged] = useState(false);
     const isModelChangedRef = useRef(isModelChanged);
 
     useEffect(() => {
         isModelChangedRef.current = isModelChanged;
         idCounterRef.current = idCounter;
+        timeDeltaRef.current = timeDelta;
     });
 
     useEffect(() => {
         setDate(new Date());
-        const timerID = setInterval(() => setDate(new Date()), 1000);
+        const timerID = setInterval(() => updateDate(timeDeltaRef.current), 1000);
         loadDefaultImages(idCounterRef.current, defaultLocation);
 
         if (navigator.geolocation) {
@@ -104,6 +107,16 @@ const ClockCollection = (props) => {
         setIsModelChanged(true);
     }
 
+    function updateTimeDelta(delta) {
+        delta += timeDelta;
+        setTimeDelta(delta);
+        updateDate(delta);
+    }
+
+    function updateDate(delta) {
+        setDate(new Date(new Date().getTime() + delta));
+    }
+
     return <div className="application-container">
         <div className="project-description">
             <div className="container-fluid">
@@ -121,7 +134,8 @@ const ClockCollection = (props) => {
                 date={date}
                 onRemove={onClockRemove}
                 onAdd={onClockAdded}
-                onChange={onClockChanged}/>)
+                onChange={onClockChanged}
+                updateTimeDelta={updateTimeDelta}/>)
         }
         </div>
     </div>;

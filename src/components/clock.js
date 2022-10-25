@@ -56,8 +56,8 @@ const Clock = (props) => {
 
     return <div className="clock-container" ref={clockComponentRef}>
         <div className="clock">
-            <div className="time">
-                <Time date={props.date} timezone={location.timezone} />
+            <div className="time-container">
+                <Time date={props.date} timezone={location.timezone} updateTimeDelta={props.updateTimeDelta} />
             </div>
             <div className="location-name">
                 <AutocompleteDropdown
