@@ -43,6 +43,9 @@ html {
 
                             .time-container {
                                 margin: 0 0 10px 0;
+                                @media (max-width: 575.98px) {
+                                    margin: 0 8px 10px 8px;
+                                }
 
                                 .time {
                                     display: flex;
