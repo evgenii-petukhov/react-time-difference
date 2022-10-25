@@ -18,10 +18,7 @@ const AutocompleteDropdown = (props) => {
     function onTextChanged(e) {
         const value = e.target.value.toUpperCase();
 
-        setSuggestions(value.length > 0
-            ? props.getItems(value).sort()
-            : []);
-
+        setSuggestions(value.length ? props.getItems(value).sort() : []);
         setIsChangedManually(true);
         setText(e.target.value);
     }
@@ -33,7 +30,7 @@ const AutocompleteDropdown = (props) => {
                 break;
             case 9:
             case 13:
-                if (suggestions.length > 0) {
+                if (suggestions.length) {
                     selectSuggestion(suggestions[0]);
                 }
                 break;
@@ -50,11 +47,13 @@ const AutocompleteDropdown = (props) => {
     function renderSuggestions() {
         return suggestions.length === 0 ? null : (
             <ul>
-                {suggestions.map((item, index) => <li key={index} onClick={() => selectSuggestion(item)}>
-                    <div className="timezone-flag">{item.location.iso2 && <span className={`fi fi-${item.location.iso2.toString().toLowerCase()}`}></span>}</div>
-                    <div className="timezone-label">{item.label}</div>
-                    <div className="timezone-diff">{item.diff}</div>
-                </li>)}
+                {
+                    suggestions.map((item, index) => <li key={index} onClick={() => selectSuggestion(item)}>
+                        <div className="timezone-flag">{item.location.iso2 && <span className={`fi fi-${item.location.iso2.toString().toLowerCase()}`}></span>}</div>
+                        <div className="timezone-label">{item.label}</div>
+                        <div className="timezone-diff">{item.diff}</div>
+                    </li>)
+                }
             </ul>
         );
     }
@@ -63,8 +62,9 @@ const AutocompleteDropdown = (props) => {
         <div className="textbox-container">
             <div className="input-group mb-3">
                 <span className="input-group-text">
-                    {location.iso2 && <span className={`fi fi-${location.iso2.toString().toLowerCase()}`}
-                        title={location.country}></span>}
+                    {
+                        location.iso2 && <span className={`fi fi-${location.iso2.toString().toLowerCase()}`} title={location.country}></span>
+                    }
                 </span>
                 <input type="text"
                     className="form-control"
