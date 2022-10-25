@@ -3,7 +3,7 @@ export { Carousel };
 const Carousel = (props) => {
     const carouselId = `clock-image-carousel-${props.clockId}`;
 
-    return props.images && <div id={carouselId} className={`carousel slide ${props.isChangedManually ? '' : 'default-images'}`} data-bs-ride="true">
+    return <div id={carouselId} className={`carousel slide ${props.isChangedManually ? '' : 'default-images'}`} data-bs-ride="true">
         <div className="carousel-inner">
             {
                 props.images.map((image, index) => <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>

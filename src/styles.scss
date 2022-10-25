@@ -55,6 +55,8 @@ html {
                             }
 
                             .carousel-container {
+                                margin: 0 0 16px 0;
+
                                 .carousel {
                                     &:not(.default-images) {
                                         animation: shake .5s linear;
@@ -123,7 +125,6 @@ html {
 
                             .button-container {
                                 text-align: center;
-                                margin: 16px 0 0 0;
 
                                 .btn-remove {
                                     margin-left: 40px;

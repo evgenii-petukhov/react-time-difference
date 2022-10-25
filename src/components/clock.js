@@ -60,9 +60,11 @@ const Clock = (props) => {
                     getItems={input => findCitiesByName(input, props.defaultTimezone, dropdownCityLimit)}
                     onTimezoneChanged={onTimezoneChanged} />
             </div>
-            <div className="carousel-container">
-                <Carousel clockId={props.id} images={images} isChangedManually={isChangedManually} />
-            </div>
+            {
+                (images && images.length) ? <div className="carousel-container">
+                    <Carousel clockId={props.id} images={images} isChangedManually={isChangedManually} />
+                </div> : null
+            }
             <div className="button-container">
                 <button className="btn btn-outline-primary" onClick={() => props.onAdd(props.id)}>{i18next.t('Add clock')}</button>
                 <button className="btn btn-light btn-remove" onClick={() => props.onRemove(props.id)}>{i18next.t('Remove')}</button>
