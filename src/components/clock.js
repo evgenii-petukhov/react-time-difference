@@ -70,9 +70,11 @@ const Clock = (props) => {
                 isLoading
                     ? <div className="loading"><span className="spinner-border" role="status"></span> {i18next.t('Loading')}</div>
                     : (
-                        images && images.length ? <div className="carousel-container">
-                            <Carousel clockId={props.id} images={images} isChangedManually={isChangedManually} />
-                        </div> : null
+                        images && images.length 
+                            ? <div className="carousel-container">
+                                <Carousel clockId={props.id} images={images} isChangedManually={isChangedManually} />
+                            </div> 
+                            : <div className="loading">{i18next.t('Not found')}</div>
                     )
             }
             <div className="button-container">
