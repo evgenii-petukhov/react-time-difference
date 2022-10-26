@@ -13,7 +13,7 @@ const Time = (props) => {
         if (!isEditing) {
             setTimeSetByUser(timeString.substring(0, 5));
         }
-    });
+    }, [props.date, props.timezone]);
 
     function changeMode() {
         if (isEditing) {

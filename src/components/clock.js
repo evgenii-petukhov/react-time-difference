@@ -14,15 +14,14 @@ const dropdownCityLimit = 10;
 const Clock = (props) => {
     const [location, setLocation] = useState(props.location);
     const [images, setImages] = useState(props.images);
-    const [isChangedManually, setIsChangedManually] = useState(false);
+    const [isShakeAnimationRequired, setIsShakeAnimationRequired] = useState(false);
     const clockComponentRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        if (!isChangedManually) {
-            setLocation(props.location);
-        }
-    });
+        setLocation(props.location);
+        setImages(props.images);
+    }, [props.location, props.images]);
 
     useEffect(() => {
         clockComponentRef.current.scrollIntoView({
@@ -31,12 +30,8 @@ const Clock = (props) => {
         });
     }, []);
 
-    useEffect(() => {
-        setImages(props.images);
-    }, [props.images]);
-
     function onTimezoneChanged(location) {
-        setIsChangedManually(true);
+        setIsShakeAnimationRequired(true);
         setLocation(location);
         setImages(null);
         setIsLoading(true);
@@ -72,7 +67,7 @@ const Clock = (props) => {
                     : (
                         images && images.length 
                             ? <div className="carousel-container">
-                                <Carousel clockId={props.id} images={images} isChangedManually={isChangedManually} />
+                                <Carousel clockId={props.id} images={images} isShakeAnimationRequired={isShakeAnimationRequired} />
                             </div> 
                             : <div className="loading">{i18next.t('Not found')}</div>
                     )

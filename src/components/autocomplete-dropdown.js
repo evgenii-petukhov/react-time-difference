@@ -13,7 +13,7 @@ const AutocompleteDropdown = (props) => {
             setLocation(props.location);
             setText(props.text);
         }
-    });
+    }, [props.location, props.text]);
 
     function onTextChanged(e) {
         const value = e.target.value.toUpperCase();
