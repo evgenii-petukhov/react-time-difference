@@ -96,8 +96,9 @@ html {
                                 margin: 0 0 16px 0;
 
                                 .carousel {
-                                    &:not(.default-images) {
-                                        animation: shake .5s linear;
+                                    animation: shake .5s linear;
+                                    &.no-animation {
+                                        animation: none;
                                     }
                                 }
 

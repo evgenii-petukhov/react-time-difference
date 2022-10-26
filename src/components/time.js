@@ -8,7 +8,7 @@ const Time = (props) => {
     const [localizedDateString, setLocalizedDateString] = useState(null);
 
     useEffect(() => {
-        const dateString = props.date.toLocaleTimeString([], { timeZone: props.timezone, hour12: false });
+        const dateString = getLocaleTimeString();
         setLocalizedDateString(dateString);
         if (!isEditing) {
             setTimeSetByUser(dateString.substring(0, 5));
@@ -32,10 +32,18 @@ const Time = (props) => {
     }
 
     function parseDateString(dateString) {
-        return {
-            hours: parseInt(dateString.substring(0, 2)),
-            minutes: parseInt(dateString.substring(3, 5))
+        const dateChunks = dateString.split(':');
+        return dateChunks.length > 1 ? {
+            hours: parseInt(dateChunks[0]),
+            minutes: parseInt(dateChunks[1])
+        } : {
+            hours: 0,
+            minutes: 0
         };
+    }
+
+    function getLocaleTimeString() {
+        return props.date.toLocaleTimeString([], { timeZone: props.timezone, hour12: false });
     }
 
     return <div className="time">
@@ -46,7 +54,7 @@ const Time = (props) => {
                         ? <div className="time-editable">
                             <input size="2" type="text" value={timeSetByUser} onChange={onTextChanged} />
                         </div>
-                        : <div className="time-readonly">{props.date.toLocaleTimeString([], { timeZone: props.timezone, hour12: false })}</div>
+                        : <div className="time-readonly">{getLocaleTimeString()}</div>
                 }
             </div>
         </div>
