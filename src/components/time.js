@@ -29,8 +29,7 @@ const Time = (props) => {
     }
 
     function onTextChanged(e) {
-        const value = e.target.value;
-        setTimeSetByUser(value);
+        setTimeSetByUser(e.target.value);
     }
 
     function parseTimeString(timeString) {
@@ -48,7 +47,10 @@ const Time = (props) => {
     }
 
     function getLocaleTimeString() {
-        return props.date.toLocaleTimeString([], { timeZone: props.timezone, hour12: false });
+        return props.date.toLocaleTimeString([], {
+            timeZone: props.timezone,
+            hour12: false
+        });
     }
 
     return <div className="time">
@@ -57,7 +59,7 @@ const Time = (props) => {
                 {
                     isEditing
                         ? <div className="time-editable">
-                            <input size="2" type="text" value={timeSetByUser} onChange={onTextChanged} />
+                            <input type="text" value={timeSetByUser} onChange={onTextChanged} />
                         </div>
                         : <div className="time-readonly">{getLocaleTimeString()}</div>
                 }
