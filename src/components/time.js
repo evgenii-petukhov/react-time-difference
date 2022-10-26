@@ -5,23 +5,25 @@ export { Time };
 const Time = (props) => {
     const [timeSetByUser, setTimeSetByUser] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [localizedDateString, setLocalizedDateString] = useState(null);
+    const [localizedTimeString, setLocalizedTimeString] = useState(null);
 
     useEffect(() => {
-        const dateString = getLocaleTimeString();
-        setLocalizedDateString(dateString);
+        const timeString = getLocaleTimeString();
+        setLocalizedTimeString(timeString);
         if (!isEditing) {
-            setTimeSetByUser(dateString.substring(0, 5));
+            setTimeSetByUser(timeString.substring(0, 5));
         }
     });
 
     function changeMode() {
         if (isEditing) {
-            const { hours, minutes } = parseDateString(localizedDateString);
-            const { hours: hoursSetByUser, minutes: minutesSetByUser } = parseDateString(timeSetByUser);
+            const currentTimeChunks = parseTimeString(localizedTimeString);
+            const newTimeChunks = parseTimeString(timeSetByUser);
 
-            const delta = ((hoursSetByUser - hours) * 3600 + (minutesSetByUser - minutes) * 60) * 1000;
-            props.updateTimeDelta?.(delta);
+            if (currentTimeChunks && newTimeChunks) {
+                const delta = ((newTimeChunks.hours - currentTimeChunks.hours) * 3600 + (newTimeChunks.minutes - currentTimeChunks.minutes) * 60) * 1000;
+                props.updateTimeDelta?.(delta);
+            }
         }
         setIsEditing(!isEditing);
     }
@@ -31,15 +33,18 @@ const Time = (props) => {
         setTimeSetByUser(value);
     }
 
-    function parseDateString(dateString) {
-        const dateChunks = dateString.split(':');
-        return dateChunks.length > 1 ? {
-            hours: parseInt(dateChunks[0]),
-            minutes: parseInt(dateChunks[1])
-        } : {
-            hours: 0,
-            minutes: 0
-        };
+    function parseTimeString(timeString) {
+        const timeChunks = timeString.split(':');
+        if (timeChunks.length > 1) {
+            const hours = parseInt(timeChunks[0]);
+            const minutes = parseInt(timeChunks[1]);
+            return hours >=0 && hours <= 24 && minutes >= 0 && minutes <= 59 ? {
+                hours,
+                minutes
+            } : null;
+        } else {
+            return null;
+        }
     }
 
     function getLocaleTimeString() {
