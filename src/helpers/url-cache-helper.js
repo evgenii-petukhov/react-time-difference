@@ -1,5 +1,3 @@
-export { get, add };
-
 const urlCacheName = 'urlCache';
 const urlCacheLimit = 100;
 
@@ -25,3 +23,5 @@ function add(query, urls) {
     });
     localStorage.setItem(urlCacheName, JSON.stringify(urlCache));
 }
+
+export default { get, add };

@@ -1,8 +1,6 @@
 import { createClient } from 'pexels';
-import { getCachedImages } from './image-cache';
-import * as urlCacheHelper from './url-cache-helper';
-
-export { searchPhotos };
+import getCachedImages from './image-cache';
+import urlCacheHelper from './url-cache-helper';
 
 const apiKey = '563492ad6f917000010000010b615054bce549e2bdb4a48e0d1520d9';
 const picturesPerPage = 3;
@@ -32,3 +30,5 @@ function searchPhotos(country) {
         });
     });
 }
+
+export default searchPhotos;

@@ -1,5 +1,3 @@
-export { getCachedImages };
-
 const cachedQueries = [
     {
         query: 'argentina',
@@ -131,3 +129,5 @@ function getCachedImages(query) {
     }
     return images;
 }
+
+export default getCachedImages;

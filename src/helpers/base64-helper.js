@@ -1,5 +1,3 @@
-export { downloadAndEncodeToBase64 };
-
 function downloadAndEncodeToBase64(url) {
     return new Promise((resolve, reject) => {
         fetch(url)
@@ -16,5 +14,6 @@ function downloadAndEncodeToBase64(url) {
                 }
             });
     });
-
 }
+
+export default downloadAndEncodeToBase64;

@@ -1,7 +1,5 @@
 const { useState, useEffect } = React;
 
-export { AutocompleteDropdown };
-
 const AutocompleteDropdown = (props) => {
     const [suggestions, setSuggestions] = useState([]);
     const [text, setText] = useState(props.text);
@@ -80,3 +78,5 @@ const AutocompleteDropdown = (props) => {
         </div>
     </div>;
 }
+
+export default AutocompleteDropdown;

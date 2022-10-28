@@ -1,7 +1,5 @@
 const { useState, useEffect } = React;
 
-export { Time };
-
 const Time = (props) => {
     const [timeSetByUser, setTimeSetByUser] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -70,3 +68,5 @@ const Time = (props) => {
         </div>
     </div>;
 }
+
+export default Time;

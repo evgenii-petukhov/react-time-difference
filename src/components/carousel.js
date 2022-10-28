@@ -1,5 +1,3 @@
-export { Carousel };
-
 const Carousel = (props) => {
     const carouselId = `clock-image-carousel-${props.clockId}`;
 
@@ -33,3 +31,5 @@ const Carousel = (props) => {
         }
     </div>;
 }
+
+export default Carousel;

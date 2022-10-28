@@ -1,8 +1,6 @@
 import { cityMapping } from "city-timezones";
 import i18next from "i18next";
 
-export { getNearestCity, findCitiesByName };
-
 const validCityMappings = cityMapping.filter(item => item.timezone !== null).map(item => ({
     city: item.city,
     country: item.country,
@@ -76,3 +74,5 @@ function getDistance(lat1, lon1, lat2, lon2) {
     let r = 6371; // Radius of earth in kilometers. Use 3956 for miles
     return (c * r);
 }
+
+export default { getNearestCity, findCitiesByName };

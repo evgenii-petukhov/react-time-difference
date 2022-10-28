@@ -1,5 +1,5 @@
 import { lookupViaCity } from "city-timezones";
-import { ClockCollection } from "./components/clock-collection";
+import ClockCollection from "./components/clock-collection";
 import './config/i18n';
 
 export default class ClockApp {

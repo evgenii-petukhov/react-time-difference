@@ -1,13 +1,11 @@
 const { useState, useEffect, useRef } = React;
 import i18next from "i18next";
-import { AutocompleteDropdown } from "./autocomplete-dropdown";
-import { Carousel } from "./carousel";
-import { Time } from "./time";
-import { findCitiesByName } from "../helpers/geo-helper";
-import { searchPhotos } from "../helpers/pexels-helper";
-import { downloadAndEncodeToBase64 } from "../helpers/base64-helper";
-
-export { Clock };
+import AutocompleteDropdown from "./autocomplete-dropdown";
+import Carousel from "./carousel";
+import Time from "./time";
+import geoHelper from "../helpers/geo-helper";
+import searchPhotos from "../helpers/pexels-helper";
+import downloadAndEncodeToBase64 from "../helpers/base64-helper";
 
 const dropdownCityLimit = 10;
 
@@ -58,7 +56,7 @@ const Clock = (props) => {
                 <AutocompleteDropdown
                     text={location.city}
                     location={location}
-                    getItems={input => findCitiesByName(input, props.defaultTimezone, dropdownCityLimit)}
+                    getItems={input => geoHelper.findCitiesByName(input, props.defaultTimezone, dropdownCityLimit)}
                     onTimezoneChanged={onTimezoneChanged} />
             </div>
             {
@@ -79,3 +77,5 @@ const Clock = (props) => {
         </div>
     </div>;
 }
+
+export default Clock;

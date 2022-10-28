@@ -1,11 +1,9 @@
 const { useState, useEffect, useRef } = React;
 import i18next from "i18next";
-import { Clock } from "./clock";
-import { getNearestCity }  from "../helpers/geo-helper";
-import { searchPhotos } from "../helpers/pexels-helper";
-import { downloadAndEncodeToBase64 } from "../helpers/base64-helper";
-
-export { ClockCollection };
+import Clock from "./clock";
+import geoHelper  from "../helpers/geo-helper";
+import searchPhotos from "../helpers/pexels-helper";
+import downloadAndEncodeToBase64 from "../helpers/base64-helper";
 
 const ClockCollection = (props) => {
     const [idCounter, setIdCounter] = useState(0);
@@ -46,7 +44,7 @@ const ClockCollection = (props) => {
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(position => {
-                const cityInfo = getNearestCity(position.coords.latitude, position.coords.longitude);
+                const cityInfo = geoHelper.getNearestCity(position.coords.latitude, position.coords.longitude);
                 setDefaultLocation(cityInfo.location);
                 loadDefaultImages(idCounterRef.current, cityInfo.location);
             });
@@ -140,3 +138,5 @@ const ClockCollection = (props) => {
         </div>
     </div>;
 }
+
+export default ClockCollection;
