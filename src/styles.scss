@@ -87,8 +87,9 @@ html {
                             }
 
                             .location-name {
+                                margin: 0 0 16px 0;
                                 @media (max-width: 575.98px) {
-                                    margin: 0 8px;
+                                    margin: 0 8px 16px 8px;
                                 }
                             }
 
@@ -218,6 +219,10 @@ html {
                             width: auto;
                             min-width: 100%;
                             z-index: 3;
+                            @media (max-width: 575.98px) {
+                                margin: 4px 0 0 -8px;
+                                min-width: calc(100% + 16px);
+                            }
 
                             li {
                                 font-size: 1rem;

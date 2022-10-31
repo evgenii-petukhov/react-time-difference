@@ -58,7 +58,7 @@ const AutocompleteDropdown = (props) => {
 
     return <div className="autocomplete-textbox-component">
         <div className="textbox-container">
-            <div className="input-group mb-3">
+            <div className="input-group">
                 <span className="input-group-text">
                     {
                         location.iso2 && <span className={`fi fi-${location.iso2.toString().toLowerCase()}`} title={location.country}></span>
