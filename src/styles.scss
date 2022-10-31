@@ -87,8 +87,9 @@ html {
                             }
 
                             .location-name {
+                                margin: 0 0 16px 0;
                                 @media (max-width: 575.98px) {
-                                    margin: 0 8px;
+                                    margin: 0 8px 16px 8px;
                                 }
                             }
 
@@ -212,7 +213,7 @@ html {
                             flex: 1;
                             list-style: none;
                             margin: 4px 0 0 0;
-                            padding: 0;
+                            padding: 0 0 0 13px;
                             position: absolute;
                             background: rgba(255, 255, 255, .9);
                             width: auto;
@@ -238,7 +239,7 @@ html {
                                 }
 
                                 .timezone-flag {
-                                    margin: 0 5px 0 0;
+                                    margin: 0 25px 0 0;
                                 }
                             }
                         }
