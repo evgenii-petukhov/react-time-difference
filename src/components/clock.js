@@ -56,7 +56,7 @@ const Clock = (props) => {
                 <AutocompleteDropdown
                     text={location.city}
                     location={location}
-                    getItems={input => geoHelper.findCitiesByName(input, props.defaultTimezone, dropdownCityLimit)}
+                    getItems={input => geoHelper.findCitiesByName(input, props.location.timezone, dropdownCityLimit)}
                     onTimezoneChanged={onTimezoneChanged} />
             </div>
             {
