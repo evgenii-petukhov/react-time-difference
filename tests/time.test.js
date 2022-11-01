@@ -6,6 +6,7 @@ import React from "react";
 import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import Time from "../src/components/time";
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 let root = null;
 let container = null;
@@ -53,10 +54,11 @@ describe('doesn\'t render the Time component', () => {
     });
 });
 
-describe('renders the Time component', () => {
-    it('if `date` and `timezone` both are passed', () => {
+describe('renders the Time component and calls the `updateTimeDelta` when time is set', () => {
+    it('if `date` and `timezone` both are passed', async () => {
+        const mockUpdateTimeDelta = jest.fn();
         act(() => {
-            root.render(<Time date={new Date()} timezone="Europe/London" />);
+            root.render(<Time date={new Date()} timezone="Europe/London" updateTimeDelta={mockUpdateTimeDelta} />);
         });
 
         const timeComponentRoot = container.querySelector('.time');
@@ -72,5 +74,20 @@ describe('renders the Time component', () => {
         expect(editButtonIcon).not.toBeNull();
         expect(editButtonIcon.classList.contains('bi-pencil')).toBe(true);
         expect(editButtonIcon.classList.contains('bi-check-lg')).toBe(false);
+
+        const editButton = container.querySelector('.time-control-container button');
+        fireEvent.click(editButton);
+        await waitFor(async () => {
+            expect(editButtonIcon.classList.contains('bi-pencil')).toBe(false);
+            expect(editButtonIcon.classList.contains('bi-check-lg')).toBe(true);
+            expect(mockUpdateTimeDelta).toHaveBeenCalledTimes(0);
+
+            fireEvent.click(editButton);
+            await waitFor(() => {
+                expect(editButtonIcon.classList.contains('bi-pencil')).toBe(true);
+                expect(editButtonIcon.classList.contains('bi-check-lg')).toBe(false);
+                expect(mockUpdateTimeDelta).toHaveBeenCalledTimes(1);
+            });
+        });
     });
 });
