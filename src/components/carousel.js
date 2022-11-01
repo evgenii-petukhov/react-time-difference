@@ -1,4 +1,4 @@
-import React from 'react';
+window.React = window.React ?? require('react');
 
 const Carousel = (props) => {
     const carouselId = `clock-image-carousel-${props.clockId}`;

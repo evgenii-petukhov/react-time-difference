@@ -1,4 +1,4 @@
-import React from 'react';
+window.React = window.React ?? require('react');
 const { useState, useEffect } = React;
 
 const Time = (props) => {
