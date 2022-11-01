@@ -36,6 +36,9 @@ describe('doesn\'t render a carousel', () => {
         const items = container.querySelectorAll('.carousel-item');
         expect(items).toHaveLength(0);
 
+        const indicatorContainer = container.querySelector('.carousel-indicators');
+        expect(indicatorContainer).toBeNull();
+
         const arrowLeft = container.querySelector('.carousel-control-prev');
         expect(arrowLeft).toBeNull();
 
@@ -54,6 +57,9 @@ describe('doesn\'t render a carousel', () => {
         const items = container.querySelectorAll('.carousel-item');
         expect(items).toHaveLength(0);
 
+        const indicatorContainer = container.querySelector('.carousel-indicators');
+        expect(indicatorContainer).toBeNull();
+
         const arrowLeft = container.querySelector('.carousel-control-prev');
         expect(arrowLeft).toBeNull();
 
@@ -71,6 +77,9 @@ describe('doesn\'t render a carousel', () => {
 
         const items = container.querySelectorAll('.carousel-item');
         expect(items).toHaveLength(0);
+
+        const indicatorContainer = container.querySelector('.carousel-indicators');
+        expect(indicatorContainer).toBeNull();
 
         const arrowLeft = container.querySelector('.carousel-control-prev');
         expect(arrowLeft).toBeNull();
@@ -97,6 +106,12 @@ describe('renders a carousel', () => {
         const images = container.querySelectorAll('.location-image');
         expect(images).toHaveLength(3);
         expect(Array.from(images).map(i => i.style.background)).toEqual(blobs.map(b => `url(${b}) no-repeat center`));
+
+        const indicatorContainer = container.querySelector('.carousel-indicators');
+        expect(indicatorContainer).not.toBeNull();
+
+        const indicators = container.querySelectorAll('.carousel-indicators button');
+        expect(indicators).toHaveLength(3);
     
         const arrowLeft = container.querySelector('.carousel-control-prev');
         expect(arrowLeft).not.toBeNull();
