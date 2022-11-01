@@ -1,3 +1,4 @@
+import React from 'react';
 const { useState, useEffect } = React;
 
 const Time = (props) => {
@@ -6,7 +7,10 @@ const Time = (props) => {
     const [localizedTimeString, setLocalizedTimeString] = useState(null);
 
     useEffect(() => {
-        const timeString = getLocaleTimeString();
+        if (!props.date || !props.timezone) {
+            return;
+        }
+        const timeString = getLocaleTimeString(props.date, props.timezone);
         setLocalizedTimeString(timeString);
         if (!isEditing) {
             setTimeSetByUser(timeString.substring(0, 5));
@@ -44,14 +48,14 @@ const Time = (props) => {
         }
     }
 
-    function getLocaleTimeString() {
-        return props.date.toLocaleTimeString([], {
-            timeZone: props.timezone,
+    function getLocaleTimeString(date, timezone) {
+        return date.toLocaleTimeString([], {
+            timeZone: timezone,
             hour12: false
         });
     }
 
-    return <div className="time">
+    return props.date && props.timezone && <div className="time">
         <div className="time-value-container">
             <div className="time-value-inner-container">
                 {
@@ -59,7 +63,7 @@ const Time = (props) => {
                         ? <div className="time-editable">
                             <input type="text" value={timeSetByUser} onChange={onTextChanged} />
                         </div>
-                        : <div className="time-readonly">{getLocaleTimeString()}</div>
+                        : <div className="time-readonly">{getLocaleTimeString(props.date, props.timezone)}</div>
                 }
             </div>
         </div>

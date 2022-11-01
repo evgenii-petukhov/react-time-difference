@@ -24,8 +24,8 @@ afterEach(() => {
     container = null;
 });
 
-describe('doesn\'t render a carousel', () => {
-    it('if `images` is undefined', () => {
+describe('doesn\'t render the Carousel component', () => {
+    it('if no arguments passed', () => {
         act(() => {
             root.render(<Carousel />);
         });
@@ -89,20 +89,20 @@ describe('doesn\'t render a carousel', () => {
     });
 });
 
-describe('renders a carousel', () => {
+describe('renders the Carousel component', () => {
     it('if the `images` array is not empty', () => {
         const blobs = ['MQ==', 'Mg==', 'Mw=='];
         act(() => {
             root.render(<Carousel clockId='1' images={blobs} isShakeAnimationRequired={true} />);
         });
-    
+
         const carousel = container.querySelector('.carousel');
         expect(carousel).not.toBeNull();
         expect(carousel.classList.contains('no-animation')).toBe(false);
-    
+
         const items = container.querySelectorAll('.carousel-item');
         expect(items).toHaveLength(3);
-    
+
         const images = container.querySelectorAll('.location-image');
         expect(images).toHaveLength(3);
         expect(Array.from(images).map(i => i.style.background)).toEqual(blobs.map(b => `url(${b}) no-repeat center`));
@@ -112,10 +112,10 @@ describe('renders a carousel', () => {
 
         const indicators = container.querySelectorAll('.carousel-indicators button');
         expect(indicators).toHaveLength(3);
-    
+
         const arrowLeft = container.querySelector('.carousel-control-prev');
         expect(arrowLeft).not.toBeNull();
-    
+
         const arrowRight = container.querySelector('.carousel-control-next');
         expect(arrowRight).not.toBeNull();
     });
@@ -125,7 +125,7 @@ describe('renders a carousel', () => {
         act(() => {
             root.render(<Carousel clockId='1' images={blobs} isShakeAnimationRequired={false} />);
         });
-    
+
         const carousel = container.querySelector('.carousel');
         expect(carousel).not.toBeNull();
         expect(carousel.classList.contains('no-animation')).toBe(true);
