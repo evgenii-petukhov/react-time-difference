@@ -24,7 +24,7 @@ afterEach(() => {
     container = null;
 });
 
-describe('doesn\'t render anything', () => {
+describe('doesn\'t render a carousel', () => {
     it('if `images` is undefined', () => {
         act(() => {
             root.render(<Carousel />);
@@ -80,25 +80,42 @@ describe('doesn\'t render anything', () => {
     });
 });
 
-it('renders images', () => {
-    const blobs = ['MQ==', 'Mg==', 'Mw=='];
-    act(() => {
-        root.render(<Carousel clockId='1' images={blobs} isShakeAnimationRequired='true' />);
+describe('renders a carousel', () => {
+    it('if the `images` array is not empty', () => {
+        const blobs = ['MQ==', 'Mg==', 'Mw=='];
+        act(() => {
+            root.render(<Carousel clockId='1' images={blobs} isShakeAnimationRequired={true} />);
+        });
+    
+        const carousel = container.querySelector('.carousel');
+        expect(carousel).not.toBeNull();
+        expect(carousel.classList.contains('no-animation')).toBe(false);
+    
+        const items = container.querySelectorAll('.carousel-item');
+        expect(items).toHaveLength(3);
+    
+        const images = container.querySelectorAll('.location-image');
+        expect(images).toHaveLength(3);
+        expect(Array.from(images).map(i => i.style.background)).toEqual(blobs.map(b => `url(${b}) no-repeat center`));
+    
+        const arrowLeft = container.querySelector('.carousel-control-prev');
+        expect(arrowLeft).not.toBeNull();
+    
+        const arrowRight = container.querySelector('.carousel-control-next');
+        expect(arrowRight).not.toBeNull();
     });
 
-    const carousel = container.querySelector('.carousel');
-    expect(carousel).not.toBeNull();
-
-    const items = container.querySelectorAll('.carousel-item');
-    expect(items).toHaveLength(3);
-
-    const images = container.querySelectorAll('.location-image');
-    expect(images).toHaveLength(3);
-    expect(Array.from(images).map(i => i.style.background)).toEqual(blobs.map(b => `url(${b}) no-repeat center`));
-
-    const arrowLeft = container.querySelector('.carousel-control-prev');
-    expect(arrowLeft).not.toBeNull();
-
-    const arrowRight = container.querySelector('.carousel-control-next');
-    expect(arrowRight).not.toBeNull();
+    it('and has `no-animation` class, if the `isShakeAnimationRequired` is false', () => {
+        const blobs = ['MQ==', 'Mg==', 'Mw=='];
+        act(() => {
+            root.render(<Carousel clockId='1' images={blobs} isShakeAnimationRequired={false} />);
+        });
+    
+        const carousel = container.querySelector('.carousel');
+        expect(carousel).not.toBeNull();
+        expect(carousel.classList.contains('no-animation')).toBe(true);
+    });
 });
+
+
+
