@@ -34,16 +34,14 @@ const Clock = (props) => {
         setImages(null);
         setIsLoading(true);
         searchPhotos(location.country)
-            .then(urls => Promise.allSettled(urls.map(url => downloadAndEncodeToBase64(url)))
-                .then(results => {
-                    const blobs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
-                    setImages(blobs);
-                    setIsLoading(false);
-                })
-                .catch(() => {
-                    setImages(null);
-                    setIsLoading(false);
-                }));
+            .then(urls => Promise.allSettled(urls.map(url => downloadAndEncodeToBase64(url))).then(results => {
+                const blobs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
+                setImages(blobs);
+                setIsLoading(false);
+            }).catch(() => {
+                setImages(null);
+                setIsLoading(false);
+            }));
         props.onChange?.(props.id, location);
     }
 
@@ -67,10 +65,10 @@ const Clock = (props) => {
                 isLoading
                     ? <div className="loading"><span className="spinner-border" role="status"></span> {i18next.t('Loading')}</div>
                     : (
-                        images && images.length 
+                        images && images.length
                             ? <div className="carousel-container">
                                 <Carousel clockId={props.id} images={images} isShakeAnimationRequired={isShakeAnimationRequired} />
-                            </div> 
+                            </div>
                             : <div className="loading">{i18next.t('Not found')}</div>
                     )
             }

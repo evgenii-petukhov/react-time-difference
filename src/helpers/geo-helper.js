@@ -1,5 +1,4 @@
 import { cityMapping } from "city-timezones";
-import i18next from "i18next";
 
 const validCityMappings = cityMapping.filter(item => item.timezone !== null).map(item => ({
     city: item.city,
@@ -36,19 +35,16 @@ function findCitiesByName(query, localTimezone, count) {
     return validCityMappings
         .filter(item => item.searchString.includes(query))
         .slice(0, count)
-        .map(item => {
-            const timezoneDiff = (getTimezoneOffset(item.timezone) - localTimezoneOffset) / 60;
-            return {
-                label: `${item.city}, ${item.country}`,
-                diff: `${timezoneDiff > 0 ? '+' : ''}${timezoneDiff}${i18next.t('h')}`,
-                location: {
-                    city: item.city,
-                    country: item.country,
-                    iso2: item.iso2,
-                    timezone: item.timezone
-                }
-            };
-        });
+        .map(item => ({
+            label: `${item.city}, ${item.country}`,
+            diff: (getTimezoneOffset(item.timezone) - localTimezoneOffset) / 60,
+            location: {
+                city: item.city,
+                country: item.country,
+                iso2: item.iso2,
+                timezone: item.timezone
+            }
+        }));
 }
 
 // https://www.geeksforgeeks.org/program-distance-two-points-earth/

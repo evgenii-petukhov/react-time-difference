@@ -1,5 +1,6 @@
 window.React = window.React ?? require('react');
 const { useState, useEffect } = React;
+import i18next from "i18next";
 
 const AutocompleteDropdown = (props) => {
     const [suggestions, setSuggestions] = useState([]);
@@ -17,7 +18,7 @@ const AutocompleteDropdown = (props) => {
     function onTextChanged(e) {
         const value = e.target.value.toUpperCase();
 
-        setSuggestions(value.length ? props.getItems(value) : []);
+        setSuggestions(value.length ? props.getItems?.(value) : []);
         setIsChangedManually(true);
         setText(e.target.value);
     }
@@ -50,7 +51,7 @@ const AutocompleteDropdown = (props) => {
                     suggestions.map((item, index) => <li key={index} onClick={() => selectSuggestion(item)}>
                         <div className="timezone-flag">{item.location.iso2 && <span className={`fi fi-${item.location.iso2.toString().toLowerCase()}`}></span>}</div>
                         <div className="timezone-label">{item.label}</div>
-                        <div className="timezone-diff">{item.diff}</div>
+                        <div className="timezone-diff">{`${item.diff > 0 ? '+' : ''}${item.diff}${i18next.t('h')}`}</div>
                     </li>)
                 }
             </ul>
