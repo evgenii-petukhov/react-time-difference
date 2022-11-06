@@ -68,7 +68,7 @@ describe('Time component: rendering', () => {
     it('should be rendered and `updateTimeDelta` should be called, if `date` and `timezone` both are passed', async () => {
         // Arrange
         const mockUpdateTimeDelta = jest.fn();
-        
+
         // Act
         act(() => {
             root.render(<Time date={new Date()} timezone="Europe/London" updateTimeDelta={mockUpdateTimeDelta} />);
@@ -141,34 +141,38 @@ async function checkControls(buttonElement, buttonIcon, callback, timeString = n
     const initialTime = getTimeReadonlyElement().textContent;
 
     // switch to editing
-    fireEvent.click(buttonElement);
-    await waitFor(async () => {
-        expect(getTimeReadonlyElement()).toBeNull();
-        expect(getTimeEditableElement()).not.toBeNull();
-        expect(buttonIcon.classList.contains('bi-pencil')).toBe(false);
-        expect(buttonIcon.classList.contains('bi-check-lg')).toBe(true);
-        expect(callback).toHaveBeenCalledTimes(0);
-        callback.mockClear();
+    act(() => {
+        fireEvent.click(buttonElement);
     });
+    
+    expect(getTimeReadonlyElement()).toBeNull();
+    expect(getTimeEditableElement()).not.toBeNull();
+    expect(buttonIcon.classList.contains('bi-pencil')).toBe(false);
+    expect(buttonIcon.classList.contains('bi-check-lg')).toBe(true);
+    expect(callback).toHaveBeenCalledTimes(0);
+    callback.mockClear();
 
     if (timeString) {
-        fireEvent.change(getTimeEditableInputElement(), {target: {value: timeString}});
+        act(() => {
+            fireEvent.change(getTimeEditableInputElement(), {target: {value: timeString}});
+        });
     }
 
     // switch back
-    fireEvent.click(buttonElement);
-    await waitFor(() => {
-        const timeReadonlyElement = getTimeReadonlyElement();
-        expect(timeReadonlyElement).not.toBeNull();
-        expect(getTimeEditableElement()).toBeNull();
-        expect(buttonIcon.classList.contains('bi-pencil')).toBe(true);
-        expect(buttonIcon.classList.contains('bi-check-lg')).toBe(false);
-        if (isTimeValid) {
-            expect(callback).toHaveBeenNthCalledWith(1, expectedDelta);
-        } else {
-            expect(callback).toHaveBeenCalledTimes(0);
-        }
-        
-        callback.mockClear();
+    act(() => {
+        fireEvent.click(buttonElement);
     });
+    
+    const timeReadonlyElement = getTimeReadonlyElement();
+    expect(timeReadonlyElement).not.toBeNull();
+    expect(getTimeEditableElement()).toBeNull();
+    expect(buttonIcon.classList.contains('bi-pencil')).toBe(true);
+    expect(buttonIcon.classList.contains('bi-check-lg')).toBe(false);
+    if (isTimeValid) {
+        expect(callback).toHaveBeenNthCalledWith(1, expectedDelta);
+    } else {
+        expect(callback).toHaveBeenCalledTimes(0);
+    }
+    
+    callback.mockClear();
 }

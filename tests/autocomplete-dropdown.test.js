@@ -129,8 +129,12 @@ describe('AutocompleteDropdown component: rendering', () => {
         expect(inputElement).not.toBeNull();
         expect(inputElement.value).toBe(defaultCity);
 
+        // Act: search a city by name
+        act(() => {
+            fireEvent.change(inputElement, { target: { value: 'London' } });
+        });
+        
         // Assert: dropdown list rendering
-        fireEvent.change(inputElement, { target: { value: 'London' } });
         const list = container.querySelector('ul');
         expect(list).not.toBeNull();
         expect(list.childNodes.length).toBe(options.length);
@@ -147,8 +151,12 @@ describe('AutocompleteDropdown component: rendering', () => {
             expect(diffElement.textContent).toBe(`${options[index].diff > 0 ? '+' : ''}${options[index].diff}h`);
         });
 
+        // Act: select a city from the list
+        act(() => {
+            fireEvent.click(list.childNodes[0]);
+        });
+
         // Assert: timezone selected callback
-        fireEvent.click(list.childNodes[0]);
         expect(mockTimezoneChanged).toHaveBeenCalledTimes(1);
     });
 });
