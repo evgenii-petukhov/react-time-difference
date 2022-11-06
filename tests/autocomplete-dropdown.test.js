@@ -2,30 +2,30 @@
  * @jest-environment jsdom
  */
 
- import React from "react";
- import { createRoot } from 'react-dom/client';
- import { act } from "react-dom/test-utils";
- import AutocompleteDropdown from "../src/components/autocomplete-dropdown";
- import { fireEvent, waitFor } from '@testing-library/react'
- 
- let root = null;
- let container = null;
- beforeEach(() => {
-     container = document.createElement('div');
-     document.body.appendChild(container);
-     globalThis.IS_REACT_ACT_ENVIRONMENT = true;
-     root = createRoot(container);
- });
- 
- afterEach(() => {
-     act(() => {
-         root.unmount();
-     });
-     container.remove();
-     container = null;
- });
+import React from "react";
+import { createRoot } from 'react-dom/client';
+import { act } from "react-dom/test-utils";
+import AutocompleteDropdown from "../src/components/autocomplete-dropdown";
+import { fireEvent, waitFor } from '@testing-library/react'
 
- describe('AutocompleteDropdown component: rendering', () => {
+let root = null;
+let container = null;
+beforeEach(() => {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+    root = createRoot(container);
+});
+
+afterEach(() => {
+    act(() => {
+        root.unmount();
+    });
+    container.remove();
+    container = null;
+});
+
+describe('AutocompleteDropdown component: rendering', () => {
     it('should be rendered, if `text` and `location` aren\'t passed', () => {
         act(() => {
             root.render(<AutocompleteDropdown />);
@@ -59,4 +59,4 @@
         expect(textElement).not.toBeNull();
         expect(textElement.value).toBe(text);
     });
- });
+});
