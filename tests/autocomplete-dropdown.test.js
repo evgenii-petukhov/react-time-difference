@@ -6,7 +6,8 @@ import React from "react";
 import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import AutocompleteDropdown from "../src/components/autocomplete-dropdown";
-import { fireEvent, waitFor } from '@testing-library/react'
+import { fireEvent, waitFor } from '@testing-library/react';
+import i18next from "i18next";
 
 let root = null;
 let container = null;
@@ -127,6 +128,7 @@ describe('AutocompleteDropdown component: rendering', () => {
             iso2: 'US'
         };
         const mockGetItems = jest.fn().mockReturnValue(options);
+        jest.spyOn(i18next, 't').mockReturnValue('h');
         act(() => {
             root.render(<AutocompleteDropdown text={text} location={location} getItems={mockGetItems} />);
         });
@@ -139,7 +141,7 @@ describe('AutocompleteDropdown component: rendering', () => {
         expect(inputElement).not.toBeNull();
         expect(inputElement.value).toBe(text);
 
-        fireEvent.change(inputElement, {target: {value: 'London'}});
+        fireEvent.change(inputElement, { target: { value: 'London' } });
         await waitFor(() => {
             const list = container.querySelector('ul');
             expect(list).not.toBeNull();
@@ -154,7 +156,7 @@ describe('AutocompleteDropdown component: rendering', () => {
                 expect(labelElement.textContent).toBe(options[index].label);
                 const diffElement = el.querySelector('.timezone-diff');
                 expect(diffElement).not.toBeNull();
-                //expect(diffElement.textContent).toBe(`options[index].diff`);
+                expect(diffElement.textContent).toBe(`${options[index].diff > 0 ? '+' : ''}${options[index].diff}h`);
             });
         });
     });

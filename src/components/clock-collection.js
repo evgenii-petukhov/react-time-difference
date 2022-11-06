@@ -1,5 +1,5 @@
 const { useState, useEffect, useRef } = React;
-import i18next from "i18next";
+import { t } from "i18next";
 import Clock from "./clock";
 import geoHelper from "../helpers/geo-helper";
 import searchPhotos from "../helpers/pexels-helper";
@@ -108,7 +108,7 @@ const ClockCollection = (props) => {
         <div className="project-description">
             <div className="container-fluid">
                 <div className="row text-center">
-                    <div className="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-sm-10 offset-sm-1">{i18next.t('Project description')}</div>
+                    <div className="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-sm-10 offset-sm-1">{t('Project description')}</div>
                 </div>
             </div>
         </div>
