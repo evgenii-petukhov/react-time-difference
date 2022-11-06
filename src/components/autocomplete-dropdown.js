@@ -1,3 +1,4 @@
+window.React = window.React ?? require('react');
 const { useState, useEffect } = React;
 
 const AutocompleteDropdown = (props) => {
@@ -23,11 +24,11 @@ const AutocompleteDropdown = (props) => {
 
     function onKeyDown(e) {
         switch (e.which) {
-            case 27:
+            case 27: // Esc
                 selectSuggestion('');
                 break;
-            case 9:
-            case 13:
+            case 9: // Tab
+            case 13: // Enter
                 if (suggestions.length) {
                     selectSuggestion(suggestions[0]);
                 }
@@ -61,7 +62,7 @@ const AutocompleteDropdown = (props) => {
             <div className="input-group">
                 <span className="input-group-text">
                     {
-                        location.iso2 && <span className={`fi fi-${location.iso2.toString().toLowerCase()}`} title={location.country}></span>
+                        location?.iso2 && <span className={`fi fi-${location.iso2.toString().toLowerCase()}`} title={location.country}></span>
                     }
                 </span>
                 <input type="text"
