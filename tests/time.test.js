@@ -27,38 +27,54 @@ afterEach(() => {
 
 describe('Time component: rendering', () => {
     it('should not be rendered, if no arguments passed', () => {
+        // Arrange
+
+        // Act
         act(() => {
             root.render(<Time />);
         });
 
+        // Assert
         const timeComponentRoot = container.querySelector('.time');
         expect(timeComponentRoot).toBeNull();
     });
 
     it('should not be rendered, if `date` is passed, but `timezone` isn\'t', () => {
+        // Arrange
+
+        // Act
         act(() => {
             root.render(<Time date={new Date()} />);
         });
 
+        // Assert
         const timeComponentRoot = container.querySelector('.time');
         expect(timeComponentRoot).toBeNull();
     });
 
     it('should not be rendered, if `timezone` is passed, but `date` isn\'t', () => {
+        // Arrange
+
+        // Act
         act(() => {
             root.render(<Time timezone="Europe/London" />);
         });
 
+        // Assert
         const timeComponentRoot = container.querySelector('.time');
         expect(timeComponentRoot).toBeNull();
     });
 
     it('should be rendered and `updateTimeDelta` should be called, if `date` and `timezone` both are passed', async () => {
+        // Arrange
         const mockUpdateTimeDelta = jest.fn();
+        
+        // Act
         act(() => {
             root.render(<Time date={new Date()} timezone="Europe/London" updateTimeDelta={mockUpdateTimeDelta} />);
         });
 
+        // Assert
         const timeComponentRoot = container.querySelector('.time');
         expect(timeComponentRoot).not.toBeNull();
 
@@ -74,11 +90,15 @@ describe('Time component: rendering', () => {
 
 describe('Time component: input validation', () => {
     it('should be valid, if a user doesn\'t change time', async () => {
+        // Arrange
         const mockUpdateTimeDelta = jest.fn();
+
+        // Act
         act(() => {
             root.render(<Time date={new Date(1961, 4, 12, 12, 0, 0)} timezone="Europe/London" updateTimeDelta={mockUpdateTimeDelta} />);
         });
 
+        // Assert
         const timeComponentRoot = container.querySelector('.time');
         expect(timeComponentRoot).not.toBeNull();
 
@@ -120,7 +140,7 @@ function getTimeEditableInputElement() {
 async function checkControls(buttonElement, buttonIcon, callback, timeString = null, isTimeValid = true, expectedDelta = 0) {
     const initialTime = getTimeReadonlyElement().textContent;
 
-    // switch to the edito mode
+    // switch to editing
     fireEvent.click(buttonElement);
     await waitFor(async () => {
         expect(getTimeReadonlyElement()).toBeNull();

@@ -1,5 +1,5 @@
 const { useState, useEffect, useRef } = React;
-import i18next from "i18next";
+import { t } from "i18next";
 import AutocompleteDropdown from "./autocomplete-dropdown";
 import Carousel from "./carousel";
 import Time from "./time";
@@ -63,18 +63,18 @@ const Clock = (props) => {
             </div>
             {
                 isLoading
-                    ? <div className="loading"><span className="spinner-border" role="status"></span> {i18next.t('Loading')}</div>
+                    ? <div className="loading"><span className="spinner-border" role="status"></span> {t('Loading')}</div>
                     : (
                         images && images.length
                             ? <div className="carousel-container">
                                 <Carousel clockId={props.id} images={images} isShakeAnimationRequired={isShakeAnimationRequired} />
                             </div>
-                            : <div className="loading">{i18next.t('Not found')}</div>
+                            : <div className="loading">{t('Not found')}</div>
                     )
             }
             <div className="button-container">
-                <button className="btn btn-outline-primary" onClick={() => props.onAdd(props.id)}>{i18next.t('Add clock')}</button>
-                <button className="btn btn-light btn-remove" onClick={() => props.onRemove(props.id)}>{i18next.t('Remove')}</button>
+                <button className="btn btn-outline-primary" onClick={() => props.onAdd(props.id)}>{t('Add clock')}</button>
+                <button className="btn btn-light btn-remove" onClick={() => props.onRemove(props.id)}>{t('Remove')}</button>
             </div>
         </div>
     </div>;
