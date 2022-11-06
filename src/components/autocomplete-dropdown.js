@@ -17,7 +17,7 @@ const AutocompleteDropdown = (props) => {
     function onTextChanged(e) {
         const value = e.target.value.toUpperCase();
 
-        setSuggestions(value.length ? props.getItems(value).sort() : []);
+        setSuggestions(value.length ? props.getItems(value) : []);
         setIsChangedManually(true);
         setText(e.target.value);
     }
@@ -44,7 +44,7 @@ const AutocompleteDropdown = (props) => {
     }
 
     function renderSuggestions() {
-        return suggestions.length === 0 ? null : (
+        return suggestions.length ? (
             <ul>
                 {
                     suggestions.map((item, index) => <li key={index} onClick={() => selectSuggestion(item)}>
@@ -54,7 +54,7 @@ const AutocompleteDropdown = (props) => {
                     </li>)
                 }
             </ul>
-        );
+        ) : null;
     }
 
     return <div className="autocomplete-textbox-component">
