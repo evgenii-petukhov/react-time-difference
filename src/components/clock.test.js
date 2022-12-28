@@ -15,8 +15,6 @@ beforeEach(() => {
     document.body.appendChild(container);
     globalThis.IS_REACT_ACT_ENVIRONMENT = true;
     root = createRoot(container);
-
-    jest.mock("./time", () => () => (<div className="time"></div>));
 });
 
 afterEach(() => {
@@ -26,6 +24,8 @@ afterEach(() => {
     container.remove();
     container = null;
 });
+
+jest.mock("./time", () => () => (<div className="time"></div>));
 
 describe('Clock component: rendering', () => {
     it('should not be rendered, if no arguments passed', () => {
