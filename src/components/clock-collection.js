@@ -2,8 +2,7 @@ const { useState, useEffect, useRef } = React;
 import { t } from "i18next";
 import Clock from "./clock";
 import geoHelper from "../helpers/geo-helper";
-import searchPhotos from "../helpers/pexels-helper";
-import downloadAndEncodeToBase64 from "../helpers/base64-helper";
+import downloadPhotos from "../helpers/pexels-helper";
 
 const ClockCollection = (props) => {
     const idCounterRef = useRef(0);
@@ -54,17 +53,10 @@ const ClockCollection = (props) => {
         }
     }
 
-    function loadDefaultImages(country) {
-        return new Promise(resolve => searchPhotos(country).then(urls => {
-            Promise.allSettled(urls.map(url => downloadAndEncodeToBase64(url))).then(results => {
-                const blobs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
-                setDefaultImages(blobs);
-                resolve(blobs);
-            }).catch(() => {
-                setDefaultImages(null);
-                resolve(null);
-            });
-        }));
+    async function loadDefaultImages(country) {
+        const blobs = await downloadPhotos(country);
+        setDefaultImages(blobs);
+        return blobs;
     }
 
     function onClockAdded(id) {

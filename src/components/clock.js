@@ -4,8 +4,7 @@ import AutocompleteDropdown from "./autocomplete-dropdown";
 import Carousel from "./carousel";
 import Time from "./time";
 import geoHelper from "../helpers/geo-helper";
-import searchPhotos from "../helpers/pexels-helper";
-import downloadAndEncodeToBase64 from "../helpers/base64-helper";
+import downloadPhotos from "../helpers/pexels-helper";
 
 const dropdownCityLimit = 10;
 
@@ -33,20 +32,17 @@ const Clock = (props) => {
         setLocation(location);
         setImages(null);
         setIsLoading(true);
-        searchPhotos(location.country)
-            .then(urls => Promise.allSettled(urls.map(url => downloadAndEncodeToBase64(url))).then(results => {
-                const blobs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
-                setImages(blobs);
-                setIsLoading(false);
-            }).catch(() => {
-                setImages(null);
-                setIsLoading(false);
-            }));
+        downloadPhotos(location.country).then(() => {
+            setImages(blobs);
+            setIsLoading(false);
+        });
         props.onChange?.(props.id, location);
     }
 
     function getItems(input) {
-        return geoHelper.findCitiesByName(input, props.location.timezone, dropdownCityLimit).sort((a, b) => a.label.localeCompare(b.label));
+        return geoHelper
+            .findCitiesByName(input, props.location.timezone, dropdownCityLimit)
+            .sort((a, b) => a.label.localeCompare(b.label));
     }
 
     return <div className="clock-container" ref={clockComponentRef}>

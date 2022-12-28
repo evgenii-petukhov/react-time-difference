@@ -1,11 +1,21 @@
 import { createClient } from 'pexels';
 import getCachedImages from './image-cache';
 import urlCacheHelper from './url-cache-helper';
+import downloadAndEncodeToBase64 from "./base64-helper";
 
 const apiKey = '563492ad6f917000010000010b615054bce549e2bdb4a48e0d1520d9';
 const picturesPerPage = 3;
 
 const client = createClient(apiKey);
+
+function downloadPhotos(country) {
+    return new Promise(resolve => searchPhotos(country).then(urls => {
+        Promise.allSettled(urls.map(url => downloadAndEncodeToBase64(url))).then(results => {
+            const blobs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
+            resolve(blobs);
+        });
+    }));
+}
 
 function searchPhotos(country) {
     country = country.toLocaleLowerCase();
@@ -31,4 +41,4 @@ function searchPhotos(country) {
     });
 }
 
-export default searchPhotos;
+export default downloadPhotos;
