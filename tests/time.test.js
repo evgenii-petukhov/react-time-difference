@@ -112,16 +112,16 @@ describe('Time component: input validation', () => {
 
         const editButton = container.querySelector('.time-control-container button');
         // switch to the edit mode and switch back without changing time
-        await checkControls(editButton, editButtonIcon, mockUpdateTimeDelta);
+        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta);
         // switch to the edit mode, set valid time, and switch back without changing time
-        await checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '18:30', true, 23400000);
-        await checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '23:59', true, 43140000);
-        await checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '24:00', true, 43200000);
-        await checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, 'text', false);
-        await checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, 'te:xt', false);
-        await checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '2359', false);
-        await checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '18:60', false);
-        await checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '25:00', false);
+        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '18:30', true, 23400000);
+        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '23:59', true, 43140000);
+        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '24:00', true, 43200000);
+        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, 'text', false);
+        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, 'te:xt', false);
+        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '2359', false);
+        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '18:60', false);
+        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '25:00', false);
     });
 });
 
@@ -137,9 +137,7 @@ function getTimeEditableInputElement() {
     return container.querySelector('.time-editable input[type="text"]');
 }
 
-async function checkControls(buttonElement, buttonIcon, callback, timeString = null, isTimeValid = true, expectedDelta = 0) {
-    const initialTime = getTimeReadonlyElement().textContent;
-
+function checkControls(buttonElement, buttonIcon, callback, timeString = null, isTimeValid = true, expectedDelta = 0) {
     // switch to editing
     act(() => {
         fireEvent.click(buttonElement);
