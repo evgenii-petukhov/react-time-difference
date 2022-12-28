@@ -5,7 +5,7 @@
 import React from "react";
 import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
-import Clock from "./clock";
+import Clock from "../src/components/clock";
 import { fireEvent } from '@testing-library/react'
 
 let root = null;
@@ -25,7 +25,7 @@ afterEach(() => {
     container = null;
 });
 
-jest.mock("./time", () => () => (<div className="time"></div>));
+jest.mock("../src/components/time", () => () => (<div className="time"></div>));
 
 describe('Clock component: rendering', () => {
     it('should not be rendered, if no arguments passed', () => {
