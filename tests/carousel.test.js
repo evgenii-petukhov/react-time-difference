@@ -114,7 +114,7 @@ describe('renders the Carousel component', () => {
         // Assert
         const carousel = container.querySelector('.carousel');
         expect(carousel).not.toBeNull();
-        expect(carousel.classList.contains('no-animation')).toBe(false);
+        expect(carousel.classList.contains('no-shaking-animation')).toBe(false);
 
         const items = container.querySelectorAll('.carousel-item');
         expect(items).toHaveLength(3);
@@ -136,7 +136,7 @@ describe('renders the Carousel component', () => {
         expect(arrowRight).not.toBeNull();
     });
 
-    it('and has `no-animation` class, if the `isShakeAnimationRequired` is false', () => {
+    it('and has `no-shaking-animation` class, if the `isShakeAnimationRequired` is false', () => {
         // Arrange
         const blobs = ['MQ==', 'Mg==', 'Mw=='];
 
@@ -148,7 +148,7 @@ describe('renders the Carousel component', () => {
         // Assert
         const carousel = container.querySelector('.carousel');
         expect(carousel).not.toBeNull();
-        expect(carousel.classList.contains('no-animation')).toBe(true);
+        expect(carousel.classList.contains('no-shaking-animation')).toBe(true);
     });
 });
 

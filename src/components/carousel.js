@@ -3,7 +3,9 @@ window.React = window.React ?? require('react');
 const Carousel = (props) => {
     const carouselId = `clock-image-carousel-${props.clockId}`;
 
-    return props.images && props.images.length && <div id={carouselId} className={`carousel ${props.isShakeAnimationRequired ? '' : 'no-animation'}`} data-bs-ride="true">
+    return props.images && props.images.length && <div id={carouselId}
+        className={`carousel slide ${props.isShakeAnimationRequired ? '' : 'no-shaking-animation'}`}
+        data-bs-ride="false">
         <div className="carousel-inner">
             {
                 props.images.map((image, index) => <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>

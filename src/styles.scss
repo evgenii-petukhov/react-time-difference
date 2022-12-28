@@ -98,7 +98,7 @@ html {
 
                                 .carousel {
                                     animation: shake .5s linear;
-                                    &.no-animation {
+                                    &.no-shaking-animation {
                                         animation: none;
                                     }
                                 }
