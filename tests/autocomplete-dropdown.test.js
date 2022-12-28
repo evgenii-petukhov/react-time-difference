@@ -6,7 +6,7 @@ import React from "react";
 import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import AutocompleteDropdown from "../src/components/autocomplete-dropdown";
-import { fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 import i18next from "i18next";
 
 let root = null;

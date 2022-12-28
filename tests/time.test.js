@@ -6,7 +6,7 @@ import React from "react";
 import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import Time from "../src/components/time";
-import { fireEvent, waitFor } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 
 let root = null;
 let container = null;
