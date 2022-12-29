@@ -38,6 +38,25 @@ describe('Clock component: rendering', () => {
 
         // Assert
         const clockComponentRoot = container.querySelector('.clock');
+        expect(clockComponentRoot).toBeNull();
+    });
+
+    it('should be rendered, if arguments passed', () => {
+        // Arrange
+        const location = {
+            city: 'Budapest',
+            country: 'Hungary',
+            iso2: 'HU',
+            timezone: 'Europe/Budapest'
+        };
+
+        // Act
+        act(() => {
+            root.render(<Clock location={location} />);
+        });
+
+        // Assert
+        const clockComponentRoot = container.querySelector('.clock');
         expect(clockComponentRoot).not.toBeNull();
     });
 

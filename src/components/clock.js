@@ -21,7 +21,7 @@ const Clock = (props) => {
     }, [props.location, props.images]);
 
     useEffect(() => {
-        clockComponentRef.current.scrollIntoView?.({
+        clockComponentRef.current?.scrollIntoView?.({
             behavior: "smooth",
             block: "end"
         });
@@ -45,14 +45,14 @@ const Clock = (props) => {
             .sort((a, b) => a.label.localeCompare(b.label));
     }
 
-    return <div className="clock-container" ref={clockComponentRef}>
+    return props.location && <div className="clock-container" ref={clockComponentRef}>
         <div className="clock">
             <div className="time-container">
-                <Time date={props.date} timezone={location?.timezone} updateTimeDelta={props.updateTimeDelta} />
+                <Time date={props.date} timezone={location.timezone} updateTimeDelta={props.updateTimeDelta} />
             </div>
             <div className="location-name">
                 <AutocompleteDropdown
-                    text={location?.city}
+                    text={location.city}
                     location={location}
                     getItems={getItems}
                     onTimezoneChanged={onTimezoneChanged} />
