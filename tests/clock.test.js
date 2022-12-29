@@ -26,6 +26,7 @@ afterEach(() => {
 });
 
 jest.mock("../src/components/time", () => () => (<div className="time"></div>));
+jest.mock("../src/components/autocomplete-dropdown", () => () => (<div className="autocomplete-textbox-component"></div>));
 
 describe('Clock component: rendering', () => {
     it('should not be rendered, if no arguments passed', () => {
