@@ -1,7 +1,7 @@
 const { useState, useEffect, useRef } = React;
 import { t } from "i18next";
 import Clock from "./clock";
-import geoHelper from "../helpers/geo-helper";
+import { getNearestCity } from "../helpers/geo-helper";
 import downloadPhotos from "../helpers/pexels-helper";
 
 const ClockCollection = (props) => {
@@ -29,7 +29,7 @@ const ClockCollection = (props) => {
         }).then(() => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
-                    const cityInfo = geoHelper.getNearestCity(position.coords.latitude, position.coords.longitude);
+                    const cityInfo = getNearestCity(position.coords.latitude, position.coords.longitude);
                     setDefaultLocation(cityInfo.location);
                     loadDefaultImages(cityInfo.location.country).then(blobs => {
                         resetTimezonesUnlessModelChanged(blobs, cityInfo.location);
@@ -54,9 +54,7 @@ const ClockCollection = (props) => {
     }
 
     async function loadDefaultImages(country) {
-        const blobs = await downloadPhotos(country);
-        setDefaultImages(blobs);
-        return blobs;
+        return await downloadPhotos(country, bs => setDefaultImages(bs));
     }
 
     function onClockAdded(id) {

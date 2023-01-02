@@ -6,14 +6,12 @@ import React from "react";
 import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import Clock from "../src/components/clock";
-import { fireEvent } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react';
 
 let root = null;
 let container = null;
 
-jest.mock("../src/components/time", () => () => <div className="time"></div>);
-jest.mock("../src/components/carousel", () => () => <div className="carousel"></div>);
-jest.mock("../src/components/autocomplete-dropdown", () => () => <div className="autocomplete-textbox-component"></div>);
+jest.mock("../src/helpers/pexels-helper", () => jest.fn().mockReturnValue(Promise.resolve([])));
 
 beforeEach(() => {
     container = document.createElement('div');
@@ -31,6 +29,17 @@ afterEach(() => {
 });
 
 describe('Clock component: rendering', () => {
+    beforeEach(() => {
+        jest.mock("../src/components/time", () => () => <div className="time"></div>);
+        jest.mock("../src/components/carousel", () => () => <div className="carousel"></div>);
+        jest.mock("../src/components/autocomplete-dropdown", () => () => <div className="autocomplete-textbox-component"></div>);
+    });
+    
+    afterEach(() => {    
+        jest.restoreAllMocks();
+        jest.resetModules();
+    });
+
     it('should not be rendered, if no arguments passed', () => {
         // Arrange
 
@@ -128,5 +137,75 @@ describe('Clock component: rendering', () => {
         expect(carousel).not.toBeNull();
         const notFound = clockComponentRoot.querySelector('.not-found');
         expect(notFound).toBeNull();
+    });
+});
+
+describe('Clock component: intergation with AutocompleteDropDown', () => {
+    beforeEach(() => {
+        jest.mock("../src/components/time", () => () => <div className="time"></div>);
+        jest.mock("../src/components/carousel", () => () => <div className="carousel"></div>);
+        jest.mock("../src/helpers/geo-helper", () => ({
+            getNearestCity: jest.fn(),
+            findCitiesByName: jest.fn().mockReturnValue([{
+                label: 'East London',
+                diff: 0,
+                location: {
+                    city: 'East London',
+                    country: 'South Africa',
+                    iso2: 'ZA',
+                    timezone: 'Africa/Johannesburg'
+                }
+            }])
+        }));
+    });
+
+    it('should call `onChange` when a city is seelcted in the child AutocompleteDropdown component', () => {
+        // Arrange
+        const defaultCity = 'New York';
+        const defaultLocation = {
+            city: defaultCity,
+            country: 'United States of America',
+            timezone: 'America/New_York',
+            iso2: 'US'
+        };
+
+        const images = [{}];
+
+        const onChangeMock = jest.fn();
+
+        // Act
+        act(() => {
+            root.render(<Clock location={defaultLocation} images={images} onChange={onChangeMock} />);
+        });
+
+        // Assert
+        const clockComponentRoot = container.querySelector('.clock');
+        expect(clockComponentRoot).not.toBeNull();
+        const dropdown = clockComponentRoot.querySelector('.autocomplete-textbox-component');
+        expect(dropdown).not.toBeNull();
+        const loading = clockComponentRoot.querySelector('.loading');
+        expect(loading).toBeNull();
+        const carousel = clockComponentRoot.querySelector('.carousel-container');
+        expect(carousel).not.toBeNull();
+        const notFound = clockComponentRoot.querySelector('.not-found');
+        expect(notFound).toBeNull();
+        const inputElement = container.querySelector('input[type="text"]');
+        expect(inputElement).not.toBeNull();
+        expect(inputElement.value).toBe(defaultCity);
+
+        act(() => {
+            fireEvent.change(inputElement, { target: { value: 'London' } });
+        });
+
+        const list = container.querySelector('ul');
+        expect(list).not.toBeNull();
+
+        // Act: select a city from the list
+        act(() => {
+            fireEvent.click(list.childNodes[0]);
+        });
+
+        // Assert: timezone selected callback
+        expect(onChangeMock).toHaveBeenCalledTimes(1);
     });
 });

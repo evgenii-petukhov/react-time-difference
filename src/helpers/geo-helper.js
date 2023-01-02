@@ -10,7 +10,7 @@ const validCityMappings = cityMapping.filter(item => item.timezone !== null).map
     searchString: `${item.city} ${item.country} ${item.city}|${item.city}, ${item.country}, ${item.city}`.toLocaleUpperCase()
 }));
 
-function getNearestCity(lat, lng) {
+export function getNearestCity(lat, lng) {
     return validCityMappings.map(item => ({
         location: {
             city: item.city,
@@ -28,7 +28,7 @@ function getTimezoneOffset(timeZone = 'UTC', date = new Date()) {
     return (tzDate.getTime() - utcDate.getTime()) / 6e4;
 }
 
-function findCitiesByName(query, localTimezone, count) {
+export function findCitiesByName(query, localTimezone, count) {
     query = query.toLocaleUpperCase();
     const localTimezoneOffset = getTimezoneOffset(localTimezone);
 
@@ -70,5 +70,3 @@ function getDistance(lat1, lon1, lat2, lon2) {
     let r = 6371; // Radius of earth in kilometers. Use 3956 for miles
     return (c * r);
 }
-
-export default { getNearestCity, findCitiesByName };

@@ -8,10 +8,11 @@ const picturesPerPage = 3;
 
 const client = createClient(apiKey);
 
-function downloadPhotos(country) {
+function downloadPhotos(country, callback) {
     return new Promise(resolve => searchPhotos(country).then(urls => {
         Promise.allSettled(urls.map(url => downloadAndEncodeToBase64(url))).then(results => {
             const blobs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
+            callback?.(blobs);
             resolve(blobs);
         });
     }));

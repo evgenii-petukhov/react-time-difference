@@ -65,7 +65,7 @@ describe('Time component: rendering', () => {
         expect(timeComponentRoot).toBeNull();
     });
 
-    it('should be rendered and `updateTimeDelta` should be called, if `date` and `timezone` both are passed', async () => {
+    it('should be rendered and `updateTimeDelta` should be called, if `date` and `timezone` both are passed', () => {
         // Arrange
         const mockUpdateTimeDelta = jest.fn();
 
@@ -89,7 +89,7 @@ describe('Time component: rendering', () => {
 });
 
 describe('Time component: input validation', () => {
-    it('should be valid, if a user doesn\'t change time', async () => {
+    it('should be valid, if a user doesn\'t change time', () => {
         // Arrange
         const mockUpdateTimeDelta = jest.fn();
 

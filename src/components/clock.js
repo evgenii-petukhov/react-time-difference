@@ -4,7 +4,7 @@ import { t } from "i18next";
 import AutocompleteDropdown from "./autocomplete-dropdown";
 import Carousel from "./carousel";
 import Time from "./time";
-import geoHelper from "../helpers/geo-helper";
+import { findCitiesByName } from "../helpers/geo-helper";
 import downloadPhotos from "../helpers/pexels-helper";
 
 const dropdownCityLimit = 10;
@@ -33,7 +33,7 @@ const Clock = (props) => {
         setLocation(location);
         setImages(null);
         setIsLoading(true);
-        downloadPhotos(location.country).then(blobs => {
+        downloadPhotos(location.country, blobs => {
             setImages(blobs);
             setIsLoading(false);
         });
@@ -41,8 +41,7 @@ const Clock = (props) => {
     }
 
     function getItems(input) {
-        return geoHelper
-            .findCitiesByName(input, props.location.timezone, dropdownCityLimit)
+        return findCitiesByName(input, props.location.timezone, dropdownCityLimit)
             .sort((a, b) => a.label.localeCompare(b.label));
     }
 

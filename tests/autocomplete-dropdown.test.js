@@ -101,7 +101,7 @@ describe('AutocompleteDropdown component: rendering', () => {
         expect(textElement.value).toBe('');
     });
 
-    it('should be rendered and `onTimezoneChanged` should be called when a timezone is selected', async () => {
+    it('should be rendered and `onTimezoneChanged` should be called when a timezone is selected', () => {
         // Arrange
         const defaultCity = 'New York';
         const defaultLocation = {
