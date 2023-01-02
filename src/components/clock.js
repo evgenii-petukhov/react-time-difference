@@ -1,3 +1,4 @@
+window.React = window.React ?? require('react');
 const { useState, useEffect, useRef } = React;
 import { t } from "i18next";
 import AutocompleteDropdown from "./autocomplete-dropdown";
@@ -48,24 +49,29 @@ const Clock = (props) => {
     return props.location && <div className="clock-container" ref={clockComponentRef}>
         <div className="clock">
             <div className="time-container">
-                <Time date={props.date} timezone={location.timezone} updateTimeDelta={props.updateTimeDelta} />
+                <Time date={props.date}
+                    timezone={location.timezone}
+                    updateTimeDelta={props.updateTimeDelta} />
             </div>
             <div className="location-name">
-                <AutocompleteDropdown
-                    text={location.city}
+                <AutocompleteDropdown text={location.city}
                     location={location}
                     getItems={getItems}
                     onTimezoneChanged={onTimezoneChanged} />
             </div>
             {
                 isLoading
-                    ? <div className="loading"><span className="spinner-border" role="status"></span> {t('Loading')}</div>
+                    ? <div className="loading">
+                        <span className="spinner-border" role="status"></span> {t('Loading')}
+                    </div>
                     : (
                         images && images.length
                             ? <div className="carousel-container">
-                                <Carousel clockId={props.id} images={images} isShakeAnimationRequired={isShakeAnimationRequired} />
+                                <Carousel clockId={props.id}
+                                    images={images}
+                                    isShakeAnimationRequired={isShakeAnimationRequired} />
                             </div>
-                            : <div className="loading">{t('Not found')}</div>
+                            : <div className="not-found">{t('Not found')}</div>
                     )
             }
             <div className="button-container">

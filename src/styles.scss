@@ -163,10 +163,12 @@ html {
                                 }
                             }
 
-                            .loading {
+                            .loading, .not-found {
                                 margin: 0 0 16px 0;
                                 text-align: center;
+                            }
 
+                            .loading {
                                 .spinner-border {
                                     width: 14px;
                                     height: 14px;
