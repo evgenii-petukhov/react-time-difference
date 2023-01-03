@@ -70,4 +70,40 @@ const dropdownOptions = [{
     }
 }];
 
-export { dropdownOptions, locations, cityNames };
+const timeInputOptions = [{
+        input: '18:30', 
+        isTimeValid: true, 
+        delta: 23400000
+    }, {
+        input: '23:59', 
+        isTimeValid: true, 
+        delta: 43140000
+    }, {
+        input: '24:00', 
+        isTimeValid: true, 
+        delta: 43200000
+    }, {
+        input: 'text', 
+        isTimeValid: false,
+        delta: 0
+    }, {
+        input: '2359', 
+        isTimeValid: false,
+        delta: 0
+    }, {
+        input: '18:60', 
+        isTimeValid: false,
+        delta: 0
+    }, {
+        input: '25:00', 
+        isTimeValid: false,
+        delta: 0
+    }
+];
+
+export {
+    dropdownOptions,
+    locations,
+    cityNames,
+    timeInputOptions
+};

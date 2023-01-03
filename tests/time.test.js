@@ -6,7 +6,8 @@ import React from "react";
 import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import Time from "../src/components/time";
-import { fireEvent } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react';
+import { timeInputOptions } from './testData';
 
 let root = null;
 let container = null;
@@ -114,14 +115,7 @@ describe('Time component: input validation', () => {
         // switch to the edit mode and switch back without changing time
         checkControls(editButton, editButtonIcon, mockUpdateTimeDelta);
         // switch to the edit mode, set valid time, and switch back without changing time
-        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '18:30', true, 23400000);
-        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '23:59', true, 43140000);
-        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '24:00', true, 43200000);
-        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, 'text', false);
-        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, 'te:xt', false);
-        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '2359', false);
-        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '18:60', false);
-        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, '25:00', false);
+        timeInputOptions.forEach(timeInput => checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, timeInput));
     });
 });
 
@@ -137,7 +131,7 @@ function getTimeEditableInputElement() {
     return container.querySelector('.time-editable input[type="text"]');
 }
 
-function checkControls(buttonElement, buttonIcon, callback, timeString = null, isTimeValid = true, expectedDelta = 0) {
+function checkControls(buttonElement, buttonIcon, callback, timeInput = { input: null, isTimeValid: true, delta: 0 }) {
     // switch to editing
     act(() => {
         fireEvent.click(buttonElement);
@@ -150,9 +144,9 @@ function checkControls(buttonElement, buttonIcon, callback, timeString = null, i
     expect(callback).toHaveBeenCalledTimes(0);
     callback.mockClear();
 
-    if (timeString) {
+    if (timeInput.input) {
         act(() => {
-            fireEvent.change(getTimeEditableInputElement(), {target: {value: timeString}});
+            fireEvent.change(getTimeEditableInputElement(), {target: {value: timeInput.input}});
         });
     }
 
@@ -166,8 +160,8 @@ function checkControls(buttonElement, buttonIcon, callback, timeString = null, i
     expect(getTimeEditableElement()).toBeNull();
     expect(buttonIcon.classList.contains('bi-pencil')).toBe(true);
     expect(buttonIcon.classList.contains('bi-check-lg')).toBe(false);
-    if (isTimeValid) {
-        expect(callback).toHaveBeenNthCalledWith(1, expectedDelta);
+    if (timeInput.isTimeValid) {
+        expect(callback).toHaveBeenNthCalledWith(1, timeInput.delta);
     } else {
         expect(callback).toHaveBeenCalledTimes(0);
     }
