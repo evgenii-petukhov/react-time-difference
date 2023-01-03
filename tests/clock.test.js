@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import Clock from "../src/components/clock";
 import { fireEvent } from '@testing-library/react';
+import { dropdownOptions, cityNames, locations } from './testData';
 
 let root = null;
 let container = null;
@@ -15,29 +16,8 @@ jest.mock("../src/components/time", () => () => <div className="time"></div>);
 jest.mock("../src/components/carousel", () => () => <div className="carousel"></div>);
 jest.mock("../src/helpers/pexels-helper", () => jest.fn().mockReturnValue(Promise.resolve([])));
 
-const cityBudapest = 'Budapest';
-const locationBudapest = {
-    city: cityBudapest,
-    country: 'Hungary',
-    iso2: 'HU',
-    timezone: 'Europe/Budapest'
-};
-
-const cityEastLondon = 'East London';
-const locationEastLondon = {
-    city: cityEastLondon,
-    country: 'South Africa',
-    iso2: 'ZA',
-    timezone: 'Africa/Johannesburg'
-};
-
-const cityLondon = 'London';
-
-const mockFindCitiesByName = jest.fn().mockReturnValue([{
-    label: cityEastLondon,
-    diff: 0,
-    location: locationEastLondon
-}]);
+// https://lukerogerson.medium.com/two-ways-to-fix-the-jest-test-error-the-module-factory-of-jest-mock-is-not-allowed-to-bf022b5175dd
+const mockFindCitiesByName = jest.fn().mockReturnValue(dropdownOptions);
 
 beforeEach(() => {
     container = document.createElement('div');
@@ -77,7 +57,7 @@ describe('Clock component: rendering', () => {
 
         // Act
         act(() => {
-            root.render(<Clock location={locationBudapest} />);
+            root.render(<Clock location={locations.budapest} />);
         });
 
         // Assert
@@ -96,7 +76,7 @@ describe('Clock component: rendering', () => {
 
         // Act
         act(() => {
-            root.render(<Clock location={locationBudapest} images={[]} />);
+            root.render(<Clock location={locations.budapest} images={[]} />);
         });
 
         // Assert
@@ -115,7 +95,7 @@ describe('Clock component: rendering', () => {
 
         // Act
         act(() => {
-            root.render(<Clock location={locationBudapest} images={[{}]} />);
+            root.render(<Clock location={locations.budapest} images={[{}]} />);
         });
 
         // Assert
@@ -149,7 +129,7 @@ describe('Clock component: intergation with AutocompleteDropDown', () => {
 
         // Act
         act(() => {
-            root.render(<Clock id={clockId} location={locationBudapest} images={[{}]} onChange={onChangeMock} />);
+            root.render(<Clock id={clockId} location={locations.budapest} images={[{}]} onChange={onChangeMock} />);
         });
 
         // Assert
@@ -165,10 +145,10 @@ describe('Clock component: intergation with AutocompleteDropDown', () => {
         expect(notFound).toBeNull();
         const inputElement = container.querySelector('input[type="text"]');
         expect(inputElement).not.toBeNull();
-        expect(inputElement.value).toBe(cityBudapest);
+        expect(inputElement.value).toBe(cityNames.budapest);
 
         act(() => {
-            fireEvent.change(inputElement, { target: { value: cityLondon } });
+            fireEvent.change(inputElement, { target: { value: cityNames.london } });
         });
 
         const list = container.querySelector('ul');
@@ -180,6 +160,6 @@ describe('Clock component: intergation with AutocompleteDropDown', () => {
         });
 
         // Assert: timezone selected callback
-        expect(onChangeMock).toHaveBeenNthCalledWith(1, clockId, locationEastLondon);
+        expect(onChangeMock).toHaveBeenNthCalledWith(1, clockId, locations.eastLondon);
     });
 });

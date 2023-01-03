@@ -8,6 +8,7 @@ import { act } from "react-dom/test-utils";
 import AutocompleteDropdown from "../src/components/autocomplete-dropdown";
 import { fireEvent } from '@testing-library/react';
 import i18next from "i18next";
+import { dropdownOptions, cityNames, locations } from './testData';
 
 let root = null;
 let container = null;
@@ -25,62 +26,6 @@ afterEach(() => {
     container.remove();
     container = null;
 });
-
-const options = [{
-    label: 'East London',
-    diff: 0,
-    location: {
-        city: 'East London',
-        country: 'South Africa',
-        iso2: 'ZA',
-        timezone: 'Africa/Johannesburg'
-    }
-}, {
-    label: 'London',
-    diff: -7,
-    location: {
-        city: 'London',
-        country: 'Canada',
-        iso2: 'CA',
-        timezone: 'America/Toronto'
-    }
-}, {
-    label: 'London',
-    diff: -2,
-    location: {
-        city: 'London',
-        country: 'United Kingdom',
-        iso2: 'GB',
-        timezone: 'Europe/London'
-    }
-}, {
-    label: 'London',
-    diff: -7,
-    location: {
-        city: 'London',
-        country: 'United States of America',
-        iso2: 'US',
-        timezone: 'America/New_York'
-    }
-}, {
-    label: 'Londonderry',
-    diff: -2,
-    location: {
-        city: 'Londonderry',
-        country: 'United Kingdom',
-        iso2: 'GB',
-        timezone: 'Europe/London'
-    }
-}, {
-    label: 'New London',
-    diff: -7,
-    location: {
-        city: 'Londonderry',
-        country: 'United States of America',
-        iso2: 'US',
-        timezone: 'America/New_York'
-    }
-}];
 
 describe('AutocompleteDropdown component: rendering', () => {
     it('should be rendered, if `text` and `location` aren\'t passed', () => {
@@ -103,31 +48,24 @@ describe('AutocompleteDropdown component: rendering', () => {
 
     it('should be rendered and `onTimezoneChanged` should be called when a timezone is selected', () => {
         // Arrange
-        const defaultCity = 'New York';
-        const defaultLocation = {
-            city: defaultCity,
-            country: 'United States of America',
-            timezone: 'America/New_York',
-            iso2: 'US'
-        };
-        const mockGetItems = jest.fn().mockReturnValue(options);
+        const mockGetItems = jest.fn().mockReturnValue(dropdownOptions);
         const mockTimezoneChanged = jest.fn();
         jest.spyOn(i18next, 't').mockReturnValue('h');
 
         // Act
         act(() => {
-            root.render(<AutocompleteDropdown text={defaultCity} location={defaultLocation} getItems={mockGetItems} onTimezoneChanged={mockTimezoneChanged} />);
+            root.render(<AutocompleteDropdown text={cityNames.budapest} location={locations.budapest} getItems={mockGetItems} onTimezoneChanged={mockTimezoneChanged} />);
         });
 
         // Assert: label
         const autocompleteDropdownComponentRoot = container.querySelector('.autocomplete-textbox-component');
         expect(autocompleteDropdownComponentRoot).not.toBeNull();
-        const flagElement = container.querySelector(`.input-group-text span.fi-${defaultLocation.iso2.toLowerCase()}`);
+        const flagElement = container.querySelector(`.input-group-text span.fi-${locations.budapest.iso2.toLowerCase()}`);
         expect(flagElement).not.toBeNull();
-        expect(flagElement.title).toBe(defaultLocation.country);
+        expect(flagElement.title).toBe(locations.budapest.country);
         const inputElement = container.querySelector('input[type="text"]');
         expect(inputElement).not.toBeNull();
-        expect(inputElement.value).toBe(defaultCity);
+        expect(inputElement.value).toBe(cityNames.budapest);
 
         // Act: search a city by name
         act(() => {
@@ -137,18 +75,18 @@ describe('AutocompleteDropdown component: rendering', () => {
         // Assert: dropdown list rendering
         const list = container.querySelector('ul');
         expect(list).not.toBeNull();
-        expect(list.childNodes.length).toBe(options.length);
+        expect(list.childNodes.length).toBe(dropdownOptions.length);
         list.childNodes.forEach((el, index) => {
             const flagElement = el.querySelector('.timezone-flag');
             expect(flagElement).not.toBeNull();
-            const spanFlagElement = flagElement.querySelector(`.fi-${options[index].location.iso2.toLowerCase()}`);
+            const spanFlagElement = flagElement.querySelector(`.fi-${dropdownOptions[index].location.iso2.toLowerCase()}`);
             expect(spanFlagElement).not.toBeNull();
             const labelElement = el.querySelector('.timezone-label');
             expect(labelElement).not.toBeNull();
-            expect(labelElement.textContent).toBe(options[index].label);
+            expect(labelElement.textContent).toBe(dropdownOptions[index].label);
             const diffElement = el.querySelector('.timezone-diff');
             expect(diffElement).not.toBeNull();
-            expect(diffElement.textContent).toBe(`${options[index].diff > 0 ? '+' : ''}${options[index].diff}h`);
+            expect(diffElement.textContent).toBe(`${dropdownOptions[index].diff > 0 ? '+' : ''}${dropdownOptions[index].diff}h`);
         });
 
         // Act: select a city from the list
