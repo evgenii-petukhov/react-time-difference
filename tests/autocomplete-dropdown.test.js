@@ -54,7 +54,11 @@ describe('AutocompleteDropdown component: rendering', () => {
 
         // Act
         act(() => {
-            root.render(<AutocompleteDropdown text={cityNames.budapest} location={locations.budapest} getItems={mockGetItems} onTimezoneChanged={mockTimezoneChanged} />);
+            root.render(<AutocompleteDropdown
+                text={cityNames.budapest}
+                location={locations.budapest}
+                getItems={mockGetItems}
+                onTimezoneChanged={mockTimezoneChanged} />);
         });
 
         // Assert: label
@@ -95,6 +99,6 @@ describe('AutocompleteDropdown component: rendering', () => {
         });
 
         // Assert: timezone selected callback
-        expect(mockTimezoneChanged).toHaveBeenCalledTimes(1);
+        expect(mockTimezoneChanged).toHaveBeenNthCalledWith(1, locations.eastLondon);
     });
 });

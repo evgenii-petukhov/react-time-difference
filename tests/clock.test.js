@@ -69,6 +69,42 @@ describe('Clock component: rendering', () => {
         expect(carousel).toBeNull();
         const notFound = clockComponentRoot.querySelector('.not-found');
         expect(notFound).not.toBeNull();
+        const buttonAdd = clockComponentRoot.querySelector('.btn-add');
+        expect(buttonAdd).not.toBeNull();
+        const buttonRemove = clockComponentRoot.querySelector('.btn-remove');
+        expect(buttonRemove).not.toBeNull();
+    });
+
+    it('should be rendered and buttons should call callbacks, if `location` is passed', () => {
+        // Arrange
+        const id = 1;
+        const onAddMock = jest.fn();
+        const onRemoveMock = jest.fn();
+
+        // Act
+        act(() => {
+            root.render(<Clock id={id} location={locations.budapest} onAdd={onAddMock} onRemove={onRemoveMock} />);
+        });
+
+        // Assert
+        const clockComponentRoot = container.querySelector('.clock');
+        expect(clockComponentRoot).not.toBeNull();
+
+        const buttonAdd = clockComponentRoot.querySelector('.btn-add');
+        expect(buttonAdd).not.toBeNull();
+
+        act(() => {
+            fireEvent.click(buttonAdd);
+        });
+        expect(onAddMock).toHaveBeenNthCalledWith(1, id);
+
+        const buttonRemove = clockComponentRoot.querySelector('.btn-remove');
+        expect(buttonRemove).not.toBeNull();
+
+        act(() => {
+            fireEvent.click(buttonRemove);
+        });
+        expect(onRemoveMock).toHaveBeenNthCalledWith(1, id);
     });
 
     it('should be rendered and "Not found" should be shown, if `location` is passed, `images` is passed, but empty', () => {
@@ -88,6 +124,10 @@ describe('Clock component: rendering', () => {
         expect(carousel).toBeNull();
         const notFound = clockComponentRoot.querySelector('.not-found');
         expect(notFound).not.toBeNull();
+        const buttonAdd = clockComponentRoot.querySelector('.btn-add');
+        expect(buttonAdd).not.toBeNull();
+        const buttonRemove = clockComponentRoot.querySelector('.btn-remove');
+        expect(buttonRemove).not.toBeNull();
     });
 
     it('should be rendered and contain `carousel-container`, if `location` is passed, `images` is passed', () => {
@@ -111,6 +151,10 @@ describe('Clock component: rendering', () => {
         expect(carousel).not.toBeNull();
         const notFound = clockComponentRoot.querySelector('.not-found');
         expect(notFound).toBeNull();
+        const buttonAdd = clockComponentRoot.querySelector('.btn-add');
+        expect(buttonAdd).not.toBeNull();
+        const buttonRemove = clockComponentRoot.querySelector('.btn-remove');
+        expect(buttonRemove).not.toBeNull();
     });
 });
 

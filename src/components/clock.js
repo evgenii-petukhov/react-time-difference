@@ -74,7 +74,7 @@ const Clock = (props) => {
                     )
             }
             <div className="button-container">
-                <button className="btn btn-outline-primary" onClick={() => props.onAdd(props.id)}>{t('Add clock')}</button>
+                <button className="btn btn-outline-primary btn-add" onClick={() => props.onAdd(props.id)}>{t('Add clock')}</button>
                 <button className="btn btn-light btn-remove" onClick={() => props.onRemove(props.id)}>{t('Remove')}</button>
             </div>
         </div>
