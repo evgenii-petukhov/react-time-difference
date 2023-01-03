@@ -26,7 +26,8 @@ const AutocompleteDropdown = (props) => {
     function onKeyDown(e) {
         switch (e.which) {
             case 27: // Esc
-                selectSuggestion('');
+                setSuggestions([]);
+                setText(props.text);
                 break;
             case 9: // Tab
             case 13: // Enter
