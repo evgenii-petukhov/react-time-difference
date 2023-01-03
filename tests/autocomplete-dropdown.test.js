@@ -69,7 +69,7 @@ describe('AutocompleteDropdown component: rendering', () => {
 
         // Act: search a city by name
         act(() => {
-            fireEvent.change(inputElement, { target: { value: 'London' } });
+            fireEvent.change(inputElement, { target: { value: cityNames.london } });
         });
         
         // Assert: dropdown list rendering
