@@ -11,7 +11,33 @@ import { fireEvent } from '@testing-library/react';
 let root = null;
 let container = null;
 
+jest.mock("../src/components/time", () => () => <div className="time"></div>);
+jest.mock("../src/components/carousel", () => () => <div className="carousel"></div>);
 jest.mock("../src/helpers/pexels-helper", () => jest.fn().mockReturnValue(Promise.resolve([])));
+
+const cityBudapest = 'Budapest';
+const locationBudapest = {
+    city: cityBudapest,
+    country: 'Hungary',
+    iso2: 'HU',
+    timezone: 'Europe/Budapest'
+};
+
+const cityEastLondon = 'East London';
+const locationEastLondon = {
+    city: cityEastLondon,
+    country: 'South Africa',
+    iso2: 'ZA',
+    timezone: 'Africa/Johannesburg'
+};
+
+const cityLondon = 'London';
+
+const mockFindCitiesByName = jest.fn().mockReturnValue([{
+    label: cityEastLondon,
+    diff: 0,
+    location: locationEastLondon
+}]);
 
 beforeEach(() => {
     container = document.createElement('div');
@@ -30,14 +56,7 @@ afterEach(() => {
 
 describe('Clock component: rendering', () => {
     beforeEach(() => {
-        jest.mock("../src/components/time", () => () => <div className="time"></div>);
-        jest.mock("../src/components/carousel", () => () => <div className="carousel"></div>);
         jest.mock("../src/components/autocomplete-dropdown", () => () => <div className="autocomplete-textbox-component"></div>);
-    });
-    
-    afterEach(() => {    
-        jest.restoreAllMocks();
-        jest.resetModules();
     });
 
     it('should not be rendered, if no arguments passed', () => {
@@ -56,16 +75,9 @@ describe('Clock component: rendering', () => {
     it('should be rendered and "Not found" should be shown, if `location` is passed', () => {
         // Arrange
 
-        const location = {
-            city: 'Budapest',
-            country: 'Hungary',
-            iso2: 'HU',
-            timezone: 'Europe/Budapest'
-        };
-
         // Act
         act(() => {
-            root.render(<Clock location={location} />);
+            root.render(<Clock location={locationBudapest} />);
         });
 
         // Assert
@@ -82,18 +94,9 @@ describe('Clock component: rendering', () => {
     it('should be rendered and "Not found" should be shown, if `location` is passed, `images` is passed, but empty', () => {
         // Arrange
 
-        const location = {
-            city: 'Budapest',
-            country: 'Hungary',
-            iso2: 'HU',
-            timezone: 'Europe/Budapest'
-        };
-
-        const images = [];
-
         // Act
         act(() => {
-            root.render(<Clock location={location} images={images} />);
+            root.render(<Clock location={locationBudapest} images={[]} />);
         });
 
         // Assert
@@ -110,18 +113,9 @@ describe('Clock component: rendering', () => {
     it('should be rendered and contain `carousel-container`, if `location` is passed, `images` is passed', () => {
         // Arrange
 
-        const location = {
-            city: 'Budapest',
-            country: 'Hungary',
-            iso2: 'HU',
-            timezone: 'Europe/Budapest'
-        };
-
-        const images = [{}];
-
         // Act
         act(() => {
-            root.render(<Clock location={location} images={images} />);
+            root.render(<Clock location={locationBudapest} images={[{}]} />);
         });
 
         // Assert
@@ -142,40 +136,20 @@ describe('Clock component: rendering', () => {
 
 describe('Clock component: intergation with AutocompleteDropDown', () => {
     beforeEach(() => {
-        jest.mock("../src/components/time", () => () => <div className="time"></div>);
-        jest.mock("../src/components/carousel", () => () => <div className="carousel"></div>);
         jest.mock("../src/helpers/geo-helper", () => ({
-            getNearestCity: jest.fn(),
-            findCitiesByName: jest.fn().mockReturnValue([{
-                label: 'East London',
-                diff: 0,
-                location: {
-                    city: 'East London',
-                    country: 'South Africa',
-                    iso2: 'ZA',
-                    timezone: 'Africa/Johannesburg'
-                }
-            }])
+            findCitiesByName: mockFindCitiesByName
         }));
     });
 
     it('should call `onChange` when a city is seelcted in the child AutocompleteDropdown component', () => {
         // Arrange
-        const defaultCity = 'New York';
-        const defaultLocation = {
-            city: defaultCity,
-            country: 'United States of America',
-            timezone: 'America/New_York',
-            iso2: 'US'
-        };
-
-        const images = [{}];
+        const clockId = 1;
 
         const onChangeMock = jest.fn();
 
         // Act
         act(() => {
-            root.render(<Clock location={defaultLocation} images={images} onChange={onChangeMock} />);
+            root.render(<Clock id={clockId} location={locationBudapest} images={[{}]} onChange={onChangeMock} />);
         });
 
         // Assert
@@ -191,10 +165,10 @@ describe('Clock component: intergation with AutocompleteDropDown', () => {
         expect(notFound).toBeNull();
         const inputElement = container.querySelector('input[type="text"]');
         expect(inputElement).not.toBeNull();
-        expect(inputElement.value).toBe(defaultCity);
+        expect(inputElement.value).toBe(cityBudapest);
 
         act(() => {
-            fireEvent.change(inputElement, { target: { value: 'London' } });
+            fireEvent.change(inputElement, { target: { value: cityLondon } });
         });
 
         const list = container.querySelector('ul');
@@ -206,6 +180,6 @@ describe('Clock component: intergation with AutocompleteDropDown', () => {
         });
 
         // Assert: timezone selected callback
-        expect(onChangeMock).toHaveBeenCalledTimes(1);
+        expect(onChangeMock).toHaveBeenNthCalledWith(1, clockId, locationEastLondon);
     });
 });
