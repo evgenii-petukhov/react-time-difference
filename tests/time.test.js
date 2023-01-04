@@ -7,7 +7,7 @@ import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import Time from "../src/components/time";
 import { fireEvent } from '@testing-library/react';
-import { timeInputOptions } from './testData';
+import { timeInputOptions, timezones } from './testData';
 
 let root = null;
 let container = null;
@@ -58,7 +58,7 @@ describe('Time component: rendering', () => {
 
         // Act
         act(() => {
-            root.render(<Time timezone="Europe/London" />);
+            root.render(<Time timezone={timezones.london} />);
         });
 
         // Assert
@@ -72,7 +72,9 @@ describe('Time component: rendering', () => {
 
         // Act
         act(() => {
-            root.render(<Time date={new Date()} timezone="Europe/London" updateTimeDelta={mockUpdateTimeDelta} />);
+            root.render(<Time date={new Date()}
+                timezone={timezones.london}
+                updateTimeDelta={mockUpdateTimeDelta} />);
         });
 
         // Assert
@@ -96,7 +98,9 @@ describe('Time component: input validation', () => {
 
         // Act
         act(() => {
-            root.render(<Time date={new Date(1961, 4, 12, 12, 0, 0)} timezone="Europe/London" updateTimeDelta={mockUpdateTimeDelta} />);
+            root.render(<Time date={new Date(1961, 4, 12, 12, 0, 0)}
+                timezone={timezones.london}
+                updateTimeDelta={mockUpdateTimeDelta} />);
         });
 
         // Assert

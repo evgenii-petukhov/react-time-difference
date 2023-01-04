@@ -173,7 +173,10 @@ describe('Clock component: intergation with AutocompleteDropDown', () => {
 
         // Act
         act(() => {
-            root.render(<Clock id={clockId} location={locations.budapest} images={[{}]} onChange={onChangeMock} />);
+            root.render(<Clock id={clockId}
+                location={locations.budapest}
+                images={[{}]}
+                onChange={onChangeMock} />);
         });
 
         // Assert

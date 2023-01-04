@@ -101,9 +101,14 @@ const timeInputOptions = [{
     }
 ];
 
+const timezones = {
+    london: 'Europe/London'
+};
+
 export {
     dropdownOptions,
     locations,
     cityNames,
-    timeInputOptions
+    timeInputOptions,
+    timezones
 };
