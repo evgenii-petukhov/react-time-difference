@@ -69,33 +69,29 @@ describe('Time component', () => {
     });
 
     describe('should be rendered', () => {
-        describe('`updateTimeDelta` should be called', () => {
-            it('if `date` and `timezone` both are passed', () => {
-                // Arrange
-                const mockUpdateTimeDelta = jest.fn();
-        
-                // Act
-                act(() => {
-                    root.render(<Time date={new Date()}
-                        timezone={timezones.london}
-                        updateTimeDelta={mockUpdateTimeDelta} />);
-                });
-        
-                // Assert
-                const timeComponentRoot = container.querySelector('.time');
-                expect(timeComponentRoot).not.toBeNull();
-        
-                expect(getTimeReadonlyElement()).not.toBeNull();
-                expect(getTimeEditableElement()).toBeNull();
-        
-                const editButtonIcon = container.querySelector('.time-control-container button i');
-                expect(editButtonIcon).not.toBeNull();
-                expect(editButtonIcon.classList.contains('bi-pencil')).toBe(true);
-                expect(editButtonIcon.classList.contains('bi-check-lg')).toBe(false);
+        it('if `date` and `timezone` both are passed', () => {
+            // Arrange
+    
+            // Act
+            act(() => {
+                root.render(<Time date={new Date()}
+                    timezone={timezones.london} />);
             });
+    
+            // Assert
+            const timeComponentRoot = container.querySelector('.time');
+            expect(timeComponentRoot).not.toBeNull();
+    
+            expect(getTimeReadonlyElement()).not.toBeNull();
+            expect(getTimeEditableElement()).toBeNull();
+    
+            const editButtonIcon = container.querySelector('.time-control-container button i');
+            expect(editButtonIcon).not.toBeNull();
+            expect(editButtonIcon.classList.contains('bi-pencil')).toBe(true);
+            expect(editButtonIcon.classList.contains('bi-check-lg')).toBe(false);
         });
 
-        describe('time input should be valid', () => {
+        describe('time input should be valid and `updateTimeDelta` should be called', () => {
             it('if a user doesn\'t change time', () => {
                 // Arrange
                 const mockUpdateTimeDelta = jest.fn();
@@ -118,12 +114,42 @@ describe('Time component', () => {
                 expect(editButtonIcon).not.toBeNull();
                 expect(editButtonIcon.classList.contains('bi-pencil')).toBe(true);
                 expect(editButtonIcon.classList.contains('bi-check-lg')).toBe(false);
-        
-                const editButton = container.querySelector('.time-control-container button');
-                // switch to the edit mode and switch back without changing time
-                checkControls(editButton, editButtonIcon, mockUpdateTimeDelta);
+
+                // switch to editing
+                switchMode();
+                checkControlsInEditMode(editButtonIcon, mockUpdateTimeDelta);
+            
+                // no time change
+
+                // switch back
+                switchMode();
+                checkControlsInDisplayMode(editButtonIcon, mockUpdateTimeDelta, true);
+
+                // switch to editing
+                switchMode();
+                checkControlsInEditMode(editButtonIcon, mockUpdateTimeDelta);
+
+                // press Esc
+                act(() => {
+                    fireEvent.keyDown(getTimeEditableInputElement(), { key: "Escape", code: "Escape", keyCode: 27, charCode: 27 });
+                });
+
+                checkControlsInDisplayMode(editButtonIcon, mockUpdateTimeDelta, false);
+
                 // switch to the edit mode, set valid time, and switch back without changing time
-                timeInputOptions.forEach(timeInput => checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, timeInput));
+                timeInputOptions.forEach(timeInput => {
+                    // switch to editing
+                    switchMode();
+                    checkControlsInEditMode(editButtonIcon, mockUpdateTimeDelta);
+
+                    act(() => {
+                        fireEvent.change(getTimeEditableInputElement(), {target: {value: timeInput.input}});
+                    });
+
+                    // switch back
+                    switchMode();
+                    checkControlsInDisplayMode(editButtonIcon, mockUpdateTimeDelta, timeInput.isValid);
+                });
             }); 
         });
     });
@@ -141,40 +167,27 @@ function getTimeEditableInputElement() {
     return container.querySelector('.time-editable input[type="text"]');
 }
 
-function checkControls(buttonElement, buttonIcon, callback, timeInput = { input: null, isTimeValid: true, delta: 0 }) {
-    // switch to editing
+function switchMode() {
     act(() => {
-        fireEvent.click(buttonElement);
+        fireEvent.click(container.querySelector('.time-control-container button'));
     });
-    
+}
+
+function checkControlsInEditMode(buttonIcon, callback) {
     expect(getTimeReadonlyElement()).toBeNull();
     expect(getTimeEditableElement()).not.toBeNull();
     expect(buttonIcon.classList.contains('bi-pencil')).toBe(false);
     expect(buttonIcon.classList.contains('bi-check-lg')).toBe(true);
     expect(callback).toHaveBeenCalledTimes(0);
     callback.mockClear();
+}
 
-    if (timeInput.input) {
-        act(() => {
-            fireEvent.change(getTimeEditableInputElement(), {target: {value: timeInput.input}});
-        });
-    }
-
-    // switch back
-    act(() => {
-        fireEvent.click(buttonElement);
-    });
-    
+function checkControlsInDisplayMode(buttonIcon, callback, isValid) {
     const timeReadonlyElement = getTimeReadonlyElement();
     expect(timeReadonlyElement).not.toBeNull();
     expect(getTimeEditableElement()).toBeNull();
     expect(buttonIcon.classList.contains('bi-pencil')).toBe(true);
     expect(buttonIcon.classList.contains('bi-check-lg')).toBe(false);
-    if (timeInput.isTimeValid) {
-        expect(callback).toHaveBeenNthCalledWith(1, timeInput.delta);
-    } else {
-        expect(callback).toHaveBeenCalledTimes(0);
-    }
-    
+    expect(callback).toHaveBeenCalledTimes(isValid ? 1 : 0);
     callback.mockClear();
 }

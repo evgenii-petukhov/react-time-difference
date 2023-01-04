@@ -17,7 +17,7 @@ const Time = (props) => {
         }
     }, [props.date, props.timezone]);
 
-    function changeMode() {
+    function switchMode() {
         if (isEditing) {
             const currentTimeChunks = parseTimeString(localizedTimeString);
             const newTimeChunks = parseTimeString(timeSetByUser);
@@ -55,20 +55,30 @@ const Time = (props) => {
         });
     }
 
+    function onKeyDown(e) {
+        if (e.which === 27) { // Esc
+            setIsEditing(!isEditing);
+        }
+    }
+
     return props.date && props.timezone && <div className="time">
         <div className="time-value-container">
             <div className="time-value-inner-container">
                 {
                     isEditing
                         ? <div className="time-editable">
-                            <input type="text" value={timeSetByUser} onChange={onTextChanged} />
+                            <input type="text"
+                                autoFocus
+                                value={timeSetByUser}
+                                onChange={onTextChanged}
+                                onKeyDown={onKeyDown}/>
                         </div>
                         : <div className="time-readonly">{getLocaleTimeString(props.date, props.timezone)}</div>
                 }
             </div>
         </div>
         <div className="time-control-container">
-            <button className="btn btn-light" onClick={changeMode}><i className={`bi bi-${isEditing ? 'check-lg' : 'pencil'}`}></i></button>
+            <button className="btn btn-light" onClick={switchMode}><i className={`bi bi-${isEditing ? 'check-lg' : 'pencil'}`}></i></button>
         </div>
     </div>;
 }
