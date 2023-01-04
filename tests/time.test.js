@@ -26,100 +26,106 @@ afterEach(() => {
     container = null;
 });
 
-describe('Time component: rendering', () => {
-    it('should not be rendered, if no arguments passed', () => {
-        // Arrange
-
-        // Act
-        act(() => {
-            root.render(<Time />);
+describe('Time component', () => {
+    describe('should not be rendered', () => {
+        it('if no arguments passed', () => {
+            // Arrange
+    
+            // Act
+            act(() => {
+                root.render(<Time />);
+            });
+    
+            // Assert
+            const timeComponentRoot = container.querySelector('.time');
+            expect(timeComponentRoot).toBeNull();
         });
-
-        // Assert
-        const timeComponentRoot = container.querySelector('.time');
-        expect(timeComponentRoot).toBeNull();
+    
+        it('if `date` is passed, but `timezone` isn\'t', () => {
+            // Arrange
+    
+            // Act
+            act(() => {
+                root.render(<Time date={new Date()} />);
+            });
+    
+            // Assert
+            const timeComponentRoot = container.querySelector('.time');
+            expect(timeComponentRoot).toBeNull();
+        });
+    
+        it('if `timezone` is passed, but `date` isn\'t', () => {
+            // Arrange
+    
+            // Act
+            act(() => {
+                root.render(<Time timezone={timezones.london} />);
+            });
+    
+            // Assert
+            const timeComponentRoot = container.querySelector('.time');
+            expect(timeComponentRoot).toBeNull();
+        });
     });
 
-    it('should not be rendered, if `date` is passed, but `timezone` isn\'t', () => {
-        // Arrange
-
-        // Act
-        act(() => {
-            root.render(<Time date={new Date()} />);
+    describe('should be rendered', () => {
+        describe('`updateTimeDelta` should be called', () => {
+            it('if `date` and `timezone` both are passed', () => {
+                // Arrange
+                const mockUpdateTimeDelta = jest.fn();
+        
+                // Act
+                act(() => {
+                    root.render(<Time date={new Date()}
+                        timezone={timezones.london}
+                        updateTimeDelta={mockUpdateTimeDelta} />);
+                });
+        
+                // Assert
+                const timeComponentRoot = container.querySelector('.time');
+                expect(timeComponentRoot).not.toBeNull();
+        
+                expect(getTimeReadonlyElement()).not.toBeNull();
+                expect(getTimeEditableElement()).toBeNull();
+        
+                const editButtonIcon = container.querySelector('.time-control-container button i');
+                expect(editButtonIcon).not.toBeNull();
+                expect(editButtonIcon.classList.contains('bi-pencil')).toBe(true);
+                expect(editButtonIcon.classList.contains('bi-check-lg')).toBe(false);
+            });
         });
 
-        // Assert
-        const timeComponentRoot = container.querySelector('.time');
-        expect(timeComponentRoot).toBeNull();
-    });
-
-    it('should not be rendered, if `timezone` is passed, but `date` isn\'t', () => {
-        // Arrange
-
-        // Act
-        act(() => {
-            root.render(<Time timezone={timezones.london} />);
+        describe('time input should be valid', () => {
+            it('if a user doesn\'t change time', () => {
+                // Arrange
+                const mockUpdateTimeDelta = jest.fn();
+        
+                // Act
+                act(() => {
+                    root.render(<Time date={new Date(1961, 4, 12, 12, 0, 0)}
+                        timezone={timezones.london}
+                        updateTimeDelta={mockUpdateTimeDelta} />);
+                });
+        
+                // Assert
+                const timeComponentRoot = container.querySelector('.time');
+                expect(timeComponentRoot).not.toBeNull();
+        
+                expect(getTimeReadonlyElement()).not.toBeNull();
+                expect(getTimeEditableElement()).toBeNull();
+        
+                const editButtonIcon = container.querySelector('.time-control-container button i');
+                expect(editButtonIcon).not.toBeNull();
+                expect(editButtonIcon.classList.contains('bi-pencil')).toBe(true);
+                expect(editButtonIcon.classList.contains('bi-check-lg')).toBe(false);
+        
+                const editButton = container.querySelector('.time-control-container button');
+                // switch to the edit mode and switch back without changing time
+                checkControls(editButton, editButtonIcon, mockUpdateTimeDelta);
+                // switch to the edit mode, set valid time, and switch back without changing time
+                timeInputOptions.forEach(timeInput => checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, timeInput));
+            }); 
         });
-
-        // Assert
-        const timeComponentRoot = container.querySelector('.time');
-        expect(timeComponentRoot).toBeNull();
-    });
-
-    it('should be rendered and `updateTimeDelta` should be called, if `date` and `timezone` both are passed', () => {
-        // Arrange
-        const mockUpdateTimeDelta = jest.fn();
-
-        // Act
-        act(() => {
-            root.render(<Time date={new Date()}
-                timezone={timezones.london}
-                updateTimeDelta={mockUpdateTimeDelta} />);
-        });
-
-        // Assert
-        const timeComponentRoot = container.querySelector('.time');
-        expect(timeComponentRoot).not.toBeNull();
-
-        expect(getTimeReadonlyElement()).not.toBeNull();
-        expect(getTimeEditableElement()).toBeNull();
-
-        const editButtonIcon = container.querySelector('.time-control-container button i');
-        expect(editButtonIcon).not.toBeNull();
-        expect(editButtonIcon.classList.contains('bi-pencil')).toBe(true);
-        expect(editButtonIcon.classList.contains('bi-check-lg')).toBe(false);
-    });
-});
-
-describe('Time component: input validation', () => {
-    it('should be valid, if a user doesn\'t change time', () => {
-        // Arrange
-        const mockUpdateTimeDelta = jest.fn();
-
-        // Act
-        act(() => {
-            root.render(<Time date={new Date(1961, 4, 12, 12, 0, 0)}
-                timezone={timezones.london}
-                updateTimeDelta={mockUpdateTimeDelta} />);
-        });
-
-        // Assert
-        const timeComponentRoot = container.querySelector('.time');
-        expect(timeComponentRoot).not.toBeNull();
-
-        expect(getTimeReadonlyElement()).not.toBeNull();
-        expect(getTimeEditableElement()).toBeNull();
-
-        const editButtonIcon = container.querySelector('.time-control-container button i');
-        expect(editButtonIcon).not.toBeNull();
-        expect(editButtonIcon.classList.contains('bi-pencil')).toBe(true);
-        expect(editButtonIcon.classList.contains('bi-check-lg')).toBe(false);
-
-        const editButton = container.querySelector('.time-control-container button');
-        // switch to the edit mode and switch back without changing time
-        checkControls(editButton, editButtonIcon, mockUpdateTimeDelta);
-        // switch to the edit mode, set valid time, and switch back without changing time
-        timeInputOptions.forEach(timeInput => checkControls(editButton, editButtonIcon, mockUpdateTimeDelta, timeInput));
     });
 });
 
