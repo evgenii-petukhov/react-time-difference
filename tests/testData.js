@@ -1,7 +1,8 @@
 const cityNames = {
     budapest: 'Budapest', 
     eastLondon: 'East London',
-    london: 'London'
+    london: 'London',
+    newYork: 'New York'
 };
 
 const locations = {
@@ -16,6 +17,12 @@ const locations = {
         country: 'South Africa',
         iso2: 'ZA',
         timezone: 'Africa/Johannesburg'
+    },
+    newYork : {
+        city: cityNames.newYork,
+        country: 'United States of America',
+        iso2: 'US',
+        timezone: 'America/New_York'
     }
 };
 
@@ -105,10 +112,18 @@ const timezones = {
     london: 'Europe/London'
 };
 
+const escapeEventArgs = {
+    key: "Escape",
+    code: "Escape",
+    keyCode: 27,
+    charCode: 27
+};
+
 export {
     dropdownOptions,
     locations,
     cityNames,
     timeInputOptions,
-    timezones
+    timezones,
+    escapeEventArgs
 };

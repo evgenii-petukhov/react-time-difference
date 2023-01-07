@@ -54,7 +54,7 @@ const ClockCollection = (props) => {
     }
 
     async function loadDefaultImages(country) {
-        return await downloadPhotos(country, bs => setDefaultImages(bs));
+        return await downloadPhotos(country, blobs => setDefaultImages(blobs));
     }
 
     function onClockAdded(id) {

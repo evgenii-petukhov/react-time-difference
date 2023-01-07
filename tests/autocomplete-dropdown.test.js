@@ -6,9 +6,10 @@ import React from "react";
 import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import AutocompleteDropdown from "../src/components/autocomplete-dropdown";
-import { fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import i18next from "i18next";
-import { dropdownOptions, cityNames, locations } from './testData';
+import { when } from 'jest-when';
+import { dropdownOptions, cityNames, locations, escapeEventArgs } from './testData';
 
 let root = null;
 let container = null;
@@ -29,12 +30,12 @@ afterEach(() => {
 
 describe('AutocompleteDropdown component', () => {
     describe('should be rendered', () => {
-        it('if `text` and `location` aren\'t passed', () => {
+        it('if `text` and `location` are not passed', () => {
             // Arrange
-    
+
             // Act
             act(() => {
-                root.render(<AutocompleteDropdown />);
+                render(<AutocompleteDropdown />, {container});
             });
     
             // Assert
@@ -46,82 +47,128 @@ describe('AutocompleteDropdown component', () => {
             expect(textElement).not.toBeNull();
             expect(textElement.value).toBe('');
         });
-    
-        it('`onTimezoneChanged` should be called when a timezone is selected', () => {
-            // Arrange
-            const mockGetItems = jest.fn().mockReturnValue(dropdownOptions);
-            const mockTimezoneChanged = jest.fn();
-            jest.spyOn(i18next, 't').mockReturnValue('h');
-    
-            // Act
-            act(() => {
-                root.render(<AutocompleteDropdown
-                    text={cityNames.budapest}
-                    location={locations.budapest}
-                    getItems={mockGetItems}
-                    onTimezoneChanged={mockTimezoneChanged} />);
-            });
-    
-            // Assert: label
-            const inputElement = container.querySelector('input[type="text"]');
-            checkLabels(inputElement, locations.budapest);
-    
-            // Act: search a city by name
-            act(() => {
-                fireEvent.change(inputElement, { target: { value: cityNames.london } });
-            });
 
-            expect(inputElement.value).toBe(cityNames.london);
-
-            // Assert: dropdown list rendering
-            const list = container.querySelector('ul');
-            checkCityList(list);
+        describe('should be rerendered', () => {
+            it('if `text` changed and `isChangedManually` is false', () => {
+                // Arrange
     
-            // Act: select a city from the list
-            act(() => {
-                fireEvent.click(list.childNodes[0]);
+                // Act
+                let rendered;
+                act(() => {
+                    rendered = render(<AutocompleteDropdown />, {container});
+                });
+        
+                // Assert
+                const autocompleteDropdownComponentRoot = container.querySelector('.autocomplete-textbox-component');
+                expect(autocompleteDropdownComponentRoot).not.toBeNull();
+                const flagElement = container.querySelector(`.input-group-text span.fi-${location.iso2}`);
+                expect(flagElement).toBeNull();
+                let textElement = container.querySelector('input[type="text"]');
+                expect(textElement).not.toBeNull();
+                expect(textElement.value).toBe('');
+    
+                // the component is rerendered, if props changed (since a user hasn't changed the timezone manually)
+                rendered.rerender(<AutocompleteDropdown text={cityNames.london} />);
+                expect(textElement.value).toBe(cityNames.london);
             });
-
-            checkLabels(inputElement, locations.eastLondon);
-    
-            // Assert: timezone selected callback
-            expect(mockTimezoneChanged).toHaveBeenNthCalledWith(1, locations.eastLondon);
         });
-    
-        it('`onTimezoneChanged` should be called when a timezone is selected', () => {
-            // Arrange
-            const mockGetItems = jest.fn().mockReturnValue(dropdownOptions);
-            jest.spyOn(i18next, 't').mockReturnValue('h');
-    
-            // Act
-            act(() => {
-                root.render(<AutocompleteDropdown
-                    text={cityNames.budapest}
-                    location={locations.budapest}
-                    getItems={mockGetItems} />);
-            });
-    
-            // Assert: label
-            const inputElement = container.querySelector('input[type="text"]');
-            checkLabels(inputElement, locations.budapest);
-    
-            // Act: search a city by name
-            act(() => {
-                fireEvent.change(inputElement, { target: { value: cityNames.london } });
+
+        describe('input tests', () => {
+            beforeEach(() => {
+                const mockT = jest.spyOn(i18next, 't');
+                when(mockT).calledWith('h').mockReturnValue('h');
             });
 
-            expect(inputElement.value).toBe(cityNames.london);
+            it('`onTimezoneChanged` should be called when a timezone is selected', () => {
+                // Arrange
+                const mockGetItems = jest.fn();
+                when(mockGetItems).calledWith(cityNames.london.toUpperCase()).mockReturnValue(dropdownOptions);
 
-            // Assert: dropdown list rendering
-            const list = container.querySelector('ul');
-            checkCityList(list);
+                const mockTimezoneChanged = jest.fn();
+        
+                // Act
+
+                let rendered;
+                act(() => {
+                    rendered = render(<AutocompleteDropdown
+                        text={cityNames.budapest}
+                        location={locations.budapest}
+                        getItems={mockGetItems}
+                        onTimezoneChanged={mockTimezoneChanged} />, {container});
+                });
+        
+                // Assert: label
+                const inputElement = container.querySelector('input[type="text"]');
+                checkLabels(inputElement, locations.budapest);
+        
+                // Act: search a city by name
+                act(() => {
+                    fireEvent.change(inputElement, { target: { value: cityNames.london } });
+                });
     
-            act(() => {
-                fireEvent.keyDown(inputElement, { key: "Escape", code: "Escape", keyCode: 27, charCode: 27 });
-            });
+                expect(inputElement.value).toBe(cityNames.london);
+    
+                // Assert: dropdown list rendering
+                const list = container.querySelector('ul');
+                checkCityList(list);
+        
+                // Act: select a city from the list
+                act(() => {
+                    fireEvent.click(list.childNodes[0]);
+                });
+    
+                checkLabels(inputElement, locations.eastLondon);
+        
+                // Assert: timezone selected callback
+                expect(mockTimezoneChanged).toHaveBeenNthCalledWith(1, locations.eastLondon);
 
-            expect(inputElement.value).toBe(cityNames.budapest);
-            expect(container.querySelector('ul')).toBeNull();
+                // the component isn't rerendered, if props changed (since a user has changed the timezone manually)
+                act(() => {
+                    rendered.rerender(<AutocompleteDropdown
+                        text={cityNames.newYork}
+                        location={locations.newYork}
+                        getItems={mockGetItems}
+                        onTimezoneChanged={mockTimezoneChanged} />);
+                });
+
+                checkLabels(inputElement, locations.eastLondon);
+            });
+        
+            it('dropdown list should be closed when Escape is pressed', () => {
+                // Arrange
+                const mockGetItems = jest.fn();
+                when(mockGetItems).calledWith(cityNames.london.toUpperCase()).mockReturnValue(dropdownOptions);
+
+                // Act
+                act(() => {
+                    root.render(<AutocompleteDropdown
+                        text={cityNames.budapest}
+                        location={locations.budapest}
+                        getItems={mockGetItems} />);
+                });
+        
+                // Assert: label
+                const inputElement = container.querySelector('input[type="text"]');
+                checkLabels(inputElement, locations.budapest);
+        
+                // Act: search a city by name
+                act(() => {
+                    fireEvent.change(inputElement, { target: { value: cityNames.london } });
+                });
+    
+                expect(inputElement.value).toBe(cityNames.london);
+    
+                // Assert: dropdown list rendering
+                const list = container.querySelector('ul');
+                checkCityList(list);
+        
+                act(() => {
+                    fireEvent.keyDown(inputElement, escapeEventArgs);
+                });
+    
+                expect(inputElement.value).toBe(cityNames.budapest);
+                expect(container.querySelector('ul')).toBeNull();
+            });
         });
     });
 });
