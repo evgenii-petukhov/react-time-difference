@@ -5,8 +5,8 @@ function downloadAndEncodeToBase64(url) {
             .then(blob => {
                 if (blob && blob.type === 'image/jpeg') {
                     const reader = new FileReader();
-                    reader.onload = function () {
-                        resolve(this.result);
+                    reader.onload = function (e) {
+                        resolve(e.target.result);
                     };
                     reader.readAsDataURL(blob);
                 } else {
