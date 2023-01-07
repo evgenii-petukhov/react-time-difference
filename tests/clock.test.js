@@ -14,7 +14,7 @@ let container = null;
 
 jest.mock("../src/components/time", () => () => <div className="time"></div>);
 jest.mock("../src/components/carousel", () => () => <div className="carousel"></div>);
-jest.mock("../src/helpers/pexels-helper", () => jest.fn().mockReturnValue(Promise.resolve([])));
+jest.mock("../src/helpers/pexels-helper", () => jest.fn().mockReturnValue(new Promise(() => {})));
 
 // https://lukerogerson.medium.com/two-ways-to-fix-the-jest-test-error-the-module-factory-of-jest-mock-is-not-allowed-to-bf022b5175dd
 const mockFindCitiesByName = jest.fn().mockReturnValue(dropdownOptions);

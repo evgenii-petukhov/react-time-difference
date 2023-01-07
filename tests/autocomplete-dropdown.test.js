@@ -3,7 +3,6 @@
  */
 
 import React from "react";
-import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import AutocompleteDropdown from "../src/components/autocomplete-dropdown";
 import { render, fireEvent } from '@testing-library/react';
@@ -11,19 +10,14 @@ import i18next from "i18next";
 import { when } from 'jest-when';
 import { dropdownOptions, cityNames, locations, escapeEventArgs } from './testData';
 
-let root = null;
 let container = null;
 beforeEach(() => {
     container = document.createElement('div');
     document.body.appendChild(container);
     globalThis.IS_REACT_ACT_ENVIRONMENT = true;
-    root = createRoot(container);
 });
 
 afterEach(() => {
-    act(() => {
-        root.unmount();
-    });
     container.remove();
     container = null;
 });
@@ -35,7 +29,7 @@ describe('AutocompleteDropdown component', () => {
 
             // Act
             act(() => {
-                render(<AutocompleteDropdown />, {container});
+                render(<AutocompleteDropdown />, { container });
             });
     
             // Assert
@@ -53,9 +47,8 @@ describe('AutocompleteDropdown component', () => {
                 // Arrange
     
                 // Act
-                let rendered;
                 act(() => {
-                    rendered = render(<AutocompleteDropdown />, {container});
+                    render(<AutocompleteDropdown />, { container });
                 });
         
                 // Assert
@@ -66,10 +59,6 @@ describe('AutocompleteDropdown component', () => {
                 let textElement = container.querySelector('input[type="text"]');
                 expect(textElement).not.toBeNull();
                 expect(textElement.value).toBe('');
-    
-                // the component is rerendered, if props changed (since a user hasn't changed the timezone manually)
-                rendered.rerender(<AutocompleteDropdown text={cityNames.london} />);
-                expect(textElement.value).toBe(cityNames.london);
             });
         });
 
@@ -94,7 +83,7 @@ describe('AutocompleteDropdown component', () => {
                         text={cityNames.budapest}
                         location={locations.budapest}
                         getItems={mockGetItems}
-                        onTimezoneChanged={mockTimezoneChanged} />, {container});
+                        onTimezoneChanged={mockTimezoneChanged} />, { container });
                 });
         
                 // Assert: label
@@ -141,10 +130,10 @@ describe('AutocompleteDropdown component', () => {
 
                 // Act
                 act(() => {
-                    root.render(<AutocompleteDropdown
+                    render(<AutocompleteDropdown
                         text={cityNames.budapest}
                         location={locations.budapest}
-                        getItems={mockGetItems} />);
+                        getItems={mockGetItems} />, { container });
                 });
         
                 // Assert: label

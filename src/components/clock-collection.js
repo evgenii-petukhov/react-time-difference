@@ -1,3 +1,4 @@
+window.React = window.React ?? require('react');
 const { useState, useEffect, useRef } = React;
 import { t } from "i18next";
 import Clock from "./clock";
@@ -7,10 +8,10 @@ import downloadPhotos from "../helpers/pexels-helper";
 const ClockCollection = (props) => {
     const idCounterRef = useRef(0);
     const [defaultLocation, setDefaultLocation] = useState({
-        city: props.defaultCity,
-        country: props.defaultCountry,
-        timezone: props.defaultTimezone,
-        iso2: props.defaultIso2
+        city: props.defaultLocation?.city,
+        country: props.defaultLocation?.country,
+        timezone: props.defaultLocation?.timezone,
+        iso2: props.defaultLocation?.iso2
     });
     const [timezones, setTimezones] = useState([{
         id: idCounterRef.current,
@@ -26,7 +27,6 @@ const ClockCollection = (props) => {
         const timerID = setInterval(() => updateDate(timeDeltaRef.current), 1000);
         loadDefaultImages(defaultLocation.country).then(blobs => {
             resetTimezonesUnlessModelChanged(blobs, defaultLocation);
-        }).then(() => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
                     const cityInfo = getNearestCity(position.coords.latitude, position.coords.longitude);
@@ -54,7 +54,10 @@ const ClockCollection = (props) => {
     }
 
     async function loadDefaultImages(country) {
-        return await downloadPhotos(country, blobs => setDefaultImages(blobs));
+        return await downloadPhotos(country).then(blobs => {
+            setDefaultImages(blobs);
+            return blobs;
+        });
     }
 
     function onClockAdded(id) {
@@ -94,7 +97,7 @@ const ClockCollection = (props) => {
         setDate(new Date(new Date().getTime() + delta));
     }
 
-    return <div className="application-container">
+    return props.defaultLocation && <div className="application-container">
         <div className="project-description">
             <div className="container-fluid">
                 <div className="row text-center">

@@ -14,10 +14,14 @@ export default class ClockApp {
             timezone: 'America/New_York',
             iso2: 'US'
         } : lookupViaCity(defaultTimezone.split('/')[1])[0];
+        
+        const location = {
+            timezone: cityInfo.timezone,
+            city: cityInfo.city,
+            country: cityInfo.country,
+            iso2: cityInfo.iso2
+        };
 
-        root.render(<ClockCollection defaultTimezone={cityInfo.timezone} 
-            defaultCity={cityInfo.city} 
-            defaultCountry={cityInfo.country}
-            defaultIso2={cityInfo.iso2} />);
+        root.render(<ClockCollection defaultLocation={location} />);
     }
 }

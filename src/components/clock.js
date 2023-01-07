@@ -33,7 +33,7 @@ const Clock = (props) => {
         setLocation(location);
         setImages(null);
         setIsLoading(true);
-        downloadPhotos(location.country, blobs => {
+        downloadPhotos(location.country).then(blobs => {
             setImages(blobs);
             setIsLoading(false);
         });
