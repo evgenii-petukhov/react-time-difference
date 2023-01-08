@@ -1,6 +1,6 @@
 import imageCacheData from "./image-cache-data";
 
-function getCachedImages(query) {
+export default function getCachedImages(query) {
     const images = [];
     const count = imageCacheData[query] ?? 0;
     for (let imageCounter = 1; imageCounter <= count; imageCounter++) {
@@ -8,5 +8,3 @@ function getCachedImages(query) {
     }
     return images;
 }
-
-export default getCachedImages;

@@ -1,4 +1,4 @@
-function downloadAndEncodeToBase64(url) {
+export default function downloadAndEncodeToBase64(url) {
     return new Promise((resolve, reject) => {
         fetch(url)
             .then(response => response.ok ? (typeof response.blob === 'function' ? response.blob() : null) : null)
@@ -15,5 +15,3 @@ function downloadAndEncodeToBase64(url) {
             });
     });
 }
-
-export default downloadAndEncodeToBase64;

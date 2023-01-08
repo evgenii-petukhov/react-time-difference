@@ -22,12 +22,6 @@ export function getNearestCity(lat, lng) {
     })).sort((a, b) => a.distance - b.distance)[0]
 }
 
-function getTimezoneOffset(timeZone = 'UTC', date = new Date()) {
-    const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
-    const tzDate = new Date(date.toLocaleString('en-US', { timeZone }));
-    return (tzDate.getTime() - utcDate.getTime()) / 6e4;
-}
-
 export function findCitiesByName(query, localTimezone, count) {
     query = query.toLocaleUpperCase();
     const localTimezoneOffset = getTimezoneOffset(localTimezone);
@@ -45,6 +39,12 @@ export function findCitiesByName(query, localTimezone, count) {
                 timezone: item.timezone
             }
         }));
+}
+
+function getTimezoneOffset(timeZone = 'UTC', date = new Date()) {
+    const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+    const tzDate = new Date(date.toLocaleString('en-US', { timeZone }));
+    return (tzDate.getTime() - utcDate.getTime()) / 6e4;
 }
 
 // https://www.geeksforgeeks.org/program-distance-two-points-earth/
