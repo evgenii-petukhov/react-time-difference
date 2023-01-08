@@ -51,7 +51,7 @@ describe('ClockCollection component', () => {
 
             // Act
             act(() => {
-                root.render(<ClockCollection defaultLocation={locations.budapest}/>);
+                root.render(<ClockCollection defaultLocation={locations.budapest.location}/>);
             });
     
             // Assert

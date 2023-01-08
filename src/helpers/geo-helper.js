@@ -10,7 +10,7 @@ const validCityMappings = cityMapping.filter(item => item.timezone !== null).map
     searchString: `${item.city} ${item.country} ${item.city}|${item.city}, ${item.country}, ${item.city}`.toLocaleUpperCase()
 }));
 
-export function getNearestCity(lat, lng) {
+export function getNearestLocation(lat, lng) {
     return validCityMappings.map(item => ({
         location: {
             city: item.city,

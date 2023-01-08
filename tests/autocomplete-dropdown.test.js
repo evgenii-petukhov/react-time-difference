@@ -82,14 +82,14 @@ describe('AutocompleteDropdown component', () => {
                     act(() => {
                         rendered = render(<AutocompleteDropdown
                             text={cityNames.budapest}
-                            location={locations.budapest}
+                            location={locations.budapest.location}
                             getItems={mockGetItems}
                             onTimezoneChanged={mockTimezoneChanged} />, { container });
                     });
             
                     // Assert: label
                     const inputElement = container.querySelector('input[type="text"]');
-                    checkLabels(inputElement, locations.budapest);
+                    checkLabels(inputElement, locations.budapest.location);
             
                     // Act: search a city by name
                     act(() => {
@@ -107,21 +107,21 @@ describe('AutocompleteDropdown component', () => {
                         fireEvent.click(list.childNodes[0]);
                     });
         
-                    checkLabels(inputElement, locations.eastLondon);
+                    checkLabels(inputElement, locations.eastLondon.location);
             
                     // Assert: timezone selected callback
-                    expect(mockTimezoneChanged).toHaveBeenNthCalledWith(1, locations.eastLondon);
+                    expect(mockTimezoneChanged).toHaveBeenNthCalledWith(1, locations.eastLondon.location);
     
                     // the component isn't rerendered, if props changed (since a user has changed the timezone manually)
                     act(() => {
                         rendered.rerender(<AutocompleteDropdown
                             text={cityNames.newYork}
-                            location={locations.newYork}
+                            location={locations.newYork.location}
                             getItems={mockGetItems}
                             onTimezoneChanged={mockTimezoneChanged} />);
                     });
     
-                    checkLabels(inputElement, locations.eastLondon);
+                    checkLabels(inputElement, locations.eastLondon.location);
                 });
 
                 ['enter', 'tab'].forEach(key => {
@@ -138,14 +138,14 @@ describe('AutocompleteDropdown component', () => {
                         act(() => {
                             rendered = render(<AutocompleteDropdown
                                 text={cityNames.budapest}
-                                location={locations.budapest}
+                                location={locations.budapest.location}
                                 getItems={mockGetItems}
                                 onTimezoneChanged={mockTimezoneChanged} />, { container });
                         });
                 
                         // Assert: label
                         const inputElement = container.querySelector('input[type="text"]');
-                        checkLabels(inputElement, locations.budapest);
+                        checkLabels(inputElement, locations.budapest.location);
                 
                         // Act: search a city by name
                         act(() => {
@@ -163,21 +163,21 @@ describe('AutocompleteDropdown component', () => {
                             fireEvent.keyDown(inputElement, keyboardEvents[key]);
                         });
             
-                        checkLabels(inputElement, locations.eastLondon);
+                        checkLabels(inputElement, locations.eastLondon.location);
                 
                         // Assert: timezone selected callback
-                        expect(mockTimezoneChanged).toHaveBeenNthCalledWith(1, locations.eastLondon);
+                        expect(mockTimezoneChanged).toHaveBeenNthCalledWith(1, locations.eastLondon.location);
         
                         // the component isn't rerendered, if props changed (since a user has changed the timezone manually)
                         act(() => {
                             rendered.rerender(<AutocompleteDropdown
                                 text={cityNames.newYork}
-                                location={locations.newYork}
+                                location={locations.newYork.location}
                                 getItems={mockGetItems}
                                 onTimezoneChanged={mockTimezoneChanged} />);
                         });
         
-                        checkLabels(inputElement, locations.eastLondon);
+                        checkLabels(inputElement, locations.eastLondon.location);
                     });
                 });
             });
@@ -191,13 +191,13 @@ describe('AutocompleteDropdown component', () => {
                 act(() => {
                     render(<AutocompleteDropdown
                         text={cityNames.budapest}
-                        location={locations.budapest}
+                        location={locations.budapest.location}
                         getItems={mockGetItems} />, { container });
                 });
         
                 // Assert: label
                 const inputElement = container.querySelector('input[type="text"]');
-                checkLabels(inputElement, locations.budapest);
+                checkLabels(inputElement, locations.budapest.location);
         
                 // Act: search a city by name
                 act(() => {

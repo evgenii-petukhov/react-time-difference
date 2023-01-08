@@ -7,29 +7,41 @@ const cityNames = {
 
 const locations = {
     budapest: {
-        city: cityNames.budapest,
-        country: 'Hungary',
-        iso2: 'HU',
-        timezone: 'Europe/Budapest'
+        location: {
+            city: cityNames.budapest,
+            country: 'Hungary',
+            iso2: 'HU',
+            timezone: 'Europe/Budapest'
+        },
+        lat: 47.4979,
+        lng: 19.0402
     },
     eastLondon: {
-        city: cityNames.eastLondon,
-        country: 'South Africa',
-        iso2: 'ZA',
-        timezone: 'Africa/Johannesburg'
+        location: {
+            city: cityNames.eastLondon,
+            country: 'South Africa',
+            iso2: 'ZA',
+            timezone: 'Africa/Johannesburg'
+        },
+        lat: -33.0198,
+        lng: 27.9039
     },
     newYork : {
-        city: cityNames.newYork,
-        country: 'United States of America',
-        iso2: 'US',
-        timezone: 'America/New_York'
+        location: {
+            city: cityNames.newYork,
+            country: 'United States of America',
+            iso2: 'US',
+            timezone: 'America/New_York'
+        },
+        lat: 40.7128,
+        lng: -74.0060
     }
 };
 
 const dropdownOptions = [{
     label: cityNames.eastLondon,
     diff: 0,
-    location: locations.eastLondon
+    location: locations.eastLondon.location
 }, {
     label: cityNames.london,
     diff: -7,

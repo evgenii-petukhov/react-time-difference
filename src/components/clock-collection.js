@@ -2,7 +2,7 @@ window.React = window.React ?? require('react');
 const { useState, useEffect, useRef } = React;
 import { t } from "i18next";
 import Clock from "./clock";
-import { getNearestCity } from "../helpers/geo-helper";
+import { getNearestLocation } from "../helpers/geo-helper";
 import downloadPhotos from "../helpers/pexels-helper";
 
 const ClockCollection = (props) => {
@@ -28,9 +28,9 @@ const ClockCollection = (props) => {
         loadDefaultImages(defaultLocation).then(() => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
-                    const cityInfo = getNearestCity(position.coords.latitude, position.coords.longitude);
-                    setDefaultLocation(cityInfo.location);
-                    loadDefaultImages(cityInfo.location);
+                    const location = getNearestLocation(position.coords.latitude, position.coords.longitude);
+                    setDefaultLocation(location);
+                    loadDefaultImages(location);
                 });
             }
         });

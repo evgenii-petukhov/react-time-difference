@@ -65,7 +65,7 @@ describe('Clock component', () => {
                 // Act
                 act(() => {
                     root.render(<Clock id={id}
-                        location={locations.budapest}
+                        location={locations.budapest.location}
                         onAdd={onAddMock}
                         onRemove={onRemoveMock} />);
                 });
@@ -100,7 +100,7 @@ describe('Clock component', () => {
         
                 // Act
                 act(() => {
-                    root.render(<Clock location={locations.budapest} images={[]} />);
+                    root.render(<Clock location={locations.budapest.location} images={[]} />);
                 });
         
                 // Assert
@@ -125,7 +125,7 @@ describe('Clock component', () => {
         
                 // Act
                 act(() => {
-                    root.render(<Clock location={locations.budapest} images={[{}]} />);
+                    root.render(<Clock location={locations.budapest.location} images={[{}]} />);
                 });
         
                 // Assert
@@ -166,7 +166,7 @@ describe('Clock component', () => {
                 // Act
                 act(() => {
                     root.render(<Clock id={clockId}
-                        location={locations.budapest}
+                        location={locations.budapest.location}
                         images={[{}]}
                         onChange={onChangeMock} />);
                 });
@@ -199,7 +199,7 @@ describe('Clock component', () => {
                 });
         
                 // Assert: timezone selected callback
-                expect(onChangeMock).toHaveBeenNthCalledWith(1, clockId, locations.eastLondon);
+                expect(onChangeMock).toHaveBeenNthCalledWith(1, clockId, locations.eastLondon.location);
             });
         });
     });
