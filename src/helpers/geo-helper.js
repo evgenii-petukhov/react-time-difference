@@ -19,7 +19,7 @@ export function getNearestLocation(lat, lng) {
             iso2: item.iso2
         },
         distance: getDistance(lat, lng, item.lat, item.lng)
-    })).sort((a, b) => a.distance - b.distance)[0];
+    })).sort((a, b) => a.distance - b.distance)[0].location;
 }
 
 export function findCitiesByName(query, localTimezone, count) {
