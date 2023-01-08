@@ -7,7 +7,7 @@ import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import Time from "../src/components/time";
 import { fireEvent } from '@testing-library/react';
-import { timeInputOptions, timezones, escapeEventArgs } from './testData';
+import { timeInputOptions, timezones, keyboardEvents } from './testData';
 
 let root = null;
 let container = null;
@@ -131,7 +131,7 @@ describe('Time component', () => {
 
                 // press Esc
                 act(() => {
-                    fireEvent.keyDown(getTimeEditableInputElement(), escapeEventArgs);
+                    fireEvent.keyDown(getTimeEditableInputElement(), keyboardEvents.escape);
                 });
 
                 checkControlsInDisplayMode(editButtonIcon, mockUpdateTimeDelta, false);

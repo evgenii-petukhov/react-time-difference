@@ -112,11 +112,25 @@ const timezones = {
     london: 'Europe/London'
 };
 
-const escapeEventArgs = {
-    key: "Escape",
-    code: "Escape",
-    keyCode: 27,
-    charCode: 27
+const keyboardEvents = {
+    escape: {
+        key: "Escape",
+        code: "Escape",
+        keyCode: 27,
+        charCode: 27
+    },
+    enter: {
+        key: "Enter",
+        code: "Enter",
+        keyCode: 13,
+        charCode: 13
+    },
+    tab: {
+        key: "Tab",
+        code: "Tab",
+        keyCode: 9,
+        charCode: 9
+    }
 };
 
 export {
@@ -125,5 +139,5 @@ export {
     cityNames,
     timeInputOptions,
     timezones,
-    escapeEventArgs
+    keyboardEvents
 };
