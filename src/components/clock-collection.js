@@ -25,15 +25,12 @@ const ClockCollection = (props) => {
 
     useEffect(() => {
         const timerID = setInterval(() => updateDate(timeDeltaRef.current), 1000);
-        loadDefaultImages(defaultLocation.country).then(blobs => {
-            resetTimezonesUnlessModelChanged(blobs, defaultLocation);
+        loadDefaultImages(defaultLocation).then(() => {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
                     const cityInfo = getNearestCity(position.coords.latitude, position.coords.longitude);
                     setDefaultLocation(cityInfo.location);
-                    loadDefaultImages(cityInfo.location.country).then(blobs => {
-                        resetTimezonesUnlessModelChanged(blobs, cityInfo.location);
-                    });
+                    loadDefaultImages(cityInfo.location);
                 });
             }
         });
@@ -43,20 +40,16 @@ const ClockCollection = (props) => {
         };
     }, []);
 
-    function resetTimezonesUnlessModelChanged(images, location) {
-        if (!isModelChangedRef.current) {
-            setTimezones(() => [{
-                id: idCounterRef.current,
-                images: images,
-                location: location
-            }]);
-        }
-    }
-
-    async function loadDefaultImages(country) {
-        return await downloadPhotos(country).then(blobs => {
+    async function loadDefaultImages(location) {
+        return await downloadPhotos(location.country).then(blobs => {
             setDefaultImages(blobs);
-            return blobs;
+            if (!isModelChangedRef.current) {
+                setTimezones(() => [{
+                    id: idCounterRef.current,
+                    images: blobs,
+                    location: location
+                }]);
+            }
         });
     }
 
