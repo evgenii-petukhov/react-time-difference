@@ -72,7 +72,7 @@ describe('AutocompleteDropdown component', () => {
                 it('when a timezone is selected by a mouse click', () => {
                     // Arrange
                     const mockGetItems = jest.fn();
-                    when(mockGetItems).calledWith(cities.london.location.city.toUpperCase()).mockReturnValue(dropdownOptions);
+                    when(mockGetItems).calledWith(cities.london.location.city.toLocaleUpperCase()).mockReturnValue(dropdownOptions);
     
                     const mockTimezoneChanged = jest.fn();
             
@@ -128,7 +128,7 @@ describe('AutocompleteDropdown component', () => {
                     it(`when a timezone is selected by pressing the ${key} key`, () => {
                         // Arrange
                         const mockGetItems = jest.fn();
-                        when(mockGetItems).calledWith(cities.london.location.city.toUpperCase()).mockReturnValue(dropdownOptions);
+                        when(mockGetItems).calledWith(cities.london.location.city.toLocaleUpperCase()).mockReturnValue(dropdownOptions);
         
                         const mockTimezoneChanged = jest.fn();
                 
@@ -185,7 +185,7 @@ describe('AutocompleteDropdown component', () => {
             it('dropdown list should be closed when Escape is pressed', () => {
                 // Arrange
                 const mockGetItems = jest.fn();
-                when(mockGetItems).calledWith(cities.london.location.city.toUpperCase()).mockReturnValue(dropdownOptions);
+                when(mockGetItems).calledWith(cities.london.location.city.toLocaleUpperCase()).mockReturnValue(dropdownOptions);
 
                 // Act
                 act(() => {

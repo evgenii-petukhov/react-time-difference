@@ -16,7 +16,7 @@ const AutocompleteDropdown = (props) => {
     }, [props.location, props.text]);
 
     function onTextChanged(e) {
-        const value = e.target.value.toUpperCase();
+        const value = e.target.value.toLocaleUpperCase();
 
         setSuggestions(value.length ? props.getItems?.(value) : []);
         setIsChangedManually(true);

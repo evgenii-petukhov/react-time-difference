@@ -42,7 +42,12 @@ const cities = {
 const dropdownOptions = [{
     label: 'East London',
     diff: 0,
-    location: cities.eastLondon.location
+    location: {
+        city: 'East London',
+        country: 'South Africa',
+        iso2: 'ZA',
+        timezone: 'Africa/Johannesburg'
+    }
 }, {
     label: 'London',
     diff: -7,

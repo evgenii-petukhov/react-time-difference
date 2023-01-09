@@ -1,5 +1,5 @@
-import { getNearestLocation } from '../src/helpers/geo-helper';
-import { cities } from './testData';
+import { getNearestLocation, findCitiesByName } from '../src/helpers/geo-helper';
+import { cities, timezones, dropdownOptions } from './testData';
 
 describe('getNearestLocation', () => {
     Object.keys(cities).filter(city => cities[city].lat && cities[city].lng).forEach(city => {
@@ -9,3 +9,19 @@ describe('getNearestLocation', () => {
         });
     });
 });
+
+describe('findCitiesByName', () => {
+    it('should return expected results', () => {
+        const results = findCitiesByName(cities.london.location.city.toLocaleUpperCase(), timezones.london, 10);
+        expect(results).toHaveLength(dropdownOptions.length);
+        expect(getSortedStringArray(results)).toEqual(getSortedStringArray(dropdownOptions));
+    });
+});
+
+function getCompareString(location) {
+    return `${location.label}, ${location.country}`;
+}
+
+function getSortedStringArray(sourceArray) {
+    return sourceArray.map(city => getCompareString(city.location)).sort();
+}
