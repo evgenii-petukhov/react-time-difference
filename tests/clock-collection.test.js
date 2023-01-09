@@ -6,7 +6,7 @@ import React from "react";
 import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import ClockCollection from "../src/components/clock-collection";
-import { locations } from './testData';
+import { cities } from './testData';
 
 let root = null;
 let container = null;
@@ -51,7 +51,7 @@ describe('ClockCollection component', () => {
 
             // Act
             act(() => {
-                root.render(<ClockCollection defaultLocation={locations.budapest.location}/>);
+                root.render(<ClockCollection defaultLocation={cities.budapest.location}/>);
             });
     
             // Assert

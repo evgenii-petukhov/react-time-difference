@@ -1,11 +1,11 @@
 import { getNearestLocation } from '../src/helpers/geo-helper';
-import { locations, cityNames } from './testData';
+import { cities } from './testData';
 
 describe('getNearestLocation', () => {
-    Object.keys(locations).forEach(city => {
-        it(`should return ${city} for lat = ${locations[city].lat} and lng = ${locations[city].lng}`, () => {
-            const result = getNearestLocation(locations[city].lat, locations[city].lng);
-            expect(result.city).toBe(cityNames[city]);
+    Object.keys(cities).filter(city => cities[city].lat && cities[city].lng).forEach(city => {
+        it(`should return ${city} for lat = ${cities[city].lat} and lng = ${cities[city].lng}`, () => {
+            const result = getNearestLocation(cities[city].lat, cities[city].lng);
+            expect(result.city).toBe(cities[city].location.city);
         });
     });
 });

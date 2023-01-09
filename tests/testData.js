@@ -1,14 +1,7 @@
-const cityNames = {
-    budapest: 'Budapest', 
-    eastLondon: 'East London',
-    london: 'London',
-    newYork: 'New York'
-};
-
-const locations = {
+const cities = {
     budapest: {
         location: {
-            city: cityNames.budapest,
+            city: 'Budapest',
             country: 'Hungary',
             iso2: 'HU',
             timezone: 'Europe/Budapest'
@@ -18,7 +11,7 @@ const locations = {
     },
     eastLondon: {
         location: {
-            city: cityNames.eastLondon,
+            city: 'East London',
             country: 'South Africa',
             iso2: 'ZA',
             timezone: 'Africa/Johannesburg'
@@ -28,43 +21,51 @@ const locations = {
     },
     newYork : {
         location: {
-            city: cityNames.newYork,
+            city: 'New York',
             country: 'United States of America',
             iso2: 'US',
             timezone: 'America/New_York'
         },
         lat: 40.7128,
         lng: -74.0060
+    },
+    london: {
+        location: {
+            city: 'London',
+            country: 'United Kingdom',
+            iso2: 'GB',
+            timezone: 'Europe/London'
+        }
     }
 };
 
 const dropdownOptions = [{
-    label: cityNames.eastLondon,
+    label: 'East London',
     diff: 0,
-    location: locations.eastLondon.location
+    location: cities.eastLondon.location
 }, {
-    label: cityNames.london,
+    label: 'London',
     diff: -7,
     location: {
-        city: cityNames.london,
+        city: 'London',
         country: 'Canada',
         iso2: 'CA',
         timezone: 'America/Toronto'
     }
 }, {
-    label: cityNames.london,
+    label: 'London',
     diff: -2,
     location: {
-        city: cityNames.london,
+        city: 'London',
         country: 'United Kingdom',
         iso2: 'GB',
         timezone: 'Europe/London'
     }
 }, {
-    label: cityNames.london,
+    label: 'London',
     diff: -7,
     location: {
-        city: cityNames.london,
+        city: 'London',
         country: 'United States of America',
         iso2: 'US',
         timezone: 'America/New_York'
@@ -147,8 +148,7 @@ const keyboardEvents = {
 
 export {
     dropdownOptions,
-    locations,
-    cityNames,
+    cities,
     timeInputOptions,
     timezones,
     keyboardEvents

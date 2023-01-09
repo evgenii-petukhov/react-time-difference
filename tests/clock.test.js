@@ -7,7 +7,7 @@ import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import Clock from "../src/components/clock";
 import { fireEvent } from '@testing-library/react';
-import { dropdownOptions, cityNames, locations } from './testData';
+import { dropdownOptions, cities } from './testData';
 
 let root = null;
 let container = null;
@@ -65,7 +65,7 @@ describe('Clock component', () => {
                 // Act
                 act(() => {
                     root.render(<Clock id={id}
-                        location={locations.budapest.location}
+                        location={cities.budapest.location}
                         onAdd={onAddMock}
                         onRemove={onRemoveMock} />);
                 });
@@ -100,7 +100,7 @@ describe('Clock component', () => {
         
                 // Act
                 act(() => {
-                    root.render(<Clock location={locations.budapest.location} images={[]} />);
+                    root.render(<Clock location={cities.budapest.location} images={[]} />);
                 });
         
                 // Assert
@@ -125,7 +125,7 @@ describe('Clock component', () => {
         
                 // Act
                 act(() => {
-                    root.render(<Clock location={locations.budapest.location} images={[{}]} />);
+                    root.render(<Clock location={cities.budapest.location} images={[{}]} />);
                 });
         
                 // Assert
@@ -166,7 +166,7 @@ describe('Clock component', () => {
                 // Act
                 act(() => {
                     root.render(<Clock id={clockId}
-                        location={locations.budapest.location}
+                        location={cities.budapest.location}
                         images={[{}]}
                         onChange={onChangeMock} />);
                 });
@@ -184,10 +184,10 @@ describe('Clock component', () => {
                 expect(notFound).toBeNull();
                 const inputElement = container.querySelector('input[type="text"]');
                 expect(inputElement).not.toBeNull();
-                expect(inputElement.value).toBe(cityNames.budapest);
+                expect(inputElement.value).toBe(cities.budapest.location.city);
         
                 act(() => {
-                    fireEvent.change(inputElement, { target: { value: cityNames.london } });
+                    fireEvent.change(inputElement, { target: { value: cities.london.location.city } });
                 });
         
                 const list = container.querySelector('ul');
@@ -199,7 +199,7 @@ describe('Clock component', () => {
                 });
         
                 // Assert: timezone selected callback
-                expect(onChangeMock).toHaveBeenNthCalledWith(1, clockId, locations.eastLondon.location);
+                expect(onChangeMock).toHaveBeenNthCalledWith(1, clockId, cities.eastLondon.location);
             });
         });
     });
