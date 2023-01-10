@@ -153,47 +153,11 @@ const keyboardEvents = {
 
 const imageCacheResults = {
     argentina: ['images/argentina.jpeg'],
-    australia: ['images/australia.jpeg'],
-    austria: ['images/austria.jpeg'],
-    belgium: ['images/belgium.jpeg'],
-    brazil: ['images/brazil.jpeg'],
-    canada: ['images/canada.jpeg'],
-    chile: ['images/chile.jpeg'],
-    china: ['images/china.jpeg'],
-    colombia: ['images/colombia.jpeg'],
-    'czech republic': ['images/czech republic.jpeg'],
-    estonia: ['images/estonia.jpeg'],
-    finland: ['images/finland.jpeg'],
-    france: ['images/france.jpeg'],
-    germany: ['images/germany.jpeg'],
-    greece: ['images/greece.jpeg'],
     hungary: [
         'images/hungary.jpeg',
         'images/hungary-2.jpeg',
         'images/hungary-3.jpeg'
     ],
-    india: ['images/india.jpeg'],
-    italy: ['images/italy.jpeg'],
-    japan: ['images/japan.jpeg'],
-    latvia: ['images/latvia.jpeg'],
-    lithuania: ['images/lithuania.jpeg'],
-    luxembourg: ['images/luxembourg.jpeg'],
-    malta: ['images/malta.jpeg'],
-    norway: ['images/norway.jpeg'],
-    poland: ['images/poland.jpeg'],
-    portugal: ['images/portugal.jpeg'],
-    romania: ['images/romania.jpeg'],
-    russia: ['images/russia.jpeg'],
-    serbia: [
-        'images/serbia.jpeg',
-        'images/serbia-2.jpeg',
-        'images/serbia-3.jpeg'
-    ],
-    'south korea': ['images/south korea.jpeg'],
-    spain: ['images/spain.jpeg'],
-    switzerland: ['images/switzerland.jpeg'],
-    turkey: ['images/turkey.jpeg'],
-    ukraine: ['images/ukraine.jpeg'],
     'united kingdom': [
         'images/united kingdom.jpeg',
         'images/united kingdom-2.jpeg',
@@ -202,10 +166,7 @@ const imageCacheResults = {
         'images/united kingdom-5.jpeg',
         'images/united kingdom-6.jpeg',
         'images/united kingdom-7.jpeg'
-    ],
-    'united states of america': ['images/united states of america.jpeg'],
-    uruguay: ['images/uruguay.jpeg'],
-    vietnam: ['images/vietnam.jpeg'],
+    ]
 };
 
 export {
