@@ -4,7 +4,12 @@ import { cities, timezones, dropdownOptions } from './testData';
 describe('getNearestLocation', () => {
     Object.keys(cities).filter(city => cities[city].lat && cities[city].lng).forEach(city => {
         it(`should return ${city} for lat = ${cities[city].lat} and lng = ${cities[city].lng}`, () => {
+            // Arrange
+
+            // Act
             const result = getNearestLocation(cities[city].lat, cities[city].lng);
+
+            // Assert
             expect(result.city).toBe(cities[city].location.city);
         });
     });
@@ -12,7 +17,12 @@ describe('getNearestLocation', () => {
 
 describe('findCitiesByName', () => {
     it('should return expected results', () => {
+        // Arrange
+
+        // Act
         const results = findCitiesByName(cities.london.location.city.toLocaleUpperCase(), timezones.london, 10);
+
+        // Assert
         expect(results).toHaveLength(dropdownOptions.length);
         expect(getSortedStringArray(results)).toEqual(getSortedStringArray(dropdownOptions));
     });

@@ -1,9 +1,8 @@
 const urlCacheName = 'urlCache';
 const urlCacheLimit = 100;
 
-let urlCache = JSON.parse(localStorage.getItem(urlCacheName) || '[]');
-
 function get(query) {
+    const urlCache = getCache();
     return new Promise((resolve, reject) => {
         const index = urlCache.findIndex(el => el.query === query && el.urls);
         if (index > -1) {
@@ -14,7 +13,8 @@ function get(query) {
     });
 }
 
-function add(query, urls) {
+function set(query, urls) {
+    let urlCache = getCache();
     urlCache = urlCache.length >= urlCacheLimit ? [] : urlCache.filter(el => el.query !== query);
     urlCache.push({
         query,
@@ -24,4 +24,8 @@ function add(query, urls) {
     localStorage.setItem(urlCacheName, JSON.stringify(urlCache));
 }
 
-export default { get, add };
+function getCache() {
+    return JSON.parse(localStorage.getItem(urlCacheName) || '[]');
+}
+
+export default { get, set };

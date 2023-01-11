@@ -13,7 +13,12 @@ jest.mock('../src/helpers/image-cache-data', () => ({
 describe('getCachedImages', () => {
     Object.keys(imageCacheResults).forEach(country => {
         it(`${country} should return ${imageCacheResults[country].length} urls`, () => {
+            // Arrange
+
+            // Act
             const urls = getCachedImages(country);
+            
+            // Assert
             expect(urls).toHaveLength(imageCacheResults[country].length);
             expect(urls).toEqual(imageCacheResults[country]);
         });
@@ -21,7 +26,12 @@ describe('getCachedImages', () => {
 
     [null, undefined, 'test'].forEach(country => {
         it(`should return empty array, if country doesn't exist in cache`, () => {
+            // Arrange
+
+            // Act
             const urls = getCachedImages(country);
+
+            // Assert
             expect(urls).toHaveLength(0);
             expect(urls).toEqual([]);
         });

@@ -31,7 +31,7 @@ function searchPhotos(country) {
             }).then(response => {
                 if (response.photos.length) {
                     const urls = response.photos.map(photo => photo.src.large);
-                    urlCacheHelper.add(country, urls);
+                    urlCacheHelper.set(country, urls);
                     resolve(urls);
                 } else {
                     resolve(defaultResponse);
