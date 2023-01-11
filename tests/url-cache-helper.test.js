@@ -87,6 +87,10 @@ describe('urlCacheHelper.get', () => {
 
 describe('urlCacheHelper.set', () => {
     describe('url should be added to cache', () => {
+        jest
+            .useFakeTimers()
+            .setSystemTime(sampleDate);
+
         it('if cache is empty', () => {
             // Arrange
             const mockGetItem = jest.fn().mockReturnValue('');
@@ -96,10 +100,6 @@ describe('urlCacheHelper.set', () => {
                 getItem: mockGetItem,
                 setItem: mockSetItem
             };
-
-            jest
-                .useFakeTimers()
-                .setSystemTime(sampleDate);
 
             const urls = ['images/argentina.jpeg'];
 
@@ -120,10 +120,6 @@ describe('urlCacheHelper.set', () => {
         [1, 2, 3, 4].forEach(cacheItemCount => {
             it(`if cache contains ${cacheItemCount} record`, () => {
                 // Arrange
-                jest
-                    .useFakeTimers()
-                    .setSystemTime(sampleDate);
-
                 const cache = [];
                 for (let i = 1; i <= cacheItemCount; i++) {
                     cache.push({
@@ -161,10 +157,6 @@ describe('urlCacheHelper.set', () => {
 
         it(`cache is flushed and only current item is saved, if cache reached limit`, () => {
             // Arrange
-            jest
-                .useFakeTimers()
-                .setSystemTime(sampleDate);
-
             const cache = [];
             for (let i = 1; i <= 5; i++) {
                 cache.push({
