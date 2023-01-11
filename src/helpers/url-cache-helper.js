@@ -1,5 +1,4 @@
-const urlCacheName = 'urlCache';
-const urlCacheLimit = 100;
+import settings from '../settings';
 
 function get(query) {
     const urlCache = getCache();
@@ -15,17 +14,17 @@ function get(query) {
 
 function set(query, urls) {
     let urlCache = getCache();
-    urlCache = urlCache.length >= urlCacheLimit ? [] : urlCache.filter(el => el.query !== query);
+    urlCache = urlCache.length >= settings.urlCache.limit ? [] : urlCache.filter(el => el.query !== query);
     urlCache.push({
         query,
         urls,
         date: new Date()
     });
-    localStorage.setItem(urlCacheName, JSON.stringify(urlCache));
+    localStorage.setItem(settings.urlCache.name, JSON.stringify(urlCache));
 }
 
 function getCache() {
-    return JSON.parse(localStorage.getItem(urlCacheName) || '[]');
+    return JSON.parse(localStorage.getItem(settings.urlCache.name) || '[]');
 }
 
 export default { get, set };
