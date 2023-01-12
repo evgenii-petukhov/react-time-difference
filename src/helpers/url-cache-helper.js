@@ -15,12 +15,11 @@ function get(query) {
 function set(query, urls) {
     let urlCache = getCache();
     urlCache = urlCache.length >= settings.urlCache.limit ? [] : urlCache.filter(el => el.query !== query);
-    urlCache.push({
+    localStorage.setItem(settings.urlCache.name, JSON.stringify([...urlCache, {
         query,
         urls,
         date: new Date()
-    });
-    localStorage.setItem(settings.urlCache.name, JSON.stringify(urlCache));
+    }]));
 }
 
 function getCache() {
