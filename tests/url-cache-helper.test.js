@@ -5,7 +5,13 @@ import { imageCacheResults } from './testData';
 const urlCacheName = 'urlCache';
 const urlCacheLimit = 5;
 const sampleCountry = 'argentina';
+const sampleUrls = ['images/argentina.jpeg'];
 const sampleDate = new Date('2020-01-01');
+const sampleCacheItem = {
+    query: sampleCountry,
+    urls: sampleUrls,
+    date: sampleDate
+};
 
 jest.mock('../src/settings', () => ({
     __esModule: true,
@@ -22,7 +28,7 @@ describe('urlCacheHelper.get', () => {
         const mockGetItem = jest.fn().mockReturnValue(JSON.stringify(Object.keys(imageCacheResults).map(query => ({
             query,
             urls: imageCacheResults[query],
-            date: new Date()
+            date: sampleDate
         }))));
     
         global.localStorage = {
@@ -101,16 +107,10 @@ describe('urlCacheHelper.set', () => {
                 setItem: mockSetItem
             };
 
-            const urls = ['images/argentina.jpeg'];
-
-            const expectedCache = JSON.stringify([{
-                query: sampleCountry,
-                urls,
-                date: new Date()
-            }]);
+            const expectedCache = JSON.stringify([sampleCacheItem]);
 
             // Act
-            urlCacheHelper.set(sampleCountry, urls);
+            urlCacheHelper.set(sampleCountry, sampleUrls);
     
             // Assert
             expect(mockGetItem).toHaveBeenNthCalledWith(1, urlCacheName);
@@ -120,14 +120,11 @@ describe('urlCacheHelper.set', () => {
         [1, 2, 3, 4].forEach(cacheItemCount => {
             it(`if cache contains ${cacheItemCount} record`, () => {
                 // Arrange
-                const cache = [];
-                for (let i = 1; i <= cacheItemCount; i++) {
-                    cache.push({
-                        query: `country-${i}`,
-                        urls: [`country-${i}.jpeg`],
-                        date: new Date()
-                    });
-                }
+                const cache = Array.from({length: cacheItemCount}, (_e, index) => ({
+                    query: `country-${index + 1}`,
+                    urls: [`country-${index + 1}.jpeg`],
+                    date: sampleDate
+                }));
 
                 const mockGetItem = jest.fn().mockReturnValue(JSON.stringify(cache));
                 const mockSetItem = jest.fn();
@@ -137,34 +134,22 @@ describe('urlCacheHelper.set', () => {
                     setItem: mockSetItem
                 };
     
-                const urls = ['images/argentina.jpeg'];
-                
-                const newCache = [... cache];
-                newCache.push({
-                    query: sampleCountry,
-                    urls,
-                    date: new Date()
-                });
-    
                 // Act
-                urlCacheHelper.set(sampleCountry, urls);
+                urlCacheHelper.set(sampleCountry, sampleUrls);
         
                 // Assert
                 expect(mockGetItem).toHaveBeenNthCalledWith(1, urlCacheName);
-                expect(mockSetItem).toHaveBeenNthCalledWith(1, urlCacheName, JSON.stringify(newCache));
+                expect(mockSetItem).toHaveBeenNthCalledWith(1, urlCacheName, JSON.stringify([... cache, sampleCacheItem]));
             });
         });
 
         it(`cache is flushed and only current item is saved, if cache reached limit`, () => {
             // Arrange
-            const cache = [];
-            for (let i = 1; i <= 5; i++) {
-                cache.push({
-                    query: `country-${i}`,
-                    urls: [`country-${i}.jpeg`],
-                    date: new Date()
-                });
-            }
+            const cache = Array.from({length: 5}, (_e, index) => ({
+                query: `country-${index + 1}`,
+                urls: [`country-${index + 1}.jpeg`],
+                date: sampleDate
+            }));
 
             const mockGetItem = jest.fn().mockReturnValue(JSON.stringify(cache));
             const mockSetItem = jest.fn();
@@ -174,20 +159,12 @@ describe('urlCacheHelper.set', () => {
                 setItem: mockSetItem
             };
 
-            const urls = ['images/argentina.jpeg'];
-            
-            const newCache = [{
-                query: sampleCountry,
-                urls,
-                date: new Date()
-            }];
-
             // Act
-            urlCacheHelper.set(sampleCountry, urls);
+            urlCacheHelper.set(sampleCountry, sampleUrls);
     
             // Assert
             expect(mockGetItem).toHaveBeenNthCalledWith(1, urlCacheName);
-            expect(mockSetItem).toHaveBeenNthCalledWith(1, urlCacheName, JSON.stringify(newCache));
+            expect(mockSetItem).toHaveBeenNthCalledWith(1, urlCacheName, JSON.stringify([sampleCacheItem]));
         });
     });
 });
