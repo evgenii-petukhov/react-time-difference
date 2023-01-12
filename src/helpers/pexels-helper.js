@@ -2,11 +2,9 @@ import { createClient } from 'pexels';
 import getCachedImages from './image-cache';
 import urlCacheHelper from './url-cache-helper';
 import downloadAndEncodeToBase64 from "./base64-helper";
+import settings from '../settings';
 
-const apiKey = '563492ad6f917000010000010b615054bce549e2bdb4a48e0d1520d9';
-const picturesPerPage = 3;
-
-const client = createClient(apiKey);
+const client = createClient(settings.pexels.apiKey);
 
 export default function downloadPhotos(country) {
     return new Promise(async resolve => {
@@ -24,7 +22,7 @@ function searchPhotos(country) {
         urlCacheHelper.get(country).then(urls => resolve(urls)).catch(() => {
             client.photos.search({ 
                 query: country, 
-                per_page: picturesPerPage,
+                per_page: settings.pexels.picturesPerPage,
                 size: 'large',
                 orientation: 'landscape'
             }).then(response => {
