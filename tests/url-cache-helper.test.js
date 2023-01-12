@@ -120,7 +120,9 @@ describe('urlCacheHelper.set', () => {
         [1, 2, 3, 4].forEach(cacheItemCount => {
             it(`if cache contains ${cacheItemCount} record`, () => {
                 // Arrange
-                const cache = Array.from({length: cacheItemCount}, (_e, index) => ({
+                const cache = Array.from({
+                    length: cacheItemCount
+                }, (_e, index) => ({
                     query: `country-${index + 1}`,
                     urls: [`country-${index + 1}.jpeg`],
                     date: sampleDate
@@ -145,7 +147,9 @@ describe('urlCacheHelper.set', () => {
 
         it(`cache is flushed and only current item is saved, if cache reached limit`, () => {
             // Arrange
-            const cache = Array.from({length: 5}, (_e, index) => ({
+            const cache = Array.from({
+                length: 5
+            }, (_e, index) => ({
                 query: `country-${index + 1}`,
                 urls: [`country-${index + 1}.jpeg`],
                 date: sampleDate
