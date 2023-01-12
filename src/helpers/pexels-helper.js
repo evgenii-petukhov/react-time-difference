@@ -9,12 +9,11 @@ const picturesPerPage = 3;
 const client = createClient(apiKey);
 
 export default function downloadPhotos(country) {
-    return new Promise(resolve => searchPhotos(country).then(urls => {
-        Promise.allSettled(urls.map(url => downloadAndEncodeToBase64(url))).then(results => {
-            const blobs = results.filter(r => r.status === 'fulfilled').map(r => r.value);
-            resolve(blobs);
-        });
-    }));
+    return new Promise(async resolve => {
+        const urls = await searchPhotos(country);
+        const downloads = await Promise.allSettled(urls.map(url => downloadAndEncodeToBase64(url)));
+        return resolve(downloads.filter(d => d.status === 'fulfilled').map(d => d.value));
+    });
 }
 
 function searchPhotos(country) {
