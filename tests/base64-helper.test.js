@@ -11,10 +11,12 @@ describe('downloadAndEncodeToBase64', () => {
                 type: 'image/jpeg',
             };
 
+            const mockBlob = jest.fn().mockResolvedValue(sampleBlob);
+
             const mockFetch = jest.fn(() =>
                 Promise.resolve({
                     ok: true,
-                    blob: () => Promise.resolve(sampleBlob)
+                    blob: mockBlob
                 })
             );
 
@@ -51,6 +53,7 @@ describe('downloadAndEncodeToBase64', () => {
             await expect(downloadAndEncodeToBase64(sampleUrl)).resolves.toBe(sampleResponse);
             expect(mockFetch).toHaveBeenNthCalledWith(1, sampleUrl);
             expect(mockReadAsDataUrl).toHaveBeenNthCalledWith(1, sampleBlob);
+            expect(mockBlob).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -58,9 +61,11 @@ describe('downloadAndEncodeToBase64', () => {
         it('if response is not ok', async () => {
             // Arrange
             // https://www.leighhalliday.com/mock-fetch-jest
+            const mockBlob = jest.fn();
             const mockFetch = jest.fn(() =>
                 Promise.resolve({
-                    ok: false
+                    ok: false,
+                    blob: mockBlob
                 })
             );
 
@@ -70,6 +75,7 @@ describe('downloadAndEncodeToBase64', () => {
             // Assert
             await expect(downloadAndEncodeToBase64(sampleUrl)).rejects.toBeUndefined();
             expect(mockFetch).toHaveBeenNthCalledWith(1, sampleUrl);
+            expect(mockBlob).not.toHaveBeenCalled();
         });
 
         it('if response is ok, but content is not binary', async () => {
@@ -91,12 +97,13 @@ describe('downloadAndEncodeToBase64', () => {
         it('if response is ok, content is binary, but not image/jpeg', async () => {
             // Arrange
             // https://www.leighhalliday.com/mock-fetch-jest
+            const mockBlob = jest.fn().mockResolvedValue({
+                type: 'application/json',
+            });
             const mockFetch = jest.fn(() =>
                 Promise.resolve({
                     ok: true,
-                    blob: () => Promise.resolve({
-                        type: 'application/json',
-                    })
+                    blob: mockBlob
                 })
             );
             global.fetch = mockFetch;
@@ -105,6 +112,7 @@ describe('downloadAndEncodeToBase64', () => {
             // Assert
             await expect(downloadAndEncodeToBase64(sampleUrl)).rejects.toBeUndefined();
             expect(mockFetch).toHaveBeenNthCalledWith(1, sampleUrl);
+            expect(mockBlob).toHaveBeenCalledTimes(1);
         });
     });
 });
