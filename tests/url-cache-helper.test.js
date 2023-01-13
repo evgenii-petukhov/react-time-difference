@@ -1,5 +1,4 @@
-import urlCacheHelper from "../src/helpers/url-cache-helper";import settings from "../src/settings";
- '../src/helpers/url-cache-helper';
+import urlCacheHelper from "../src/helpers/url-cache-helper";
 import { imageCacheResults } from './testData';
 
 const urlCacheName = 'urlCache';
