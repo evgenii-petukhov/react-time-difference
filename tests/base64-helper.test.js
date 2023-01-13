@@ -2,6 +2,12 @@ import downloadAndEncodeToBase64 from '../src/helpers/base64-helper';
 
 const sampleUrl = 'https://127.0.0.1/';
 
+global.fetch = jest.fn();
+
+beforeEach(() => {
+    global.fetch.mockReset();
+});
+
 describe('downloadAndEncodeToBase64', () => {
     describe('should return a resolved promise', () => {
         it('if response is ok, content is binary and image/jpeg', async () => {
@@ -13,20 +19,16 @@ describe('downloadAndEncodeToBase64', () => {
 
             const mockBlob = jest.fn().mockResolvedValue(sampleBlob);
 
-            const mockFetch = jest.fn(() =>
-                Promise.resolve({
-                    ok: true,
-                    blob: mockBlob
-                })
-            );
+            global.fetch.mockResolvedValue({
+                ok: true,
+                blob: mockBlob
+            });
 
             const mockReadAsDataUrl = jest.fn(() => onloadRef({
                 target: {
                     result: sampleResponse
                 }
             }));
-
-            global.fetch = mockFetch;
     
             // https://stackoverflow.com/a/66978762
             let onloadRef;
@@ -51,7 +53,7 @@ describe('downloadAndEncodeToBase64', () => {
             // Act
             // Assert
             await expect(downloadAndEncodeToBase64(sampleUrl)).resolves.toBe(sampleResponse);
-            expect(mockFetch).toHaveBeenNthCalledWith(1, sampleUrl);
+            expect(global.fetch).toHaveBeenNthCalledWith(1, sampleUrl);
             expect(mockReadAsDataUrl).toHaveBeenNthCalledWith(1, sampleBlob);
             expect(mockBlob).toHaveBeenCalledTimes(1);
         });
@@ -62,36 +64,30 @@ describe('downloadAndEncodeToBase64', () => {
             // Arrange
             // https://www.leighhalliday.com/mock-fetch-jest
             const mockBlob = jest.fn();
-            const mockFetch = jest.fn(() =>
-                Promise.resolve({
-                    ok: false,
-                    blob: mockBlob
-                })
-            );
 
-            global.fetch = mockFetch;
+            global.fetch.mockResolvedValue({
+                ok: false,
+                blob: mockBlob
+            });
     
             // Act
             // Assert
             await expect(downloadAndEncodeToBase64(sampleUrl)).rejects.toBeUndefined();
-            expect(mockFetch).toHaveBeenNthCalledWith(1, sampleUrl);
+            expect(global.fetch).toHaveBeenNthCalledWith(1, sampleUrl);
             expect(mockBlob).not.toHaveBeenCalled();
         });
 
         it('if response is ok, but content is not binary', async () => {
             // Arrange
             // https://www.leighhalliday.com/mock-fetch-jest
-            const mockFetch = jest.fn(() =>
-                Promise.resolve({
-                    ok: true
-                })
-            );
-            global.fetch = mockFetch;
+            global.fetch.mockResolvedValue({
+                ok: true
+            });
     
             // Act
             // Assert
             await expect(downloadAndEncodeToBase64(sampleUrl)).rejects.toBeUndefined();
-            expect(mockFetch).toHaveBeenNthCalledWith(1, sampleUrl);
+            expect(global.fetch).toHaveBeenNthCalledWith(1, sampleUrl);
         });
 
         it('if response is ok, content is binary, but not image/jpeg', async () => {
@@ -100,18 +96,16 @@ describe('downloadAndEncodeToBase64', () => {
             const mockBlob = jest.fn().mockResolvedValue({
                 type: 'application/json',
             });
-            const mockFetch = jest.fn(() =>
-                Promise.resolve({
-                    ok: true,
-                    blob: mockBlob
-                })
-            );
-            global.fetch = mockFetch;
+
+            global.fetch.mockResolvedValue({
+                ok: true,
+                blob: mockBlob
+            });
     
             // Act
             // Assert
             await expect(downloadAndEncodeToBase64(sampleUrl)).rejects.toBeUndefined();
-            expect(mockFetch).toHaveBeenNthCalledWith(1, sampleUrl);
+            expect(global.fetch).toHaveBeenNthCalledWith(1, sampleUrl);
             expect(mockBlob).toHaveBeenCalledTimes(1);
         });
     });
