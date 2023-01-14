@@ -1,6 +1,7 @@
 import downloadAndEncodeToBase64 from '../src/helpers/base64-helper';
 
 const sampleUrl = 'https://127.0.0.1/';
+const sampleResponse = 'data:image/jpeg;base64,...';
 
 global.fetch = jest.fn();
 
@@ -24,15 +25,14 @@ describe('downloadAndEncodeToBase64', () => {
                 blob: mockBlob
             });
 
+            // https://stackoverflow.com/questions/66964346/how-to-properly-mock-the-file-reader-using-jest/66978762
+            // https://stackoverflow.com/a/66978762
             const mockReadAsDataUrl = jest.fn(() => onloadRef({
                 target: {
                     result: sampleResponse
                 }
             }));
-    
-            // https://stackoverflow.com/a/66978762
             let onloadRef;
-            const sampleResponse = 'data:image/jpeg;base64,...';
             global.FileReader = jest.fn(() => {
                 const fileReader = {
                     readAsDataURL: mockReadAsDataUrl
@@ -46,13 +46,15 @@ describe('downloadAndEncodeToBase64', () => {
                       this._onload = onload;
                     },
                   });
-    
+            
                 return fileReader;
             });
     
             // Act
+            const result = downloadAndEncodeToBase64(sampleUrl);
+
             // Assert
-            await expect(downloadAndEncodeToBase64(sampleUrl)).resolves.toBe(sampleResponse);
+            await expect(result).resolves.toBe(sampleResponse);
             expect(global.fetch).toHaveBeenNthCalledWith(1, sampleUrl);
             expect(mockReadAsDataUrl).toHaveBeenNthCalledWith(1, sampleBlob);
             expect(mockBlob).toHaveBeenCalledTimes(1);
@@ -71,8 +73,10 @@ describe('downloadAndEncodeToBase64', () => {
             });
     
             // Act
+            const result = downloadAndEncodeToBase64(sampleUrl);
+
             // Assert
-            await expect(downloadAndEncodeToBase64(sampleUrl)).rejects.toBeUndefined();
+            await expect(result).rejects.toBeUndefined();
             expect(global.fetch).toHaveBeenNthCalledWith(1, sampleUrl);
             expect(mockBlob).not.toHaveBeenCalled();
         });
@@ -85,8 +89,10 @@ describe('downloadAndEncodeToBase64', () => {
             });
     
             // Act
+            const result = downloadAndEncodeToBase64(sampleUrl);
+
             // Assert
-            await expect(downloadAndEncodeToBase64(sampleUrl)).rejects.toBeUndefined();
+            await expect(result).rejects.toBeUndefined();
             expect(global.fetch).toHaveBeenNthCalledWith(1, sampleUrl);
         });
 
@@ -103,8 +109,10 @@ describe('downloadAndEncodeToBase64', () => {
             });
     
             // Act
+            const result = downloadAndEncodeToBase64(sampleUrl);
+
             // Assert
-            await expect(downloadAndEncodeToBase64(sampleUrl)).rejects.toBeUndefined();
+            await expect(result).rejects.toBeUndefined();
             expect(global.fetch).toHaveBeenNthCalledWith(1, sampleUrl);
             expect(mockBlob).toHaveBeenCalledTimes(1);
         });

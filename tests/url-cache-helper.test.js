@@ -22,19 +22,26 @@ jest.mock('../src/settings', () => ({
     }
 }));
 
+global.localStorage = {
+    getItem: jest.fn(),
+    setItem: jest.fn()
+};
+
+beforeEach(() => {
+    global.localStorage.getItem.mockReset();
+    global.localStorage.setItem.mockReset();
+});
+
 describe('urlCacheHelper.get', () => {
     describe('cache is not empty', () => {
-        const mockGetItem = jest.fn().mockReturnValue(JSON.stringify(Object.keys(imageCacheResults).map(query => ({
-            query,
-            urls: imageCacheResults[query],
-            date: sampleDate
-        }))));
-    
-        global.localStorage = {
-            getItem: mockGetItem,
-            setItem: jest.fn(),
-        };
-    
+        beforeEach(() => {
+            global.localStorage.getItem = jest.fn().mockReturnValue(JSON.stringify(Object.keys(imageCacheResults).map(query => ({
+                query,
+                urls: imageCacheResults[query],
+                date: sampleDate
+            }))));
+        });
+            
         describe('should return a resolved promise', () => {
             Object.keys(imageCacheResults).forEach(key => {
                 it(`if ${key} exists in cache`, () => {
@@ -45,8 +52,7 @@ describe('urlCacheHelper.get', () => {
     
                     // Assert
                     expect(result).resolves.toEqual(imageCacheResults[key]);
-                    expect(mockGetItem).toHaveBeenNthCalledWith(1, urlCacheName);
-                    mockGetItem.mockClear();
+                    expect(global.localStorage.getItem).toHaveBeenNthCalledWith(1, urlCacheName);
                 });
             });
         });
@@ -60,8 +66,7 @@ describe('urlCacheHelper.get', () => {
     
                 // Assert
                 expect(result).rejects.toBeUndefined();
-                expect(mockGetItem).toHaveBeenNthCalledWith(1, urlCacheName);
-                mockGetItem.mockClear();
+                expect(global.localStorage.getItem).toHaveBeenNthCalledWith(1, urlCacheName);
             });
         });
     });
@@ -70,20 +75,15 @@ describe('urlCacheHelper.get', () => {
         describe('should return a rejected promise', () => {
             [JSON.stringify([]), ''].forEach(value => {
                 it('if urlCache is an empty array', () => { 
-                    // Arrange
-                    const mockGetItem = jest.fn().mockReturnValue(value);
-        
-                    global.localStorage = {
-                        getItem: mockGetItem,
-                        setItem: jest.fn(),
-                    };
+                    // Arrange        
+                    global.localStorage.getItem = jest.fn().mockReturnValue(value);
     
                     // Act  
                     const result = urlCacheHelper.get(sampleCountry);
         
                     // Assert
                     expect(result).rejects.toBeUndefined();
-                    expect(mockGetItem).toHaveBeenNthCalledWith(1, urlCacheName);
+                    expect(global.localStorage.getItem).toHaveBeenNthCalledWith(1, urlCacheName);
                 });
             });
         });
@@ -97,14 +97,9 @@ describe('urlCacheHelper.set', () => {
             .setSystemTime(sampleDate);
 
         it('if cache is empty', () => {
-            // Arrange
-            const mockGetItem = jest.fn().mockReturnValue('');
-            const mockSetItem = jest.fn();
-        
-            global.localStorage = {
-                getItem: mockGetItem,
-                setItem: mockSetItem
-            };
+            // Arrange       
+            global.localStorage.getItem = jest.fn().mockReturnValue('');
+            global.localStorage.setItem = jest.fn();
 
             const expectedCache = JSON.stringify([sampleCacheItem]);
 
@@ -112,8 +107,8 @@ describe('urlCacheHelper.set', () => {
             urlCacheHelper.set(sampleCountry, sampleUrls);
     
             // Assert
-            expect(mockGetItem).toHaveBeenNthCalledWith(1, urlCacheName);
-            expect(mockSetItem).toHaveBeenNthCalledWith(1, urlCacheName, expectedCache);
+            expect(global.localStorage.getItem).toHaveBeenNthCalledWith(1, urlCacheName);
+            expect(global.localStorage.setItem).toHaveBeenNthCalledWith(1, urlCacheName, expectedCache);
         });
 
         [1, 2, 3, 4].forEach(cacheItemCount => {
@@ -126,21 +121,16 @@ describe('urlCacheHelper.set', () => {
                     urls: [`country-${index + 1}.jpeg`],
                     date: sampleDate
                 }));
-
-                const mockGetItem = jest.fn().mockReturnValue(JSON.stringify(cache));
-                const mockSetItem = jest.fn();
             
-                global.localStorage = {
-                    getItem: mockGetItem,
-                    setItem: mockSetItem
-                };
+                global.localStorage.getItem = jest.fn().mockReturnValue(JSON.stringify(cache));
+                global.localStorage.setItem = jest.fn();
     
                 // Act
                 urlCacheHelper.set(sampleCountry, sampleUrls);
         
                 // Assert
-                expect(mockGetItem).toHaveBeenNthCalledWith(1, urlCacheName);
-                expect(mockSetItem).toHaveBeenNthCalledWith(1, urlCacheName, JSON.stringify([... cache, sampleCacheItem]));
+                expect(global.localStorage.getItem).toHaveBeenNthCalledWith(1, urlCacheName);
+                expect(global.localStorage.setItem).toHaveBeenNthCalledWith(1, urlCacheName, JSON.stringify([... cache, sampleCacheItem]));
             });
         });
 
