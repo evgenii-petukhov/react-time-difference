@@ -12,30 +12,26 @@ export default async function downloadPhotos(country) {
     return downloads.filter(d => d.status === 'fulfilled').map(d => d.value);
 }
 
-async function searchPhotos(country) {
-    let cachedUrls;
-    try {
-        cachedUrls = await urlCacheHelper.get(country);
-    } catch {
-        const defaultResponse = [`images/${country}.jpeg`];
-        let response;
-        try {
-            response = await createClient(settings.pexels.apiKey).photos.search({ 
-                query: country, 
-                per_page: settings.pexels.picturesPerPage,
-                size: 'large',
-                orientation: 'landscape'
+function searchPhotos(country) {
+    return new Promise(resolve => {
+        urlCacheHelper.get(country)
+            .then(cachedUrls => resolve(cachedUrls))
+            .catch(() => {
+                const defaultResponse = [`images/${country}.jpeg`];
+                createClient(settings.pexels.apiKey).photos.search({ 
+                    query: country, 
+                    per_page: settings.pexels.picturesPerPage,
+                    size: 'large',
+                    orientation: 'landscape'
+                }).then(response => {
+                    if (response.photos.length) {
+                        const urls = response.photos.map(photo => photo.src.large);
+                        urlCacheHelper.set(country, urls);
+                        resolve(urls);
+                    } else {
+                        resolve(defaultResponse);
+                    }
+                }).catch(() => resolve(defaultResponse));
             });
-        } catch {
-            return defaultResponse;
-        }
-        if (response.photos.length) {
-            const urls = response.photos.map(photo => photo.src.large);
-            urlCacheHelper.set(country, urls);
-            return urls;
-        } else {
-            return defaultResponse;
-        }
-    }
-    return cachedUrls;
+    });
 }

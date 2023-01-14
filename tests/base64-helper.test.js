@@ -39,17 +39,17 @@ describe('downloadAndEncodeToBase64', () => {
                 };
                 Object.defineProperty(fileReader, 'onload', {
                     get() {
-                      return this._onload;
+                        return this._onload;
                     },
                     set(onload) {
-                      onloadRef = onload;
-                      this._onload = onload;
+                        onloadRef = onload;
+                        this._onload = onload;
                     },
-                  });
-            
+                });
+
                 return fileReader;
             });
-    
+
             // Act
             const result = downloadAndEncodeToBase64(sampleUrl);
 
@@ -71,7 +71,7 @@ describe('downloadAndEncodeToBase64', () => {
                 ok: false,
                 blob: mockBlob
             });
-    
+
             // Act
             const result = downloadAndEncodeToBase64(sampleUrl);
 
@@ -87,7 +87,7 @@ describe('downloadAndEncodeToBase64', () => {
             global.fetch.mockResolvedValue({
                 ok: true
             });
-    
+
             // Act
             const result = downloadAndEncodeToBase64(sampleUrl);
 
@@ -107,7 +107,7 @@ describe('downloadAndEncodeToBase64', () => {
                 ok: true,
                 blob: mockBlob
             });
-    
+
             // Act
             const result = downloadAndEncodeToBase64(sampleUrl);
 

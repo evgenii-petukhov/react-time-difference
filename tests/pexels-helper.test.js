@@ -43,6 +43,7 @@ describe('downloadPhotos', () => {
         getCachedImages.mockReset();
         downloadAndEncodeToBase64.mockReset();
         urlCacheHelper.get.mockReset();
+        urlCacheHelper.set.mockReset();
         createClient.mockReset();
     });
 
@@ -89,7 +90,7 @@ describe('downloadPhotos', () => {
         expect(downloadAndEncodeToBase64).not.toHaveBeenCalled();
     });
 
-    [1].forEach(itemCount => {
+    [1, 2, 3].forEach(itemCount => {
         it(`should return array which contains ${itemCount} pictures, if a country does not exist in the image-cache and url-cache, Pexels returns ${itemCount} pictures`, () => {
             // Arrange
             createClient.mockReturnValue({
