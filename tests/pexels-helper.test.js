@@ -139,9 +139,9 @@ describe('downloadPhotos', () => {
             }
         });
         getCachedImages.mockReturnValue([]);
-        when(downloadAndEncodeToBase64).calledWith('url1').mockImplementationOnce(() => Promise.resolve(sampleResponse));
-        when(downloadAndEncodeToBase64).calledWith('url2').mockImplementationOnce(() => Promise.reject(sampleResponse));
-        when(downloadAndEncodeToBase64).calledWith('url3').mockImplementationOnce(() => Promise.resolve(sampleResponse));
+        when(downloadAndEncodeToBase64).calledWith('url1').mockResolvedValueOnce(sampleResponse);
+        when(downloadAndEncodeToBase64).calledWith('url2').mockRejectedValueOnce(sampleResponse);
+        when(downloadAndEncodeToBase64).calledWith('url3').mockResolvedValueOnce(sampleResponse);
         urlCacheHelper.get.mockRejectedValue();
 
         // Act
