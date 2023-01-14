@@ -9,6 +9,7 @@ import urlCacheHelper from "../src/helpers/url-cache-helper";
 const sampleCountry = 'argentina';
 const sampleResponse = 'data:image/jpeg;base64,...';
 const sampleImageUrl = 'https://images.pexels.com/photos/11126448/pexels-photo-11126448.jpeg?auto=compress&cs=tinysrgb&h=650&w=940';
+const defaultImageUrl = 'images/argentina.jpeg';
 const urlCacheName = 'urlCache';
 const urlCacheLimit = 5;
 const pexelsApiKey = 'apikey';
@@ -47,7 +48,7 @@ describe('downloadPhotos', () => {
         createClient.mockReset();
     });
 
-    it('should return an empty array, if a country does not exist in the image-cache, url-cache, and Pexels is unavailable', () => {
+    it('should return an empty array, if a country does not exist in the image-cache, url-cache, and Pexels is unavailable', async () => {
         // Arrange
         createClient.mockReturnValue({
             photos: {
@@ -62,13 +63,14 @@ describe('downloadPhotos', () => {
         const result = downloadPhotos(sampleCountry);
 
         //Assert
-        expect(result).resolves.toEqual([]);
+        await expect(result).resolves.toEqual([]);
         expect(getCachedImages).toHaveBeenNthCalledWith(1, sampleCountry);
         expect(urlCacheHelper.get).toHaveBeenNthCalledWith(1, sampleCountry);
-        expect(downloadAndEncodeToBase64).not.toHaveBeenCalled();
+        expect(urlCacheHelper.set).not.toHaveBeenCalled();
+        expect(downloadAndEncodeToBase64).toHaveBeenNthCalledWith(1, defaultImageUrl);
     });
 
-    it('should return an empty array, if a country does not exist in the image-cache and url-cache, Pexels returns 0 pictures', () => {
+    it('should return an empty array, if a country does not exist in the image-cache and url-cache, Pexels returns 0 pictures', async () => {
         // Arrange
         createClient.mockReturnValue({
             photos: {
@@ -84,14 +86,15 @@ describe('downloadPhotos', () => {
         const result = downloadPhotos(sampleCountry);
 
         //Assert
-        expect(result).resolves.toEqual([]);
+        await expect(result).resolves.toEqual([]);
         expect(getCachedImages).toHaveBeenNthCalledWith(1, sampleCountry);
         expect(urlCacheHelper.get).toHaveBeenNthCalledWith(1, sampleCountry);
-        expect(downloadAndEncodeToBase64).not.toHaveBeenCalled();
+        expect(urlCacheHelper.set).not.toHaveBeenCalled();
+        expect(downloadAndEncodeToBase64).toHaveBeenNthCalledWith(1, defaultImageUrl);
     });
 
     [1, 2, 3].forEach(itemCount => {
-        it(`should return array which contains ${itemCount} pictures, if a country does not exist in the image-cache and url-cache, Pexels returns ${itemCount} pictures`, () => {
+        it(`should return array which contains ${itemCount} pictures, if a country does not exist in the image-cache and url-cache, Pexels returns ${itemCount} pictures`, async () => {
             // Arrange
             createClient.mockReturnValue({
                 photos: {
@@ -110,15 +113,17 @@ describe('downloadPhotos', () => {
     
             // Act
             const result = downloadPhotos(sampleCountry);
-    
+
             //Assert
-            expect(result).resolves.toEqual(Array.from({ length: itemCount }, () => sampleResponse));
+            await expect(result).resolves.toEqual(Array.from({ length: itemCount }, () => sampleResponse));
             expect(getCachedImages).toHaveBeenNthCalledWith(1, sampleCountry);
             expect(urlCacheHelper.get).toHaveBeenNthCalledWith(1, sampleCountry);
+            expect(urlCacheHelper.set).toHaveBeenNthCalledWith(1, sampleCountry, Array.from({length: itemCount}, () => sampleImageUrl));
+            expect(downloadAndEncodeToBase64).toHaveBeenNthCalledWith(itemCount, sampleImageUrl);
         });
     });
 
-    it('should return array which contains 3 pictures, if a country does not exist in the image-cache, url-cache, and Pexels returns 3 pictures, only 2 can be downloaded', () => {
+    it('should return array which contains 3 pictures, if a country does not exist in the image-cache, url-cache, and Pexels returns 3 pictures, only 2 can be downloaded', async () => {
         // Arrange
         createClient.mockReturnValue({
             photos: {
@@ -149,13 +154,15 @@ describe('downloadPhotos', () => {
         const result = downloadPhotos(sampleCountry);
 
         //Assert
-        expect(result).resolves.toEqual(Array.from({ length: 2 }, () => sampleResponse));
+        await expect(result).resolves.toEqual(Array.from({ length: 2 }, () => sampleResponse));
         expect(getCachedImages).toHaveBeenNthCalledWith(1, sampleCountry);
         expect(urlCacheHelper.get).toHaveBeenNthCalledWith(1, sampleCountry);
+        expect(urlCacheHelper.set).toHaveBeenNthCalledWith(1, sampleCountry, ['url1', 'url2', 'url3']);
+        expect(downloadAndEncodeToBase64).toHaveBeenCalledTimes(3);
     });
 
     [1, 2, 3].forEach(itemCount => {
-        it(`should return array which contains ${itemCount} pictures, if a country exists in the image-cache and ${itemCount} urls saved`, () => {
+        it(`should return array which contains ${itemCount} pictures, if a country exists in the image-cache and ${itemCount} urls saved`, async () => {
             // Arrange
             getCachedImages.mockReturnValue(Array.from({ length: itemCount }, () => sampleImageUrl));
             downloadAndEncodeToBase64.mockResolvedValue(sampleResponse);
@@ -163,16 +170,18 @@ describe('downloadPhotos', () => {
     
             // Act
             const result = downloadPhotos(sampleCountry);
-    
+
             //Assert
-            expect(result).resolves.toEqual(Array.from({ length: itemCount }, () => sampleResponse));
+            await expect(result).resolves.toEqual(Array.from({ length: itemCount }, () => sampleResponse));
             expect(getCachedImages).toHaveBeenNthCalledWith(1, sampleCountry);
             expect(urlCacheHelper.get).not.toHaveBeenCalled();
+            expect(urlCacheHelper.set).not.toHaveBeenCalled();
+            expect(downloadAndEncodeToBase64).toHaveBeenNthCalledWith(itemCount, sampleImageUrl);
         });
     });
 
     [1, 2, 3].forEach(itemCount => {
-        it(`should return array which contains ${itemCount} pictures, if a country does not exist in the image-cache, but exists in the url-cache and ${itemCount} urls saved`, () => {
+        it(`should return array which contains ${itemCount} pictures, if a country does not exist in the image-cache, but exists in the url-cache and ${itemCount} urls saved`, async () => {
             // Arrange
             getCachedImages.mockReturnValue([]);
             downloadAndEncodeToBase64.mockResolvedValue(sampleResponse);
@@ -180,11 +189,13 @@ describe('downloadPhotos', () => {
     
             // Act
             const result = downloadPhotos(sampleCountry);
-    
+
             //Assert
-            expect(result).resolves.toEqual(Array.from({ length: itemCount }, () => sampleResponse));
+            await expect(result).resolves.toEqual(Array.from({ length: itemCount }, () => sampleResponse));
             expect(getCachedImages).toHaveBeenNthCalledWith(1, sampleCountry);
             expect(urlCacheHelper.get).toHaveBeenNthCalledWith(1, sampleCountry);
+            expect(urlCacheHelper.set).not.toHaveBeenCalled();
+            expect(downloadAndEncodeToBase64).toHaveBeenNthCalledWith(itemCount, sampleImageUrl);
         });
     });
 });

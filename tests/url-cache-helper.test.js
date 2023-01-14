@@ -44,28 +44,28 @@ describe('urlCacheHelper.get', () => {
             
         describe('should return a resolved promise', () => {
             Object.keys(imageCacheResults).forEach(key => {
-                it(`if ${key} exists in cache`, () => {
+                it(`if ${key} exists in cache`, async () => {
                     // Arrange
     
                     // Act
                     const result = urlCacheHelper.get(key);
     
                     // Assert
-                    expect(result).resolves.toEqual(imageCacheResults[key]);
+                    await expect(result).resolves.toEqual(imageCacheResults[key]);
                     expect(global.localStorage.getItem).toHaveBeenNthCalledWith(1, urlCacheName);
                 });
             });
         });
     
         describe('should return a rejected promise', () => {
-            it('if a country does not exist in cache', () => { 
+            it('if a country does not exist in cache', async () => { 
                 // Arrange
     
                 // Act  
                 const result = urlCacheHelper.get('test');
     
                 // Assert
-                expect(result).rejects.toBeUndefined();
+                await expect(result).rejects.toBeUndefined();
                 expect(global.localStorage.getItem).toHaveBeenNthCalledWith(1, urlCacheName);
             });
         });
@@ -74,7 +74,7 @@ describe('urlCacheHelper.get', () => {
     describe('cache is empty', () => {
         describe('should return a rejected promise', () => {
             [JSON.stringify([]), ''].forEach(value => {
-                it('if urlCache is an empty array', () => { 
+                it('if urlCache is an empty array', async () => { 
                     // Arrange        
                     global.localStorage.getItem = jest.fn().mockReturnValue(value);
     
@@ -82,7 +82,7 @@ describe('urlCacheHelper.get', () => {
                     const result = urlCacheHelper.get(sampleCountry);
         
                     // Assert
-                    expect(result).rejects.toBeUndefined();
+                    await expect(result).rejects.toBeUndefined();
                     expect(global.localStorage.getItem).toHaveBeenNthCalledWith(1, urlCacheName);
                 });
             });
