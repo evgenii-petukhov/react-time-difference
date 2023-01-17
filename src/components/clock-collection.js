@@ -25,15 +25,17 @@ const ClockCollection = (props) => {
 
     useEffect(() => {
         const timerID = setInterval(() => updateDate(timeDeltaRef.current), 1000);
-        loadDefaultImages(defaultLocation).then(() => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    const location = getNearestLocation(position.coords.latitude, position.coords.longitude);
-                    setDefaultLocation(location);
-                    loadDefaultImages(location);
-                });
-            }
-        });
+        if (props.defaultLocation) {
+            loadDefaultImages(defaultLocation).then(() => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(position => {
+                        const location = getNearestLocation(position.coords.latitude, position.coords.longitude);
+                        setDefaultLocation(location);
+                        loadDefaultImages(location);
+                    });
+                }
+            });
+        }
 
         return () => {
             clearInterval(timerID);
@@ -41,16 +43,15 @@ const ClockCollection = (props) => {
     }, []);
 
     async function loadDefaultImages(location) {
-        return await downloadPhotos(location.country).then(blobs => {
-            setDefaultImages(blobs);
-            if (!isModelChangedRef.current) {
-                setTimezones(() => [{
-                    id: idCounterRef.current,
-                    images: blobs,
-                    location: location
-                }]);
-            }
-        });
+        const blobs = await downloadPhotos(location.country);
+        setDefaultImages(blobs);
+        if (!isModelChangedRef.current) {
+            setTimezones(() => [{
+                id: idCounterRef.current,
+                images: blobs,
+                location: location
+            }]);
+        }
     }
 
     function onClockAdded(id) {

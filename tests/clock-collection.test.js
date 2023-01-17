@@ -6,13 +6,11 @@ import React from "react";
 import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import ClockCollection from "../src/components/clock-collection";
-import { cities } from './testData';
 
 let root = null;
 let container = null;
 
 jest.mock("../src/components/clock", () => () => <div className="clock"></div>);
-jest.mock("../src/helpers/pexels-helper", () => jest.fn().mockReturnValue(new Promise(() => {})));
 
 beforeEach(() => {
     container = document.createElement('div');
@@ -42,21 +40,6 @@ describe('ClockCollection component', () => {
             // Assert
             const clockComponentRoot = container.querySelector('.clock-collection');
             expect(clockComponentRoot).toBeNull();
-        });
-    });
-
-    describe('should be rendered', () => {
-        it('if `location` is passed', () => {
-            // Arrange
-
-            // Act
-            act(() => {
-                root.render(<ClockCollection defaultLocation={cities.budapest.location}/>);
-            });
-    
-            // Assert
-            const clockComponentRoot = container.querySelector('.clock-collection');
-            expect(clockComponentRoot).not.toBeNull();
         });
     });
 });

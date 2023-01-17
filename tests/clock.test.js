@@ -3,6 +3,7 @@
  */
 
 import React from "react";
+import { waitFor } from "@testing-library/react";
 import { createRoot } from 'react-dom/client';
 import { act } from "react-dom/test-utils";
 import Clock from "../src/components/clock";
@@ -14,7 +15,7 @@ let container = null;
 
 jest.mock("../src/components/time", () => () => <div className="time"></div>);
 jest.mock("../src/components/carousel", () => () => <div className="carousel"></div>);
-jest.mock("../src/helpers/pexels-helper", () => jest.fn().mockReturnValue(new Promise(() => {})));
+jest.mock("../src/helpers/pexels-helper", () => jest.fn().mockResolvedValue([]));
 
 // https://lukerogerson.medium.com/two-ways-to-fix-the-jest-test-error-the-module-factory-of-jest-mock-is-not-allowed-to-bf022b5175dd
 const mockFindCitiesByName = jest.fn().mockReturnValue(dropdownOptions);
@@ -196,6 +197,7 @@ describe('Clock component', () => {
                 // Act: select a city from the list
                 act(() => {
                     fireEvent.click(list.childNodes[0]);
+                    waitFor(() => container.querySelector('.loading') === null);
                 });
         
                 // Assert: timezone selected callback
