@@ -7,6 +7,8 @@
 ![npm](https://badges.aleen42.com/src/npm.svg)
 
 ![demo](cover.gif)
+
+[Live demo](https://petukhov.cyou/react-time-difference/)
 ## Description
 This application enables you to compare times in different timezones instantly. You can check a few places at once. Therefore, making it very easy to find the most suitable time for everybody.
 
