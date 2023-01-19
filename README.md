@@ -5,6 +5,8 @@
 ![webpack](https://badges.aleen42.com/src/webpack.svg)
 ![jest](https://badges.aleen42.com/src/jest_1.svg)
 ![npm](https://badges.aleen42.com/src/npm.svg)
+
+![demo](cover.gif)
 ## Description
 This application enables you to compare times in different timezones instantly. You can check a few places at once. Therefore, making it very easy to find the most suitable time for everybody.
 
