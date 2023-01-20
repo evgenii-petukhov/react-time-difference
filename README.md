@@ -12,7 +12,7 @@
 ## Description
 This application enables you to compare times in different timezones instantly. You can check a few places at once. Therefore, making it very easy to find the most suitable time for everybody.
 
-This application enables users to add as many clocks as they want. When time is set for a specific timezone, the time in the rest of the time zones changes accordingly. It could be quite useful for arranging meetings, if your colleagues live in different places.
+This application enables users to add as many clocks as they want. When time is set for a specific timezone, the time in the rest of the time zones changes accordingly. It could be quite useful for arranging meetings, if your colleagues live in different places. For example, a person from London said that they would be able to have a meeting at 9pm and we need to figure out if this time is convenient for people from New Zealand and Cuba.
 
 >The idea behind this project is to demonstrate that I can
 >* create a single-page web application with React
