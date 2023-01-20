@@ -14,25 +14,15 @@ This application enables you to compare times in different timezones instantly. 
 
 This application enables users to add as many clocks as they want. When time is set for a specific timezone, the time in the rest of the time zones changes accordingly. It could be quite useful for arranging meetings, if your colleagues live in different places.
 
-## Background
-The idea behind this project is to demonstrate that I can
-* create a single-page web application with React
-* perform unit testing of React components using Jest
-* bundle a JavaScript project with WebPack
+>The idea behind this project is to demonstrate that I can
+>* create a single-page web application with React
+>* perform unit testing of React components using Jest
+>* bundle a JavaScript project with WebPack
 
 ## Get started
-### Install dependencies
-`npm install`
-
-### Build the project
-
-`npm run build`
-
-### Serve
-
-`npm install --global serve`
-
-`npm run start`
+1. Install dependencies `npm install`
+2. Build the project `npm run build`
+3. Serve `npm install --global serve` `npm run start`
 
 ## Unit test coverage
 ```---------------------------|---------|----------|---------|---------|-------------------
