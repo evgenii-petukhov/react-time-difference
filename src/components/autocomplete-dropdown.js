@@ -3,53 +3,73 @@ const { useState, useEffect } = React;
 import { t } from "i18next";
 
 const AutocompleteDropdown = (props) => {
-    const [suggestions, setSuggestions] = useState([]);
-    const [text, setText] = useState(props.text);
-    const [location, setLocation] = useState(props.location);
-    const [isChangedManually, setIsChangedManually] = useState(false);
+    const [model, setModel] = useState({
+        suggestions: [],
+        text: props.text,
+        location: props.location,
+        isChangedManually: false
+    });
 
     useEffect(() => {
-        if (!isChangedManually) {
-            setLocation(props.location);
-            setText(props.text);
+        if (!model.isChangedManually) {
+            setModel((prev) => {
+                return {...prev,                 
+                    location: props.location,
+                    text: props.text
+                };
+            });
         }
     }, [props.location, props.text]);
 
     function onTextChanged(e) {
         const value = e.target.value.toLocaleUpperCase();
 
-        setSuggestions(value.length ? props.getItems?.(value) : []);
-        setIsChangedManually(true);
-        setText(e.target.value);
+        setModel((prev) => {
+            return {...prev,
+                suggestions: value.length ? props.getItems?.(value) : [],
+                isChangedManually: true,
+                text: e.target.value
+            };
+
+        });
     }
 
     function onKeyDown(e) {
         switch (e.which) {
             case 27: // Esc
-                setSuggestions([]);
-                setText(props.text);
+                setModel((prev) => {
+                    return {
+                        ...prev,
+                        suggestions: [],
+                        text: props.text
+                    };
+                });
                 break;
             case 9: // Tab
             case 13: // Enter
-                if (suggestions.length) {
-                    selectSuggestion(suggestions[0]);
+                if (model.suggestions.length) {
+                    selectSuggestion(model.suggestions[0]);
                 }
                 break;
         }
     }
 
     function selectSuggestion(item) {
-        setSuggestions([]);
-        setLocation(item.location);
-        setText(item.location.city);
+        setModel((prev) => {
+            return {...prev,
+                suggestions: [],
+                location: item.location,
+                text: item.location.city
+            };
+        });
         props.onTimezoneChanged?.(item.location);
     }
 
     function renderSuggestions() {
-        return suggestions.length ? (
+        return (model.suggestions && model.suggestions.length) ? (
             <ul>
                 {
-                    suggestions.map((item, index) => <li key={index} onClick={() => selectSuggestion(item)}>
+                    model.suggestions.map((item, index) => <li key={index} onClick={() => selectSuggestion(item)}>
                         <div className="timezone-flag">{item.location.iso2 && <span className={`fi fi-${item.location.iso2.toString().toLowerCase()}`}></span>}</div>
                         <div className="timezone-label">{item.label}</div>
                         <div className="timezone-diff">{`${item.diff > 0 ? '+' : ''}${item.diff}${t('h')}`}</div>
@@ -64,12 +84,12 @@ const AutocompleteDropdown = (props) => {
             <div className="input-group">
                 <span className="input-group-text">
                     {
-                        location?.iso2 && <span className={`fi fi-${location.iso2.toString().toLowerCase()}`} title={location.country}></span>
+                        model.location?.iso2 && <span className={`fi fi-${model.location.iso2.toString().toLowerCase()}`} title={model.location.country}></span>
                     }
                 </span>
                 <input type="text"
                     className="form-control"
-                    value={text}
+                    value={model.text}
                     placeholder={props.placeholder}
                     onChange={onTextChanged}
                     onKeyDown={onKeyDown}
