@@ -1,9 +1,10 @@
 window.React = window.React ?? require('react');
-const { useState, useEffect } = React;
+const { useReducer, useEffect } = React;
 import { t } from "i18next";
+import { } from "react";
 
 const AutocompleteDropdown = (props) => {
-    const [model, setModel] = useState({
+    const [model, dispatch] = useReducer(reduce, {
         suggestions: [],
         text: props.text,
         location: props.location,
@@ -12,11 +13,10 @@ const AutocompleteDropdown = (props) => {
 
     useEffect(() => {
         if (!model.isChangedManually) {
-            setModel((prev) => {
-                return {...prev,                 
-                    location: props.location,
-                    text: props.text
-                };
+            dispatch({
+                type: 'propsChanged',
+                location: props.location,
+                text: props.text
             });
         }
     }, [props.location, props.text]);
@@ -24,25 +24,21 @@ const AutocompleteDropdown = (props) => {
     function onTextChanged(e) {
         const value = e.target.value.toLocaleUpperCase();
 
-        setModel((prev) => {
-            return {...prev,
-                suggestions: value.length ? props.getItems?.(value) : [],
-                isChangedManually: true,
-                text: e.target.value
-            };
-
+        dispatch({
+            type: 'textChanged',
+            suggestions: value.length ? props.getItems?.(value) : [],
+            isChangedManually: true,
+            text: e.target.value
         });
     }
 
     function onKeyDown(e) {
         switch (e.which) {
             case 27: // Esc
-                setModel((prev) => {
-                    return {
-                        ...prev,
-                        suggestions: [],
-                        text: props.text
-                    };
+                dispatch({
+                    type: 'keyPressed',
+                    suggestions: [],
+                    text: props.text
                 });
                 break;
             case 9: // Tab
@@ -55,12 +51,11 @@ const AutocompleteDropdown = (props) => {
     }
 
     function selectSuggestion(item) {
-        setModel((prev) => {
-            return {...prev,
-                suggestions: [],
-                location: item.location,
-                text: item.location.city
-            };
+        dispatch({
+            type: 'suggestionSelected',
+            suggestions: [],
+            location: item.location,
+            text: item.location.city
         });
         props.onTimezoneChanged?.(item.location);
     }
@@ -77,6 +72,44 @@ const AutocompleteDropdown = (props) => {
                 }
             </ul>
         ) : null;
+    }
+
+    function reduce(prev, action) {
+        switch (action.type) {
+            case 'propsChanged': {
+                return {
+                    ...prev,
+                    location: action.location,
+                    text: action.text
+                };
+            }
+            case 'textChanged': {
+                return {
+                    ...prev,
+                    suggestions: action.suggestions,
+                    isChangedManually: action.isChangedManually,
+                    text: action.text
+                };
+            }
+            case 'keyPressed': {
+                return {
+                    ...prev,
+                    suggestions: action.suggestions,
+                    text: action.text
+                };
+            }
+            case 'suggestionSelected': {
+                return {
+                    ...prev,
+                    suggestions: action.suggestions,
+                    location: action.location,
+                    text: action.text
+                };
+            }
+            default: {
+                throw Error('Unknown action: ' + action.type);
+            }
+        }
     }
 
     return <div className="autocomplete-textbox-component">
